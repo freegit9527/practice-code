@@ -1,0 +1,5 @@
+Hello text file
+goodbye text file
+3 4 3
+Hello world
+'Hello text file\ngoodbye text file\n'
