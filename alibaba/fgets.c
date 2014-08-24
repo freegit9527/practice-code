@@ -1,26 +1,32 @@
 /*
  * =====================================================================================
- *       Filename : test.c
- *    Description : td
- *    Version     : dd
- *        Created : 07/19/14 17:51
+ *       Filename : fgets.c
+ *    Description : learn to use fgets
+ *    Version     : 0.1
+ *        Created : 03/07/14 19:06
  *         Author : Liu Xue Yang (LXY), liuxueyang457@163.com
- *         Motto  : Suicide is Painless
+ *         Motto  : How about today?
  * =====================================================================================
  */
 #include <stdio.h>
 #include <stdlib.h>
-/* 
- * ===  FUNCTION  ======================================================================
- *         Name: main
- * =====================================================================================
- */
 
 	int
 main ( int argc, char *argv[] )
 {
-	printf ( "Hello, world!\n" );
+	FILE *fp;
+	char mystring[20];
+	fp = fopen("fgets.txt", "r");
+	if ( fp == NULL ) {
+		perror("fail to open file.");
+	}
+	else {
+		fgets(mystring, 6, fp);
+//		puts(mystring);
+		if ( fputs(mystring, stdout) == EOF ) {
+			exit(1);
+		}
+	}
 
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
-

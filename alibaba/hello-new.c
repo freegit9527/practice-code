@@ -1,15 +1,16 @@
 /*
  * =====================================================================================
- *       Filename : test.c
- *    Description : td
- *    Version     : dd
- *        Created : 07/19/14 17:51
+ *       Filename : hello.c
+ *    Description : 
+ *    Version     : 
+ *        Created : 05/10/14 17:07
  *         Author : Liu Xue Yang (LXY), liuxueyang457@163.com
- *         Motto  : Suicide is Painless
+ *         Motto  : How about today?
  * =====================================================================================
  */
 #include <stdio.h>
-#include <stdlib.h>
+
+
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name: main
@@ -23,4 +24,3 @@ main ( int argc, char *argv[] )
 
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
-

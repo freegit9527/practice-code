@@ -1,15 +1,16 @@
 /*
  * =====================================================================================
- *       Filename : test.c
- *    Description : td
- *    Version     : dd
- *        Created : 07/19/14 17:51
+ *       Filename : largearrayinit.c
+ *    Description : init large array
+ *    Version     : 0.1
+ *        Created : 05/10/14 17:33
  *         Author : Liu Xue Yang (LXY), liuxueyang457@163.com
- *         Motto  : Suicide is Painless
+ *         Motto  : How about today?
  * =====================================================================================
  */
 #include <stdio.h>
 #include <stdlib.h>
+int myarray[50000];
 /* 
  * ===  FUNCTION  ======================================================================
  *         Name: main
@@ -19,7 +20,7 @@
 	int
 main ( int argc, char *argv[] )
 {
-	printf ( "Hello, world!\n" );
+	myarray[0] = 3;
 
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
