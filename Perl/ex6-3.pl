@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 #===============================================================================
-#         FILE: ex5-3.pl
+#         FILE: ex6-3.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
-#      CREATED: 08/24/14 21:04:44
+#      CREATED: 08/25/2014 16:02:11
 #===============================================================================
 
 use strict;
@@ -12,15 +12,14 @@ use utf8;
 use autodie;
 use 5.010;
 
-print "What column width would you linke? ";
-chomp(my $width = <STDIN>);
-
-print "Enter some lines, then press Ctrl-D:\n";
-chomp(my @lines = <STDIN>);
-
-print "1234567890" x (($width + 9) / 10) . "12345", "\n";
-
-foreach (@lines) {
-	printf "%${width}s\n", $_;
+my $longest = 0;
+foreach my $tmp (keys %ENV) {
+	my $key_length = length($tmp);
+	$longest = $key_length if $key_length > $longest;
 }
+
+foreach my $tmp (sort keys %ENV) {
+	printf "%-${longest}s  %s\n", $tmp, $ENV{$tmp};
+}
+
 

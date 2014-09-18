@@ -1,26 +1,25 @@
 #!/usr/bin/perl
 #===============================================================================
-#         FILE: ex5-3.pl
+#         FILE: ex8-1.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
-#      CREATED: 08/24/14 21:04:44
+#      CREATED: 09/06/14 09:35:41
 #===============================================================================
 
 use strict;
 use warnings;
 use utf8;
-use autodie;
 use 5.010;
+use autodie;
 
-print "What column width would you linke? ";
-chomp(my $width = <STDIN>);
-
-print "Enter some lines, then press Ctrl-D:\n";
-chomp(my @lines = <STDIN>);
-
-print "1234567890" x (($width + 9) / 10) . "12345", "\n";
-
-foreach (@lines) {
-	printf "%${width}s\n", $_;
+while (<>) {
+	chomp;
+	if (/match/) {
+		say "Matched: |$`<$&>$'|";
+	}
+	else {
+		say "No match: |$_|";
+	}
 }
+
 

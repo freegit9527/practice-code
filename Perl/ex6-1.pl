@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 #===============================================================================
-#         FILE: ex5-3.pl
+#         FILE: ex6-1.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
-#      CREATED: 08/24/14 21:04:44
+#      CREATED: 08/25/2014 15:50:44
 #===============================================================================
 
 use strict;
@@ -12,15 +12,17 @@ use utf8;
 use autodie;
 use 5.010;
 
-print "What column width would you linke? ";
-chomp(my $width = <STDIN>);
+my %family_names = (
+	Ikki => 'Phoenix',
+	mu => 'Aries',
+	xueyang => 'liu',
+);
 
-print "Enter some lines, then press Ctrl-D:\n";
-chomp(my @lines = <STDIN>);
-
-print "1234567890" x (($width + 9) / 10) . "12345", "\n";
-
-foreach (@lines) {
-	printf "%${width}s\n", $_;
+while (<>) {
+	chomp;
+	if (exists $family_names{$_}) {
+		say "$_\'s family is $family_names{$_}";
+	} else {
+		say "$_ does not exists..=_=";
+	}
 }
-

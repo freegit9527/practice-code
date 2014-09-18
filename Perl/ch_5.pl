@@ -1,4 +1,4 @@
-#!/usr/bin/env perl 
+#!/usr/bin/perl
 #===============================================================================
 #         FILE: ch_5.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com

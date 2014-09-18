@@ -1,22 +1,22 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl 
 #===============================================================================
-#         FILE: ex5-2.pl
+#         FILE: ex11-1.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
-#      CREATED: 08/24/14 20:48:48
+#      CREATED: 09/15/14 21:57:15
 #===============================================================================
 
 use strict;
 use warnings;
 use utf8;
-use autodie;
-use 5.010;
+use 5.014;
 
-print "Enter some lines, then press Ctrl-D:\n";
-chomp(my @lines = <STDIN>);
-print "1234567890" x 7, "12345\n";
-foreach (@lines) {
-	printf "%20s\n", $_;
+my $magicnumber = int(1+rand 100);
+
+while (<>) {
+	chomp;
+	last if $_ == $magicnumber || $_ =~ /quit|exit|^$/i ;
+	$_ > $magicnumber ? say "Too high!" : say "Too low!";
 }
 
 

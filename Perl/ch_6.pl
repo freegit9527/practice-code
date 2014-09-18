@@ -1,4 +1,4 @@
-#!/usr/bin/env perl 
+#!/usr/bin/perl
 #===============================================================================
 #         FILE: ch_6.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
@@ -51,4 +51,37 @@ say "There are $count key-value in hash!";
 
 while (my ($key, $value) = each %hash) {
 	print "$key => $value\n";
+}
+
+foreach my $key (sort keys %hash) {
+	say "$key => $hash{$key}";
+}
+
+my %books = (
+	fred => 3,
+	wilma => 1,
+	barney => 0,
+	mu => undef,
+);
+
+foreach my $name (keys %books) {
+	if ($books{$name}) {
+		say "$name has at least one book checked out.";
+	}
+}
+
+if (exists $books{fred}) {
+	say "Hey, there's a library card for fred!";
+}
+
+say "PATH is $ENV{PATH}";
+
+my %dic = qw /
+xueyang liu 
+mu Aries
+Ikki Phoenix
+/;
+
+foreach my $last_name (keys %dic) {
+	say "$last_name\'s first name is $dic{$last_name}";
 }
