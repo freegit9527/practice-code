@@ -68,3 +68,11 @@ main ( int argc, char *argv[] )
 
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
+
+void f()
+{
+	int xi = 0;
+	for (int j = 0; j < 10; ++j) {
+		printf ("j = %d\n", j);
+	}
+}
