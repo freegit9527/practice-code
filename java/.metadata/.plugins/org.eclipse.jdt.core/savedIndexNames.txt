@@ -1,0 +1,14 @@
+INDEX VERSION 1.127+/home/aries/learnc/java/.metadata/.plugins/org.eclipse.jdt.core
+2520620663.index
+919642463.index
+963730196.index
+1163500741.index
+2890625959.index
+1858288453.index
+139473798.index
+1090093296.index
+553764907.index
+523729837.index
+2347142034.index
+2957966712.index
+3260361455.index
