@@ -14,10 +14,13 @@ main()
 	int i;
 	char c;
 
-	for ( i = 0; i < 5; ++i ) {
-		scanf ( "%d", &c );
-		printf ( "%d ", i );
-	}
+//	for ( i = 0; i < 5; ++i ) {
+//		scanf ( "%d", &c );
+//		printf ( "%d ", i );
+//	}
+//	printf ( "%d %d\n", (-1)>>1, -1/2 );
+	char *p = NULL;
+	printf ( "%d\n", *p );
 	printf ( "\n" );
 }
 
