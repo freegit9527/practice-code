@@ -14,10 +14,20 @@ main()
 	int i;
 	char c;
 
+<<<<<<< HEAD
 	for ( i = 0; i < 5; ++i ) {
 		scanf ( "%d", &c );
 		printf ( "%d\n", i );
 	}
+=======
+//	for ( i = 0; i < 5; ++i ) {
+//		scanf ( "%d", &c );
+//		printf ( "%d ", i );
+//	}
+//	printf ( "%d %d\n", (-1)>>1, -1/2 );
+	char *p = NULL;
+	printf ( "%d\n", *p );
+>>>>>>> 495d993c78e4135fc1d89baff14cc4f3144eb20b
 	printf ( "\n" );
 }
 
