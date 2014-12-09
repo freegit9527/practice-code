@@ -8,7 +8,10 @@
  *         Motto  : Suicide is Painless
  * =====================================================================================
  */
-#include <bits/stdc++.h>
+//#include <bits/stdc++.h>
+#include <cstdio>
+#include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -34,25 +37,43 @@ QuickSort ( int low, int high, int a[] )
 	int
 main ( int argc, char *argv[] )
 {
+	freopen("QuickSort.txt", "r", stdin);
 	// 1, 2, 3, 4, 5, 6, 7, 8
-	const int N = 8;
-	int a[8] = { 7, 6, 3, 2, 1, 4, 5, 8 };
+//	const int N = 8;
+	int num;
+//	int a[8] = { 7, 6, 3, 2, 1, 4, 5, 8 };
+	int *a;
 
-	//print initial array
-	cout << "original array:" << endl;
-	for ( int i = 0; i < N; ++i ) {
-		cout << a[i] << " "; 
-	}
-	cout << endl;
+//		cout << "Input array size: "; 
+//		cin >> num;
+		while (cin >> num) {
+			a = (int*)malloc(num * sizeof(int));
 
-	QuickSort(0, N - 1, a);
+			// input array element
 
-	//output
-	cout << "\n\nsorted array:" << endl;
-	for ( int i = 0; i < N; ++i ) {
-		cout << a[i] << " "; 
-	}
-	cout << endl;
+			for ( int i = 0; i < num; ++i ) {
+				cin >> a[i];
+			}
+			//print initial array
+		//	cout << "original array:" << endl;
+		//	for ( int i = 0; i < N; ++i ) {
+		//	for ( int i = 0; i < num; ++i ) {
+		//		cout << a[i] << " "; 
+		//	}
+		//	cout << endl;
+
+			QuickSort(0, num - 1, a);
+		//	QuickSort(0, N - 1, a);
+
+			//output
+			cout << "sorted array:" << endl;
+		//	for ( int i = 0; i < N; ++i ) {
+			for ( int i = 0; i < num; ++i ) {
+				cout << a[i] << " "; 
+			}
+			cout << endl;
+//			cout << "Input array size: "; 
+		}
 
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
