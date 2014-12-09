@@ -62,6 +62,7 @@ my %books = (
 	wilma => 1,
 	barney => 0,
 	mu => undef,
+	"bar.foo" => 10,
 );
 
 foreach my $name (keys %books) {
@@ -70,11 +71,14 @@ foreach my $name (keys %books) {
 	}
 }
 
+say ""; 
+say "bar.foo borrows $books{'bar.foo'} books";
+say ""; 
 if (exists $books{fred}) {
 	say "Hey, there's a library card for fred!";
 }
 
-say "PATH is $ENV{PATH}";
+#say "PATH is $ENV{PATH}";
 
 my %dic = qw /
 xueyang liu 
