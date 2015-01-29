@@ -1,0 +1,8 @@
+;; Dribble of #<IO TERMINAL-STREAM> started on 2015-01-21 10:07:14.
+#<OUTPUT BUFFERED FILE-STREAM CHARACTER #P"session2.log">
+[2]> (cons t 3)
+(T . 3)
+[3]> (list 2 3 4)
+(2 3 4)
+[4]> (dribble)
+;; Dribble of #<IO TERMINAL-STREAM> finished on 2015-01-21 10:07:33.
