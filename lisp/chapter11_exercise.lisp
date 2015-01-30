@@ -252,13 +252,18 @@
 
 (defun prefixp (small big)
   (if (or (null small)
-	  (null big))
-      (return nil))
-  (do ((el (pop small) (pop small))
-       (elem (pop big) (pop big)))
-      ((null small) t)
-    (unless (equal el elem)
-       (return nil))))
+	  (null big)
+	  (> (length small)
+	     (length big)))
+      nil
+      (do ((el (first small) (first small))
+	   (elem (first big) (first big)))
+	  ((not (equal el elem)) nil)
+	(pop small)
+	(pop big)
+	(if (or (null small)
+		(null big))
+	    (return t)))))
 
 (prefixp '(g t c) '(g t c a t))
 (prefixp '(g t c) '(a g g t c))
@@ -266,10 +271,78 @@
 ;; f.
 
 (defun appearsp (small big)
-  (do ((big-rest big (rest big)))
-      ((prefixp small big-rest) t)
-    (if (null big-rest) (return nil))))
+  (if (or (null small)
+	  (null big))
+      nil
+      (do ((big-rest big (rest big-rest)))
+	  ((prefixp small big-rest) t)
+	(if (or (null big-rest)
+		(> (length small)
+		   (length (rest big-rest))))
+	    (return nil)))))
 
 (appearsp '(c a t) '(t c a t g))
 (appearsp '(c a t) '(t c c g t a))
-      
+
+;; g.
+
+(defun coverp (small big)
+  (if (or (null small)
+	  (null big))
+      nil
+      (let ((small-len (length small))
+	    (big-len (length big)))
+	(if (zerop (rem big-len small-len))
+	    (let ((times (/ big-len small-len))
+		  (result nil))
+	      (dotimes (i times)
+		(setf result (append result small)))
+	      (equal result big))
+	    nil))))
+
+
+;; h.
+
+(defun prefix (n lst)
+  (if (or (> n (length lst))
+	  (zerop n))
+      nil
+      (do ((result nil)
+	   (i 0 (incf i)))
+	  ((equal i n) result)
+	(push (pop lst) (reverse result)))))
+
+;; i.
+
+(defun kernel (lst)
+  (do* ((i 1 (1+ i))
+	(small (prefix i lst) (prefix i lst)))
+       ((equal i (length lst)) lst)
+    (when (coverp small lst) (return small))))
+
+;; h.
+
+(defun draw-line (n)
+  (dotimes (i (* 5 n))
+    (format t "-"))
+  (format t "~%"))
+
+(defun draw-sym (n sym)
+  (dotimes (i n)
+    (format t "  ~A  " sym))
+  (format t "~%"))
+
+(defun draw-dna (lst)
+  (let ((comp-lst (complement-strand lst)))
+    (draw-line (length lst))
+    (draw-sym (length lst) "!")
+    (dotimes (i (length lst))
+      (format t "  ~S  " (nth i lst)))
+    (format t "~%")
+    (draw-sym (length lst) ".")
+    (draw-sym (length lst) ".")
+    (dotimes (i (length comp-lst))
+      (format t "  ~A  " (nth i comp-lst)))
+    (format t "~%")
+    (draw-sym (length lst) "!")
+    (draw-line (length lst))))
