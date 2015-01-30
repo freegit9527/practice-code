@@ -1,0 +1,3 @@
+# learnc
+
+some code I wrote....
