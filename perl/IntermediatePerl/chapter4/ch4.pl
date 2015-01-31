@@ -91,3 +91,14 @@ sub check_required_items_2 {
 		push @$items, @missing;
 	}
 }
+
+my @num = qw (first second);
+my @lang = qw (c java perl python);
+my @num_name = ('number' => \@num);
+my @lang_name = ('language' => \@lang);
+
+my @num_and_lang = (\@num_name, \@lang_name);
+for my $i (@num_and_lang) {
+	print "${$i}[0]: (@{${$i}[1]})";
+}
+
