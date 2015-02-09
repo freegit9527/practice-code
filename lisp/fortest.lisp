@@ -121,8 +121,7 @@
 (defun kernel (lst)
   (do* ((i 1 (1+ i))
 	(small (prefix i lst) (prefix i lst)))
-       ((equal i (length lst)) lst)
-    (when (coverp small lst) (return small))))
+       ((coverp small lst) small)))
 	
 ;; h.
 

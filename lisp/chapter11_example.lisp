@@ -143,7 +143,7 @@
 	(format t "~&Sorry, ~S is not a number. Try again."
 		answer))))
 
-(read-a-number)
+;(read-a-number)
 
 ;; ==============================
 ;; ==============================
@@ -173,4 +173,59 @@
 (square-list '(1 2 3 4 5))
 (square-list '(1 2 three four 5))
 
+;; 11.13 OPTIONAL ARGUMENTS
+
+(defun foo (x &optional (y 101))
+  (format t "~&x is ~S" x)
+  (format t "~&y is ~S" y)
+  (list x y))
+
+;; 11.14 REST ARGUMENTS
+
+(defun average (&rest args)
+  (/ (reduce #'+ args)
+     (if (zerop (length args))
+	 1.0
+	 (length args))
+     1.0))
+
+(defun square-all (&rest args)
+  (if (null args) nil
+      (cons (* (first args) (first args))
+	    (apply #'square-all (cdr args)))))
+
+
+;; 11.16 KEYWORD ARGUMENTS
+
+(defun make-sundae (name &key
+			   (size 'regular)
+			   (ice-cream 'vanilla)
+			   (syrup 'hot-fudge)
+			   nuts
+			   cherries
+			   wipped-cream)
+  (list 'sundae
+	(list 'for name)
+	(list ice-cream 'with syrup 'syrup)
+	(list 'toppings '=
+	      (remove nil
+		      (list (and nuts 'nuts)
+			    (and cherries 'cherries)
+			    (and wipped-cream 'wipped-cream))))))
+
+(format t "~&~S"
+	(make-sundae 'cindy
+		     :syrup 'strawberry
+		     :nuts t
+		     :cherries '(and true)))
+
+;; 11.16 AUXILIARY VARIABLES
+
+(defun average (&rest args
+		  &aux (len (length args)))
+  (/ (reduce #'+ args)
+     (if (zerop len)
+	 1
+	 len)
+     1.0))
 

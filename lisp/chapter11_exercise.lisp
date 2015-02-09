@@ -300,6 +300,14 @@
 	      (equal result big))
 	    nil))))
 
+;; coverp written by author...
+(defun coverp-author (strand1 strand2)
+  (do* ((len1 (length strand1))
+	(s2 strand2 (nthcdr len1 s2)))
+       ((null s2) t)
+    (unless (prefixp strand1 s2)
+      (return nil))))
+
 
 ;; h.
 
@@ -317,8 +325,7 @@
 (defun kernel (lst)
   (do* ((i 1 (1+ i))
 	(small (prefix i lst) (prefix i lst)))
-       ((equal i (length lst)) lst)
-    (when (coverp small lst) (return small))))
+       ((coverp small lst) small)))
 
 ;; h.
 
