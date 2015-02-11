@@ -3,6 +3,8 @@
 ;;;     chapter 13 Arrays,       #
 ;;;      Hash Tables, And        #
 ;;;       Property Lists         #
+;;;        Example code          #
+;;;         2015/01/10           #
 ;;;                              #
 ;;; ##############################
 
@@ -82,3 +84,54 @@ my-vec
 (gethash 'mary h) ; return two value. 1. value of key 2. T or NIL
 
 (describe h)
+
+(inspect h)
+
+;; 13.8 PROPERTY LISTS
+
+(setf (get 'fred 'sex) 'male)
+
+(setf (get 'fred 'age) 23)
+
+(setf (get 'fred 'siblings) '(george wanda))
+
+(describe 'fred)
+
+(get 'fred 'age)
+(get 'fred 'favorite-ice-cream-flavor)
+
+; third argument
+(setf (get 'mabel 'siblings) nil)
+
+(get 'mabel 'siblings 'unknown)
+
+(get 'clara 'siblings 'unknown)
+
+; change a property
+(get 'fred 'age)
+(incf (get 'fred 'age))
+(get 'fred 'age)
+
+; symbol's property list
+(symbol-plist 'fred)
+
+; remove a property
+(remprop 'fred 'age)
+(get 'fred 'age)
+
+;; 13. PROGRAMMING WITH PROPERTY LISTS
+
+(defun addprop (sym elem prop)
+  (pushnew elem (get sym prop)))
+
+(defun record-meeting (x y)
+  (addprop x y 'has-met)
+  (addprop y x 'has-met)
+  t)
+
+(symbol-plist 'little-red)
+(record-meeting 'little-red 'wolfie)
+(symbol-plist 'little-red)
+(symbol-plist 'wolfie)
+(record-meeting 'wolfie 'grandma)
+(symbol-plist 'wolfie)
