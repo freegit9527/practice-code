@@ -119,7 +119,7 @@ my-vec
 (remprop 'fred 'age)
 (get 'fred 'age)
 
-;; 13. PROGRAMMING WITH PROPERTY LISTS
+;; 13.9 PROGRAMMING WITH PROPERTY LISTS
 
 (defun addprop (sym elem prop)
   (pushnew elem (get sym prop)))

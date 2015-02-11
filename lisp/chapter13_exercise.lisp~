@@ -57,3 +57,167 @@
 (hasprop 'little-red 'has-met)
 (hasprop 'little-red 'has)
 
+;; Array Keyboard Exercise 
+
+;; 13.8 
+
+;; a.
+
+(setf *hist-array* nil)
+
+(setf *total-points* 0)
+
+;; b.
+
+(defun new-histogram (bin)
+  (setf *hist-array* (make-array bin :initial-element 0))
+  (setf *total-points* 0))
+
+(new-histogram 11)
+(setf *print-array* t)
+(new-histogram 10)
+
+;; c.
+
+(defun record-value (num)
+  (incf *total-points*)
+  (if (<= 0 num (1- (length *hist-array*)))
+      (incf (aref *hist-array* num))
+      (error "~S is out of range" num)))
+
+(record-value 1)
+
+;; d.
+
+(defun print-hist-line (num)
+  (let ((cnt (aref *hist-array* num)))
+    (format t "~&~2S" num)
+    (format t " [~3S] " cnt)
+    (dotimes (i cnt)
+      (format t "*"))))
+
+(print-hist-line 1)
+
+;; e. 
+
+(dotimes (i 300)
+  (record-value (random 11)))
+
+(defun print-histogram ()
+  (dotimes (i (length *hist-array*))
+    (print-hist-line i))
+  (format t "~&    ~3D total" *total-points*))
+
+(print-histogram)
+
+
+;; Hash Table Keyboard Exercise
+
+;; 13.9
+
+(setf crypto-text nil)
+
+;; a.
+
+(setf *encipher-table* (make-hash-table))
+(setf *decipher-table* (make-hash-table))
+
+;; b.
+
+(defun make-substitution (chara charb)
+  (setf (gethash chara *decipher-table*) charb)
+  (setf (gethash charb *encipher-table*) chara)
+  t)
+
+;; c.
+
+(defun undo-substitution (letter)
+  (setf (gethash (gethash letter *decipher-table*)
+                 *encipher-table*) nil)
+  (setf (gethash letter *decipher-table*) nil)
+  t)
+
+;; d.
+
+(defun clear ()
+  (clrhash *decipher-table*)
+  (clrhash *encipher-table*))
+
+;; e.
+
+(defun decipher-string (str)
+  (let ((new-str (make-string (length str) 
+                              :initial-element #\Space)))
+    (dotimes (pos (length str))
+      (if (gethash (aref str pos) *decipher-table*)
+          (setf (aref new-str pos) 
+                (gethash (aref str pos) *decipher-table*))))
+    new-str))
+
+;; f.
+
+(defun show-line (str)
+  (format t "~&~A" str)
+  (format t "~&~A" (decipher-string str)))
+
+(show-line "abcd")
+
+;; g.
+
+(defun show-text (str-lst)
+  (format t "~&------------------------------")
+  (dolist (lst str-lst)
+    (show-line lst))
+  (format t "~&------------------------------"))
+
+(show-text '("abc" "def" "ghi"))
+
+;; h.
+
+(defun get-first-char (x)
+  (char-downcase 
+   (char (format nil "~A" x) 0)))
+
+;; i.
+
+(defun read-letter ()
+  (let ((obj (read)))
+    (cond ((equal obj 'END) obj)
+          ((equal obj 'UNDO) obj)
+          (t (get-first-char obj)))))
+
+(read-letter)
+
+;; j.
+(defun sub-letter ()
+  (format t "Substitute which letter? ")
+  (let ((char (read-letter))
+        (tochar))
+    (if (characterp char)
+        (cond ((gethash char *decipher-table*)
+               (format t "'~A' has already been deciphered as '~A'!"
+                       char (gethash char *decipher-table*)))
+              (t (format t "~&What does '~A' decipher to? " char)
+                 (setf tochar (read-letter))
+                 (if (gethash tochar *encipher-table*)
+                     (format t "But '~A' already deciphers to '~A'!"
+                             (gethash tochar *encipher-table*) tochar)
+                     (make-substitution char tochar)))))))
+
+
+(sub-letter)
+
+;; k
+(defun undo-letter ()
+  (format t "Undo which letter? ")
+  (let ((char (read-letter)))
+    (if (gethash char *decipher-table*)
+        (undo-substitution char)
+        (format t "'~A' has not been deciphered."
+                char))))
+
+(undo-letter)
+
+;; l
+
+(defun solve (
