@@ -110,7 +110,6 @@
 
 (print-histogram)
 
-
 ;; Hash Table Keyboard Exercise
 
 ;; 13.9
@@ -160,7 +159,6 @@
   (format t "~&~A" str)
   (format t "~&~A" (decipher-string str)))
 
-(show-line "abcd")
 
 ;; g.
 
@@ -170,7 +168,6 @@
     (show-line lst))
   (format t "~&------------------------------"))
 
-(show-text '("abc" "def" "ghi"))
 
 ;; h.
 
@@ -186,26 +183,20 @@
           ((equal obj 'UNDO) obj)
           (t (get-first-char obj)))))
 
-(read-letter)
 
 ;; j.
-(defun sub-letter ()
-  (format t "Substitute which letter? ")
-  (let ((char (read-letter))
-        (tochar))
-    (if (characterp char)
-        (cond ((gethash char *decipher-table*)
-               (format t "'~A' has already been deciphered as '~A'!"
-                       char (gethash char *decipher-table*)))
-              (t (format t "~&What does '~A' decipher to? " char)
-                 (setf tochar (read-letter))
-                 (if (gethash tochar *encipher-table*)
-                     (format t "But '~A' already deciphers to '~A'!"
-                             (gethash tochar *encipher-table*) tochar)
-                     (make-substitution char tochar)))))))
+(defun sub-letter (char)
+  (let ((tochar))
+    (cond ((gethash char *decipher-table*)
+           (format t "'~A' has already been deciphered as '~A'!"
+                   char (gethash char *decipher-table*)))
+          (t (format t "~&What does '~A' decipher to? " char)
+             (setf tochar (read-letter))
+             (if (gethash tochar *encipher-table*)
+                 (format t "But '~A' already deciphers to '~A'!"
+                         (gethash tochar *encipher-table*) tochar)
+                 (make-substitution char tochar))))))
 
-
-(sub-letter)
 
 ;; k
 (defun undo-letter ()
@@ -216,8 +207,23 @@
         (format t "'~A' has not been deciphered."
                 char))))
 
-(undo-letter)
 
 ;; l
+;; Only code when you consider it all!
 
-(defun solve (
+(defun solve (cryp)
+  (do ((char nil))
+      ((equal char 'end) t)
+    (show-text cryp)
+    (format t "~&Substitute which letter? ")
+    (setf char (read-letter))
+    (cond ((characterp char) (sub-letter char))
+          ((equal char 'undo) (undo-letter))
+          ((equal char 'end) (return-from solve t))
+          (t (format t "error input")))))
+
+(setf crypto-text
+      '("zj ze kljjls jf slapzi ezvlij pib kl jufwxuj p hffv jupi jf" "enlpo pib slafml pvv bfwkj"))
+
+(solve crypto-text)
+

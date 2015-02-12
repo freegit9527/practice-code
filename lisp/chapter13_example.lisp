@@ -135,3 +135,36 @@ my-vec
 (symbol-plist 'wolfie)
 (record-meeting 'wolfie 'grandma)
 (symbol-plist 'wolfie)
+
+;; Advanced Topics
+
+;; 13.10 PROPERTY LIST CELLS
+
+(setf (get 'cat-in-hat 'bowtie) 'red)
+
+(setf (get 'cat-in-hat 'tail) 'long)
+
+(symbol-plist 'cat-in-hat)
+
+
+;; 13.11 MORE ON SEQUENCES
+
+(coerce "Cockatoo" 'list)
+
+(coerce '(#\b #\i #\r #\d) 'string)
+
+(coerce '(foo bar baz) 'vector)
+
+(coerce (make-array 3 :element-type 'string-char
+            :initial-contents '(#\M #\o #\m)) 'string)
+
+(map 'list #'+
+     '(1 2 3 4)
+     '#(10 20 30 40 ))
+
+(map 'list #'list
+     '(a b c)
+     '#(1 2 3)
+     "xyz")
+
+(map nil #'print "a bc")
