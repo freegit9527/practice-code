@@ -21,4 +21,10 @@
 
 (setf s1 (make-starship))
 
-(setf s2 '#s(starship
+(setf s3 '#s(starship 
+	     speed 250 
+	     name aries))
+
+	     
+
+
