@@ -30,6 +30,4 @@
 
 (setf a 2)
 (setf b 7)
-
-
 (simple-rotatef a b)

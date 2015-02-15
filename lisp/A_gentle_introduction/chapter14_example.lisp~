@@ -41,15 +41,3 @@
 (simple-incf-2 a 2)
 
 `(setf foo 'bar)
-
-
-;avoid having to quote arguments
-;we place a comma before object because we want the value of that variable
-;to be inserted into the list that backquote constructs.
-
-(defmacro two-from-one (func object)
-  `(,func ',object ',object))
-
-;if we leave out the quote, the macro will expand to (cons hello hello),
-;this will cause unassigned variable error unless hello has a value.
-(two-from-one cons hello)
