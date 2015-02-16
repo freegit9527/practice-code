@@ -53,3 +53,8 @@
 ;if we leave out the quote, the macro will expand to (cons hello hello),
 ;this will cause unassigned variable error unless hello has a value.
 (two-from-one cons hello)
+
+
+(defmacro showvar (var)
+  `(format t "~&The vale of ~S is ~S"
+	   ',var ,var))
