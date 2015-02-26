@@ -12,6 +12,8 @@
 	(t (push person *friends*)
 	   'pleased-to-meet-you)))
 
+
+
 ;10.4
 (defun forget (person)
   (cond ((equal person (first *friends*))

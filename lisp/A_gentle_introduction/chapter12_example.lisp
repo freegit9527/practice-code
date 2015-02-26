@@ -170,4 +170,3 @@
 (ship-p z1)
 (starship-p z1)
 (supply-ship-p z1)
->>>>>>> d1ed3a500305a85f6560c8a72a54da229c977ff8

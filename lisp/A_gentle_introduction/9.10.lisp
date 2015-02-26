@@ -116,4 +116,6 @@
     ((listp (rest lst))
      (format t "~S " (first lst))
      (print-cdr (rest lst)))
-    (t (format t ". ~S)" (rest lst)))
+    (t (format t ". ~S)" (rest lst)))))
+
+
