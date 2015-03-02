@@ -1,0 +1,7 @@
+;; ====================
+;; 2.13 Iteration
+
+(defun show-square (start end)
+  (do ((i start) (1+ i))
+      ((> i end) 'done)
+    (format t "~A ~A~%" i (* i i))))
