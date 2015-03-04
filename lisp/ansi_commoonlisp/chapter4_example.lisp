@@ -147,7 +147,7 @@
 			 (b a d)
 			 (c a t)))
 
-;;; Example: Parsing Dates
+;;; 4.5 Example: Parsing Dates
 
 (defun constituent (c)
   (and (graphic-char-p c)
@@ -197,3 +197,116 @@ gh" #'constituent 0)
 	  (parse-month (second toks))
 	  (my-read-integer (third toks)))))
 
+
+;;; 4.6 Structures
+
+(defstruct point
+  x
+  y)
+
+(setf p (make-point :x 0
+		    :y 0))
+
+(point-x p)
+
+(setf (point-y p) 2) ; set y of p to 2
+
+(point-p p)
+
+(typep p 'point)
+
+(defstruct polemic
+  (type (progn
+	  (format t "What kind of polemic was it? ")
+	  (read)))
+  (effect nil))
+
+;;(make-polemic)
+
+(defstruct (point (:conc-name p)
+		  (:print-function print-point))
+  (x 0)
+  (y 0))
+
+(defun print-point (p stream depth)
+  (format stream "#<~A ~A>" (px p) (py p)))
+
+(make-point)
+
+
+;;; 4.7 Example: Binary Search Trees
+
+(defstruct (node (:print-function
+		  (lambda (n s d)
+		    (format s "#<~A ~A ~A>" (node-elt n)
+			    (node-l n)
+			    (node-r n)))))
+  elt (l nil) (r nil))
+
+(defun bst-insert (obj bst comp)
+  (if (null bst)
+      (make-node :elt obj)
+    (let ((elt (node-elt bst)))
+      (if (eql obj elt)
+	  bst
+	(if (funcall comp obj elt)
+	    (progn (setf (node-l bst) (bst-insert obj (node-l bst) comp))
+		   bst)
+	  (progn
+	    (setf (node-r bst) (bst-insert obj (node-r bst) comp))
+	    bst))))))
+
+(defun bst-find (obj bst comp)
+  (if (null bst)
+      nil
+    (let ((elt (node-elt bst)))
+      (if (eql obj elt)
+	  bst
+	(if (funcall comp obj elt)
+	    (bst-find obj (node-l bst) comp)
+	  (bst-find obj (node-r bst) comp))))))
+
+(defun bst-min (bst)
+  (and bst
+       (or (bst-min (node-l bst))
+	   bst)))
+
+(defun bst-max (bst)
+  (and bst
+       (or (bst-max (node-r bst))
+	   bst)))
+
+(setf nums nil)
+
+(dolist (x '(5 8 4 2 1 9 6 7 3))
+  (setf nums (bst-insert x nums #'<)))
+
+(defun rperc (bst)
+  (make-node :elt (node-elt (node-r bst))
+	     :l (node-l bst)
+	     :r (percolate (node-r bst))))
+
+(defun lperc (bst)
+  (make-node :elt (node-elt (node-l bst))
+	     :l (percolate (node-l bst))
+	     :r (node-r bst)))
+
+(defun percolate (bst)
+  (cond ((null (node-l bst))
+	 (if (null (node-r bst))
+	     nil
+	   (rperc bst)))
+	((null (node-r bst))
+	 (lperc bst))
+	(t (if (zerop (random 2))
+	       (lperc bst)
+	     (rperc bst)))))
+
+(defun bst-remove (obj bst comp)
+  (if (null bst)
+      nil
+    (let ((elt (node-elt bst)))
+      (if (eql obj elt)
+	  (percolate bst)
+	(if (funcall < obj elt)
+	    ())))))
