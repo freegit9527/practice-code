@@ -330,4 +330,28 @@ gh" #'constituent 0)
 
 (gethash 'color ht)
 
+(push "This is color"
+      (gethash 'color ht))
 
+(setf (gethash 'red ht)
+      'RED)
+
+(remhash 'red ht)
+
+(setf (gethash 'shape ht) 'spherical
+      (gethash 'size ht) 'giant)
+
+(maphash #'(lambda (k v)
+	     (format t "~A = ~A~%"
+		     k v))
+	 ht)
+
+(make-hash-table : size 5)
+
+(setf writers
+      (make-hash-table :test
+		       #'equal))
+
+(setf (gethash '(ralph waldo
+		       emerson) writers)
+      t)
