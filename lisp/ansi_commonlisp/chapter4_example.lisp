@@ -309,4 +309,25 @@ gh" #'constituent 0)
       (if (eql obj elt)
 	  (percolate bst)
 	(if (funcall < obj elt)
-	    ())))))
+	    (make-node
+	     :elt elt
+	     :l (bst-remove obj (node-l bst) comp)
+	     :r (node-r bst))
+	  (make-node
+	   :elt elt
+	   :r (bst-remove obj (node-r bst) comp)
+	   :l (node-l bst)))))))
+
+(defun bst-traverse (fn bst)
+  (when bst
+    (bst-traverse fn (node-l bst))
+    (funcall fn (node-elt bst))
+    (bst-traverse fn (node-r bst))))
+
+;;; 4.8 Hash Tables
+
+(setf ht (make-hash-table))
+
+(gethash 'color ht)
+
+
