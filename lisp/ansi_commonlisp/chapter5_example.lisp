@@ -226,4 +226,10 @@
       (do* ((y (1- yzero) (1- y))
 	    (d (- (year-days y))
 	       (- d (year-days y))))
-	  ((<= d n) (values y (- n d))))))
+	  ((<= d n) (values y (- n d))))
+    (do* ((y yzero (1+ y))
+	  (prev 0 d)
+	  (d (year-days y) (+ d (year-days y))))
+	((> d n) (values y (- n prev))))))
+
+
