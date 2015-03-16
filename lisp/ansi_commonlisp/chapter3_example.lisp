@@ -271,3 +271,5 @@
   (bfs end (list (list start)) net))
 
 (setf min '((a b c) (b c) (c d)))
+
+
