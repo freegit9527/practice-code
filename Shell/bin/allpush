@@ -1,0 +1,35 @@
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: allpush.sh
+# 
+#         USAGE: ./allpush.sh 
+# 
+#   DESCRIPTION: 
+# 
+#       OPTIONS: ---
+#  REQUIREMENTS: ---
+#          BUGS: ---
+#         NOTES: ---
+#        AUTHOR: liuxueyang (lxy), liuxueyang457@163.com
+#  ORGANIZATION: Hunan University
+#       CREATED: 04/27/2014 20:22
+#      REVISION:  ---
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+
+cp ~/.vimrc ~/.vim/vimrc
+
+dir=$(find ~/Hack -name .git)
+for dir_one in $dir
+do
+	cd $dir_one
+	cd ..
+	onepush
+done
+
+cd ~/vimwiki/
+onepush
+
+exit 0

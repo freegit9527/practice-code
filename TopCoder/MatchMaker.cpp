@@ -1,13 +1,3 @@
-/*
- * =====================================================================================
- *       Filename : MatchMaker.cpp
- *    Description : MatchMaker
- *    Version     : 
- *        Created : 03/20/15 14:06
- *         Author : Liu Xue Yang (LXY), liuxueyang457@163.com
- *         Motto  : Suicide is Painless
- * =====================================================================================
- */
 #include <sstream>
 #include <iostream>
 #include <cstdlib>
@@ -19,12 +9,6 @@
 using namespace std;
 
 
-/*
- * =====================================================================================
- *        Class:  MatchMaker
- *  Description:  MatchMaker 
- * =====================================================================================
- */
 class MatchMaker
 {
 	public:
