@@ -19,4 +19,7 @@
   (car lst))
 
 
-(defun (setf primo1) (val lst))
+(defun (setf primo1) (val lst)
+  (setf (car lst) val))
+
+
