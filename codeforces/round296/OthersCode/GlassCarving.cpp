@@ -24,7 +24,7 @@ int gf(int &x){
     return x==fa[x]?x:fa[x]=gf(fa[x]);
 }
 void un(int x,int y){                           /* I can not understand */
-    x=gf(x);y=gf(y);                            /* Maybe he uses union set */
+    x=gf(x);y=gf(y);                            /* Maybe he uses union find set */
     if(x!=y){
         cnt[y]+=cnt[x];
         fa[x]=y;
