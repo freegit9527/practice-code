@@ -1,5 +1,6 @@
 #!/usr/bin/ruby -w
 
+
 puts "Hello, Ruby!";
 
 print <<EOF
@@ -23,4 +24,30 @@ def  hello
     puts "Hello, Matz!"
 end
 
-hello 
+["Hello, ", "Matz!", " each\n"].each { |e| print e }
+
+class Hello
+
+    def initialize (name)
+        @name = name
+    end
+
+    def hello_matz
+        puts "Hello, " + @name + "!"
+    end
+    
+end
+
+#hi = Hello.new("Veo")
+#hi.hello_matz
+#
+#hell = TkRoot.new
+#TkLabel.new(hello) do
+#    text "\n Hello, phoenix! \n"
+#    pack
+#end
+#
+#Tk.mainloop
+#
+
+
