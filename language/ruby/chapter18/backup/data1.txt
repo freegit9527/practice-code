@@ -1,0 +1,4 @@
+#!/usr/bin/ruby 
+a a b b
+A A b b
+a A B b
