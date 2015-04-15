@@ -28,6 +28,7 @@ end
 
 
 while true do
+  system "clear"
   ch = STDIN.getch
   case 
   when "h" == ch.to_str
