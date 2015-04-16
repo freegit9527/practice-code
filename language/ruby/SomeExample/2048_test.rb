@@ -3,9 +3,12 @@
 require "io/console"
 
 mar = Array.new(16, 0) # sheet value array
+$score = 0
+$target = 2048
+$pieces = 0
 
 def operate(mar, ran, gap)
-  mark = true
+  mark = false
   ran.each { |index| 
     ar = index.step(index + 3 * gap, gap).collect { |ind| ind}
     tm_ar = ar.collect{|ie| mar[ie]}
@@ -14,6 +17,7 @@ def operate(mar, ran, gap)
     (0..(tm_ar.size-1)).each {|ie|
       if tm_ar[ie] == tm_ar[ie+1]
         tm_ar[ie] *= 2
+        $score += tm_ar[ie]
         tm_ar[ie+1] = 0
       end 
     }
@@ -24,20 +28,15 @@ def operate(mar, ran, gap)
     tm_ar.size.times {|item|
       mar[ar[item]] = tm_ar[item]
     }
-    mark = false if tm_ar == pre_tm_ar
-#    pos = tm_ar.size
-#    (pos...4).each {|item|
-#      mar[ar[item]] = 0
-#    }
+    mark = true if tm_ar != pre_tm_ar
   }
-  #sheet(mar)
   mark
 end
 
 def myloop(mar, a_pos, gap) 
   a_pos.each{|item|
     3.times {|i|
-      if mar[item+i] == mar[item+i+gap]
+      if mar[item+i*gap] == mar[item+i*gap+gap]
         return true
       end 
     }
@@ -95,26 +94,54 @@ def add(mar, direc)
   end
   if mark 
     genera_num(mar)
+    $pieces += 1
   end
 end
 
 # print sheet
 def sheet(mar) 
-  mar.each_with_index { |i, index| 
-    printf("%4d", i) unless i == 0
-    printf("%4s", "*") if i == 0
-    puts if (index + 1) % 4 == 0
+  printf("\n\ntarget = %-4d  pieces = %-4d  score = %-4d\n", $target, $pieces, $score)
+  printf("\n%s%s\n", " " * 5, "~" * 35)
+  printf("%s%s\n\n", " " * 5, "~" * 35)
+
+
+  printf("%s%s%s\n%s", " " * 8 + "/", ("-" * 6 + "+") * 3,
+        "-" * 6 + "\\", " " * 8)
+  16.times { |i|
+    if mar[i] != 0
+      printf("|%5d ", mar[i])
+    else 
+      printf("|%5s ", " ")
+    end 
+    if (i+1) % 4 == 0 
+      printf("|\n") 
+      if (i+1) != 16
+        printf("%s%s%s\n%s", " " * 8 + "|", ("-" * 6 + "+") * 3,
+              "-" * 6 + "|", " " * 8)
+      else 
+        printf("%s%s%s\n%s", " " * 8 + "\\", ("-" * 6 + "+") * 3,
+              "-" * 6 + "/", " " * 8)
+      end 
+    end 
   }
-  printf("%s\n", "*" * 20)
+  printf("\n%s%s\n", " " * 5, "~" * 35)
+  printf("%s%s\n\n", " " * 5, "~" * 35)
 end
 
 
-
 genera_num(mar)
+$pieces += 1
+system "clear"
 while true
   sheet(mar)
   direc = STDIN.getch
+  if direc == "q"
+    break 
+  end
   add(mar, direc)
+
+  system "clear"
+  sheet(mar)
 
   if win?(mar) 
     puts "Congratulations! You Win!"
