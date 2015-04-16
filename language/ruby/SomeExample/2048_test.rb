@@ -103,7 +103,7 @@ def sheet(mar)
   printf("%s\n", "I am a vimer. So you can use vim-keybindings -.-")
   printf("%s\n", "You can also use direction keys...")
   puts "Besides, press 'q' or 'ESC' to quit."
-  printf("\n\ntarget = %-4d  pieces = %-4d  score = %-4d\n", $target, $pieces, $score)
+  printf("\n\n    target = %-4d pieces = %-4d score = %-4d\n", $target, $pieces, $score)
   printf("\n%s%s\n", " " * 5, "~" * 35)
   printf("%s%s\n\n", " " * 5, "~" * 35)
 
@@ -152,7 +152,6 @@ $pieces += 1
 system "clear"
 while true
   sheet(mar)
-  #direc = STDIN.getch
   direc = read_char
   if direc == "q" || direc == "\e" || direc == "\u0003"
     break 
