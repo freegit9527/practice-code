@@ -5,7 +5,7 @@ require "io/console"
 mar = Array.new(16, 0) # sheet value array
 
 def operate(mar, ran, gap)
-  mark = false
+  mark = true
   ran.each { |index| 
     ar = index.step(index + 3 * gap, gap).collect { |ind| ind}
     tm_ar = ar.collect{|ie| mar[ie]}
@@ -24,7 +24,7 @@ def operate(mar, ran, gap)
     tm_ar.size.times {|item|
       mar[ar[item]] = tm_ar[item]
     }
-    mark = true if tm_ar == pre_tm_ar
+    mark = false if tm_ar == pre_tm_ar
 #    pos = tm_ar.size
 #    (pos...4).each {|item|
 #      mar[ar[item]] = 0
@@ -76,17 +76,22 @@ def genera_num(mar)
 
 end
 
+def move?(mar, ba_r) 
+  val = ba_r.collect{|i| mar[i]}
+  val.count(0) > 0 ? true : false
+end
+
 def add(mar, direc)
   mark = false;
   case 
   when direc == "j"
-    mark = operate(mar, Array(12..15), -4) #j
+    mark = (operate(mar, Array(12..15), -4) || move?(mar, Array(12..15))) #j
   when direc == "k"
-    mark = operate(mar, Array(0..3), 4) #k
+    mark = (operate(mar, Array(0..3), 4) || move?(mar, Array(0..3))) #k
   when direc == "h"
-    mark = operate(mar, [0, 4, 8, 12], 1) #h
+    mark = (operate(mar, [0, 4, 8, 12], 1) || move?(mar, [0, 4, 8, 12])) #h
   when direc == "l"
-    mark = operate(mar, [3, 7, 11, 15], -1) #l
+    mark = (operate(mar, [3, 7, 11, 15], -1) || move?(mar, [3, 7 ,11, 15])) #l
   end
   if mark 
     genera_num(mar)
@@ -102,6 +107,7 @@ def sheet(mar)
   }
   printf("%s\n", "*" * 20)
 end
+
 
 
 genera_num(mar)
