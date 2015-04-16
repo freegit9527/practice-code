@@ -83,13 +83,13 @@ end
 def add(mar, direc)
   mark = false;
   case 
-  when direc == "j"
+  when direc == "j" || direc == "\e[B"
     mark = (operate(mar, Array(12..15), -4) || move?(mar, Array(12..15))) #j
-  when direc == "k"
+  when direc == "k" || direc == "\e[A"
     mark = (operate(mar, Array(0..3), 4) || move?(mar, Array(0..3))) #k
-  when direc == "h"
+  when direc == "h" || direc == "\e[D"
     mark = (operate(mar, [0, 4, 8, 12], 1) || move?(mar, [0, 4, 8, 12])) #h
-  when direc == "l"
+  when direc == "l" || direc == "\e[C"
     mark = (operate(mar, [3, 7, 11, 15], -1) || move?(mar, [3, 7 ,11, 15])) #l
   end
   if mark 
@@ -100,6 +100,9 @@ end
 
 # print sheet
 def sheet(mar) 
+  printf("%s\n", "I am a vimer. So you can use vim-keybindings -.-")
+  printf("%s\n", "You can also use direction keys...")
+  puts "Besides, press 'q' or 'ESC' to quit."
   printf("\n\ntarget = %-4d  pieces = %-4d  score = %-4d\n", $target, $pieces, $score)
   printf("\n%s%s\n", " " * 5, "~" * 35)
   printf("%s%s\n\n", " " * 5, "~" * 35)
@@ -128,14 +131,30 @@ def sheet(mar)
   printf("%s%s\n\n", " " * 5, "~" * 35)
 end
 
+def read_char 
+  STDIN.echo = false 
+  STDIN.raw!
+
+  input = STDIN.getc.chr 
+  if input == "\e" 
+    input << STDIN.read_nonblock(3) rescue nil
+    input << STDIN.read_nonblock(2) rescue nil
+  end 
+ensure 
+  STDIN.echo = true
+  STDIN.cooked!
+  return input
+end
+
 
 genera_num(mar)
 $pieces += 1
 system "clear"
 while true
   sheet(mar)
-  direc = STDIN.getch
-  if direc == "q"
+  #direc = STDIN.getch
+  direc = read_char
+  if direc == "q" || direc == "\e" || direc == "\u0003"
     break 
   end
   add(mar, direc)
