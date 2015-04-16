@@ -3,6 +3,7 @@
 #include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
+#include "a.h"
 
 /* 
  * ===  FUNCTION  ======================================================================
@@ -13,10 +14,8 @@
 	int
 main ( int argc, char *argv[] )
 {
-	printf ("\nProgram %s\n\n", argv[0] );
-	printf ("\nProgram %s\n\n", argv[0] );
-	printf ("\nProgram %s\n\n", argv[0] );
-	printf ("\nProgram %s\n\n", argv[0] );
+  printf ( "INVALUE = %d\n", INVALUE );
+  foo();
 
 	return EXIT_SUCCESS;
 }		/* ----------  end of function main  ---------- */
