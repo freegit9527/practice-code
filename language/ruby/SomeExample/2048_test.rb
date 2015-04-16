@@ -3,13 +3,13 @@
 require "io/console"
 
 mar = Array.new(16, 0) # sheet value array
-ran = [2, 4] # generate random new value
-r_pos = Random.new # get pos random seed
 
-def operate(mar, ran, gap) 
+def operate(mar, ran, gap)
+  mark = false
   ran.each { |index| 
     ar = index.step(index + 3 * gap, gap).collect { |ind| ind}
     tm_ar = ar.collect{|ie| mar[ie]}
+    pre_tm_ar = tm_ar.clone
     tm_ar.delete_if{|item| item == 0}
     (0..(tm_ar.size-1)).each {|ie|
       if tm_ar[ie] == tm_ar[ie+1]
@@ -18,22 +18,26 @@ def operate(mar, ran, gap)
       end 
     }
     tm_ar.delete_if{|item| item == 0}
+    (4-tm_ar.size).times {
+      tm_ar << 0
+    }
     tm_ar.size.times {|item|
       mar[ar[item]] = tm_ar[item]
     }
-    pos = tm_ar.size
-    (pos...4).each {|item|
-      mar[ar[item]] = 0
-    }
+    mark = true if tm_ar == pre_tm_ar
+#    pos = tm_ar.size
+#    (pos...4).each {|item|
+#      mar[ar[item]] = 0
+#    }
   }
-  sheet(mar)
-  printf("%s\n", "=" * 20)
+  #sheet(mar)
+  mark
 end
 
-def myloop(mar, a_pos) 
+def myloop(mar, a_pos, gap) 
   a_pos.each{|item|
     3.times {|i|
-      if mar[item+i] == mar[item+i+1]
+      if mar[item+i] == mar[item+i+gap]
         return true
       end 
     }
@@ -44,20 +48,7 @@ end
 def judge_lose_full(mar) 
   ro = [0, 4, 8, 12]
   col = [0, 1, 2, 3]
-  myloop(mar, ro) || myloop(mar, col)
-end
-
-def add(mar, direc)
-  case 
-  when direc == "j"
-    operate(mar, Array(12..15), -4) #j
-  when direc == "k"
-    operate(mar, Array(0..3), 4) #k
-  when direc == "h"
-    operate(mar, [0, 4, 8, 12], 1) #h
-  when direc == "l"
-    operate(mar, [3, 7, 11, 15], -1) #l
-  end
+  !myloop(mar, ro, 1) && !myloop(mar, col, 4)
 end
 
 def lose?(mar) 
@@ -70,6 +61,38 @@ def win?(mar)
   return max_value == 2048 ? true : false
 end
 
+def genera_num(mar) 
+  r_pos = Random.new # get pos random seed
+  ran = [2, 4] # generate random new value
+  pos = r_pos.rand(16)
+  while mar[pos] != 0 
+    r_pos = Random.new
+    pos = r_pos.rand(16)
+  end
+
+  r_val = Random.new 
+  val = r_val.rand(2)
+  mar[pos] = ran[val]
+
+end
+
+def add(mar, direc)
+  mark = false;
+  case 
+  when direc == "j"
+    mark = operate(mar, Array(12..15), -4) #j
+  when direc == "k"
+    mark = operate(mar, Array(0..3), 4) #k
+  when direc == "h"
+    mark = operate(mar, [0, 4, 8, 12], 1) #h
+  when direc == "l"
+    mark = operate(mar, [3, 7, 11, 15], -1) #l
+  end
+  if mark 
+    genera_num(mar)
+  end
+end
+
 # print sheet
 def sheet(mar) 
   mar.each_with_index { |i, index| 
@@ -80,19 +103,10 @@ def sheet(mar)
   printf("%s\n", "*" * 20)
 end
 
+
+genera_num(mar)
 while true
-  system "clear"
-  pos = r_pos.rand(16)
-  while mar[pos] != 0 
-    r_pos = Random.new
-    pos = r_pos.rand(16)
-  end
-
-  r_val = Random.new 
-  val = r_val.rand(2)
-  mar[pos] = ran[val]
   sheet(mar)
-
   direc = STDIN.getch
   add(mar, direc)
 
@@ -105,5 +119,6 @@ while true
     puts "Sorry, You are a loser..."
     break
   end
+  system "clear"
 end 
 
