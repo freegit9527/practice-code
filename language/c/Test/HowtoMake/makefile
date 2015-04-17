@@ -1,10 +1,12 @@
-Main: Main.o
-	cc -o Main Main.o
+obj = Main.o
 
-Main.o: Main.c a.h
-	cc -c Main.c
+Main: $(obj)
+	cc -o Main $(obj)
 
+Main.o: a.h
+
+.PHONEY: clean
 clean:
-	rm Main Main.o
+	-rm Main $(obj)
 
 
