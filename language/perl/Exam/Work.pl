@@ -10,29 +10,80 @@ use strict;
 use warnings;
 use utf8;
 use 5.014;
+use threads;
+use Thread::Semaphore;
+use threads::shared;
 
-sub auth {
+my $semaphore = Thread::Semaphore->new();
+my @NameList :shared;
+my @ResList :shared;
+
+#simulate calculate function.
+sub cal {
     my @ran = (0, 1);
     $ran[int(rand(2))];
 }
 
-while (<>) {
-    chomp;
-    s/\s+//;
-    my @arr = (split / /);
-    my $len = @arr;
-    if ($len == 2) {
-        if (auth($arr[0], $arr[1])) {
-            say "OK";
-        } else {
-            say "ERR";
-        }
-    } else {
-        if (auth($arr[0], $arr[1])) {
-            print "OK ", $arr[-1], "\n";
-        } else {
-            print "ERR ", $arr[-1], "\n";
+sub my_cache {
+    $semaphore->down();
+    my $fi = shift;
+    my $line;
+    chomp($line = <$fi>);
+    $line =~ s/\s+/ /g;
+    my ($name, $passwd, $channel) = split / /, $line;
+    my $len = @NameList;
+    my ($index, $pos);
+    for $index (0..($len-1)) {
+        if ($NameList[$index] eq $name) {
+            $pos = $index;
+            last;
         }
     }
+    if ($pos) {
+        my $truth = $ResList[$pos];
+        splice @NameList, $pos, 1;
+        splice @ResList, $pos, 1;
+        push @NameList, $name;
+        push @ResList, $truth;
+        if ( $truth ) {
+            print "OK";
+        } else {
+            print "ERR";
+        }
+        print " ", $channel if ($channel); 
+        say;
+    } else {
+        my $truth = cal($name, $passwd);
+        # size of cache is 10 
+        if ($len == 10) {
+            shift(@NameList);
+            shift(@ResList);
+        } else {
+            push @NameList, $name;
+            push @ResList, $truth;
+        }
+        if ( $truth ) {
+            print "OK";
+        } else {
+            print "ERR";
+        }
+        print " ", $channel if ($channel);
+        print "\n";
+    }
+    $semaphore->up();
 }
 
+my $TXT;
+open $TXT, 'in.txt';
+
+
+my $thr1 = threads->new(\&my_cache, $TXT);
+my $thr2 = threads->new(\&my_cache, $TXT);
+
+$thr1->join();
+$thr2->join();
+
+# in.txt
+# liuxueyang 1234 1
+# lxy 321
+#
