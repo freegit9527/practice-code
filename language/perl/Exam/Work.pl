@@ -20,8 +20,7 @@ my @ResList :shared;
 
 #simulate calculate function.
 sub cal {
-    my @ran = (0, 1);
-    $ran[int(rand(2))];
+    int(rand(2));
 }
 
 sub my_cache {
@@ -50,7 +49,7 @@ sub my_cache {
         } else {
             print "ERR";
         }
-        print " ", $channel if ($channel); 
+        print " ", $channel if ($channel);
         say;
     } else {
         my $truth = cal($name, $passwd);
