@@ -38,3 +38,7 @@ say ${$crew[0]}{'name'};
 my $ref = $crew[0]; say $$ref{'name'};
 
 my $format = "%-15s %-7s %-7s %-15s\n";
+my @k = qw (name hat shirt position);
+$\ = $/;
+printf $format, @k;
+printf $format, @$_{@k} for (@crew)
