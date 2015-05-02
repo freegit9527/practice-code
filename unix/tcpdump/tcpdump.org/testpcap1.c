@@ -18,6 +18,7 @@
 *****************************************************/
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include <pcap.h> /* if this gives you an error try pcap/pcap.h */
 #include <errno.h>
 #include <sys/socket.h>
