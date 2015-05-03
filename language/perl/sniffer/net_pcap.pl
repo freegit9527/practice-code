@@ -14,13 +14,19 @@ use Net::Pcap;
 
 die "You should be root...\n" if $>;
 
+my $dumper;
+
 sub process_packet {
     my ($user_data, $header, $packet) = @_;
     print "#" x 20 . "\n";
-    print "user_data is $user_data\n";
-    print "header is $header\n";
-    print "packet is $packet\n";
-    print "#" x 20 . "\n";
+    print "user_data is <$user_data>\n";
+    print "header is: \n";
+    for (sort keys %$header) {
+        print "\t\t$_ : $$header{$_}\n";
+    }
+    print "packet is <$packet>\n";
+    print "#" x 20 . "\n\n";
+    pcap_dump($dumper, $header, $packet);
 }
 
 my $err;
@@ -28,10 +34,15 @@ my $device = Net::Pcap::lookupdev(\$err);
 
 print "device is: $device\n";
 
+my $dump_file = 'network.dmp';
+
 my $pcap = pcap_open_live($device, 1024, 1, 0, \$err);
 
-#pcap_loop($pcap, 3, \&process_packet, "just for the demo");
+$dumper = pcap_dump_open($pcap, $dump_file);
 
+pcap_loop($pcap, 3, \&process_packet, "just for the demo");
+
+pcap_dump_close($dumper);
 pcap_close($pcap);
 
 my ($net, $mask);
