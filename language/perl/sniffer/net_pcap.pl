@@ -11,6 +11,11 @@ use warnings;
 use utf8;
 use 5.014;
 use Net::Pcap;
+use NetPacket::TCP;
+use Net::PcapUtils;
+use NetPacket::Ethernet qw(:strip);
+use NetPacket::IP qw(:strip);
+
 
 die "You should be root...\n" if $>;
 
@@ -25,6 +30,10 @@ sub process_packet {
         print "\t\t$_ : $$header{$_}\n";
     }
     print "packet is <$packet>\n";
+    my $tcp_obj = NetPacket::TCP->decode(ip_strip(eth_strip($packet)));
+    print "tcp_obj data is: <$tcp_obj->{data}> 
+    src_port: $tcp_obj->{src_port}
+    dest_port: $tcp_obj->{dest_port}\n";
     print "#" x 20 . "\n\n";
     pcap_dump($dumper, $header, $packet);
 }
