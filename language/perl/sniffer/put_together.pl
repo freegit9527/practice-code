@@ -71,8 +71,8 @@ my $filter;
 Net::Pcap::compile(
     $object, 
     \$filter,
-#    '(dst 10.63.110.14) && (tcp[13] & 2 != 0)', 
-    '(dst 127.0.0.1) && (tcp[13] & 2 != 0)', 
+    '(dst 10.63.68.180) && (tcp[13] & 2 != 0)', 
+#    '(dst 127.0.0.1) && (tcp[13] & 2 != 0)', 
     0, 
     $netmask
 ) 

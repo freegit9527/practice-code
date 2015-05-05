@@ -40,7 +40,7 @@ my $right_frame = $main_frame->Frame(
     -background => "white"
 )->pack(
     -side => 'right',
-#    -fill => 'y'
+    -fill => 'y',
 );
 
 $top_frame->Label(
@@ -94,7 +94,15 @@ sub clear_entry
 sub copy_entry
 {
     my $copied_text = $copy_entry->get();
-    $paste_text->insert("end", $copied_text);
+    my $num = 100;
+    my $cnt = 5;
+    while ($cnt > 0) {
+        my $test_str = sprintf("a-b-c-d" . "-e-f" . $num . "\n");
+        $paste_text->insert("end", $test_str);
+        $cnt -= 1;
+        sleep(2);
+    }
+#    $paste_text->insert("end", $copied_text);
 }
 
 MainLoop;
