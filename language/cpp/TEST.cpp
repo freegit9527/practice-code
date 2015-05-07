@@ -33,6 +33,11 @@ main ( int argc, char *argv[] )
 		pch = strchr(pch + 1, 's');
 	}
 
+  if (a == b)
+  {
+    printf("a equals to b..");
+  }
+
 		return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
 
