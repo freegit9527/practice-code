@@ -39,7 +39,7 @@ my $filter;
 
 my $mw = MainWindow->new;
 
-$mw->geometry("500x480");
+$mw->geometry("500x580");
 
 $mw->title("TCP CAPTURE TOOL");
 
@@ -63,6 +63,15 @@ my $top_frame = $main_frame->Frame
 );
 
 my $device_frame = $main_frame->Frame
+(
+    -background => "white",
+)->pack 
+(
+    -side => 'top',
+    -fill => 'x',
+);
+
+my $number_frame = $main_frame->Frame
 (
     -background => "white",
 )->pack 
@@ -135,6 +144,30 @@ my $device_button = $device_frame->Button
     -before => $device_entry,
     -expand => 1,
     -fill => 'x',
+);
+
+my $number_entry = $number_frame->Entry 
+(
+    -background => 'white',
+    -foreground => 'black',
+)->pack 
+(
+    -side => "right",
+    -fill => 'x',
+    -expand => 1,
+    -anchor => 'w',
+);
+
+my $number_label = $number_frame->Label
+(
+    -text => "Number of Packets:",
+    -background => 'white',
+    -foreground => 'black',
+)->pack 
+(
+    -side => 'left',
+    -anchor => 'w',
+    -expand => 1,
 );
 
 
