@@ -29,6 +29,8 @@ my $err;
 
 my $dev = $ARGV[0];
 
+my $packet_num = 0;
+
 unless (defined $dev) 
 {
     $dev = Net::Pcap::lookupdev(\$err);
@@ -71,7 +73,7 @@ my $filter;
 Net::Pcap::compile(
     $object, 
     \$filter,
-    '(dst 10.63.68.180) && (tcp[13] & 2 != 0)', 
+    '(dst 192.168.1.105) && (tcp[13] & 2 != 0)', 
 #    '(dst 127.0.0.1) && (tcp[13] & 2 != 0)', 
     0, 
     $netmask
@@ -84,7 +86,7 @@ Net::Pcap::setfilter($object, $filter) &&
 
 #   Set callback function and initiate packet capture loop
 
-Net::Pcap::loop($object, -1, \&syn_packets, '') ||
+Net::Pcap::loop($object, 10, \&syn_packets, '') ||
     die 'Unable to perform packet capture';
 
 Net::Pcap::close($object);
@@ -92,6 +94,7 @@ Net::Pcap::close($object);
 
 sub syn_packets 
 {
+#    state $num = 0;
     my ($user_data, $header, $packet) = @_;
 
     #   Strip ethernet encapsulation of captured packet 
@@ -107,6 +110,8 @@ sub syn_packets
     #   Print all out where its coming from and where its 
     #   going to!
 
+#    print "NO $num: ";
+    print "NO. $packet_num: ";
     print
         $ip->{'src_ip'}, ":", $tcp->{'src_port'}, " -> ",
         $ip->{'dest_ip'}, ":", $tcp->{'dest_port'}, "\n";
@@ -117,6 +122,8 @@ sub syn_packets
       "seqnum: $tcp->{seqnum}\n",
       "acknum: $tcp->{acknum}\n";
 
+#    $num++;
+    $packet_num++;
     if ($tcp->{flags} & SYN) 
     {
         print 
@@ -141,6 +148,7 @@ sub syn_packets
     }
 
     print "\n";
+    print "=" x 20 . "\n\n";
 }
 
 __END__

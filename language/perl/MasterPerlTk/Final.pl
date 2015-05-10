@@ -18,7 +18,7 @@ use NetPacket::TCP;
 
 if ($>)
 {
-#    die "You are not root...\n";
+    die "You are not root...\n";
 }
 
 #   Create packet capture object on device
@@ -36,6 +36,9 @@ my ($address, $netmask);
 
 # store packet filter 
 my $filter;
+
+# packet number 
+my $packet_num = 0;
 
 my $mw = MainWindow->new;
 
@@ -270,7 +273,7 @@ sub start_entry
     Net::Pcap::compile(
         $object, 
         \$filter,
-        '(dst 10.63.68.180) && (tcp[13] & 2 != 0)', 
+        '(dst 192.168.1.105) && (tcp[13] & 2 != 0)', 
 #        '(dst 127.0.0.1) && (tcp[13] & 2 != 0)', 
         0, 
         $netmask
@@ -325,6 +328,9 @@ sub syn_packets
     #   Print all out where its coming from and where its 
     #   going to!
 
+    $packet_content->insert("end",
+      "NO.$packet_num: ");
+
     $packet_content->insert("end", 
         $ip->{'src_ip'}. ":". $tcp->{'src_port'}. " -> ".
         $ip->{'dest_ip'}. ":". $tcp->{'dest_port'}. "\n"
@@ -337,35 +343,44 @@ sub syn_packets
       "acknum: $tcp->{acknum}\n"
     );
 
+    $packet_content->insert("end",
+      "\n" . "=" x 20 . "\n\n");
+
+    print "NO.$packet_num\n";
+
+
+    $packet_num++;
+
+
 #    # tcp fileds.
 #    
 #    print 
 #      "seqnum: $tcp->{seqnum}\n",
 #      "acknum: $tcp->{acknum}\n";
 
-    if ($tcp->{flags} & SYN) 
-    {
-        print 
-          "SYN: 1";
-    }
-    else 
-    {
-        print 
-          "SYN: 0";
-    }
-    print "\n";
+#    if ($tcp->{flags} & SYN) 
+#    {
+#        print 
+#          "SYN: 1";
+#    }
+#    else 
+#    {
+#        print 
+#          "SYN: 0";
+#    }
+#    print "\n";
+#
+#    if ($tcp->{flags} & FIN) 
+#    {
+#        print 
+#          "FIN: 1";
+#    }
+#    else 
+#    {
+#        print 
+#          "FIN: 0";
+#    }
 
-    if ($tcp->{flags} & FIN) 
-    {
-        print 
-          "FIN: 1";
-    }
-    else 
-    {
-        print 
-          "FIN: 0";
-    }
-
-    print "\n";
+#    print "\n";
 }
 
