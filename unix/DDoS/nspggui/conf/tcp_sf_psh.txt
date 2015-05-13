@@ -1,0 +1,22 @@
+# 다음의 @@ 변수를 알맞게 수정
+
+# 몇초동안 보낼 것인가? (초 단위)
+@@DURATION=10
+# 초당 보낼 패킷 수 (0은 최대)
+@@PPS=100
+
+# DMAC 주소는 일단 0으로 놓고 나중에 패러미터에서 주도록 함
+@@DMAC=000000000000
+# SMAC : 종종 L2 스위치 등에서 src mac verification 하는 경우 발생
+@@SMAC=00900b0858e7
+
+# 소스IP 지정
+@@SIP=GG GG GG GG
+
+# DIP 지정
+@@DIP=C0 A8 01 01 
+
+@@DPORT=0050
+
+@@TCPFLAG=08	# psh
+

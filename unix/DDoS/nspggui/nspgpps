@@ -1,0 +1,46 @@
+#!/bin/bash
+
+if [ $# -lt 1 ];then
+	echo "usage: $0 <interface> [...<interface>"
+	echo "ex) $0 eth0 eth1"
+	exit 1;
+fi
+
+index=0
+while [ $# -gt 0 ]; do
+	NIC[$index]=$1
+	shift
+	index=$(($index+1))
+done
+
+index=0
+for i in "${NIC[@]}"; do
+	PTV[$index]=`ifconfig $i | grep 'TX packets' | awk -- '{print $2;}' | awk -F ':' -- '{print $2;}'`
+	PRV[$index]=`ifconfig $i | grep 'RX packets' | awk -- '{print $2;}' | awk -F ':' -- '{print $2;}'`
+	index=$(($index+1))
+done
+
+
+while [ 1 ]; do
+	index=0
+	NOW=`date "+%T"`
+	echo -n "[$NOW]"
+	for i in "${NIC[@]}"; do
+		CTV[$index]=`ifconfig $i | grep 'TX packets' | awk -- '{print $2;}' | awk -F ':' -- '{print $2;}'`
+		CRV[$index]=`ifconfig $i | grep 'RX packets' | awk -- '{print $2;}' | awk -F ':' -- '{print $2;}'`
+
+		dtv=$((${CTV[$index]}-${PTV[$index]}))
+		drv=$((${CRV[$index]}-${PRV[$index]}))
+		dtv=$(($dtv / 1000))
+		drv=$(($drv / 1000))
+		printf " | %s:%4dkT%4dkR" $i $dtv $drv
+
+		PTV[$index]=${CTV[$index]}
+		PRV[$index]=${CRV[$index]}
+
+		index=$(($index+1))
+	done
+	echo ""
+	sleep 1;
+done
+

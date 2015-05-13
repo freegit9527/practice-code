@@ -1,0 +1,40 @@
+
+<IGMP>[@@DURATION,@@PPS]
+# IGMP
+############################################################
+# G H I J K L M N O P Q R S T U V
+# -------------------------------
+# 0 1 2 3 4 5 6 7 8 9 A B C D E F
+############################################################
+{
+# L2
+# Ethernet HEADER ----
+@@DMAC  # dest MAC : 01 00 5e 00 00 01
+@@SMAC	# src MAC
+08 00 # type IP
+
+# L3
+45	# Version : 4, Length 20
+00
+00 20	# total length
+73 eb	# identification
+00	# flags
+00 	# freg offset
+01	# TTL
+02	# IGMP
+a3 49	# header checksum
+@@SIP	# c0 a8 01 fe	# sip
+@@DIP	# e0 00 00 01	# dip
+
+# L4 IGMP
+11	# membership query
+64	# max response time
+ee 37	# L4 checksum
+00 00 00 00	# multicast address
+00	# QRV=0 S=Do not suppress router side processing
+64	# QQIC=100
+00 00	# Num Src: 0
+
+# IGMP trailer : 4) access IP(2
+34 29 20 61 63 63 65 73 73 20 49 50 28 32
+}

@@ -1,0 +1,32 @@
+#
+<ICMP Echo Request Flooding with single source>[@@DURATION,@@PPS]
+{
+# Ethernet HEADER ----
+@@DMAC	# dest MAC
+@@SMAC	# src MAC
+08 00	# Type : IP
+
+# IP Header
+45	# Version : 4, Header length 20
+00	# Differentiated Service Field : 0 ( DSCP 0, Default; ECN : 0)
+00 3C	# Total Length : 60
+GG GG	# Identification
+GG	# Flag
+GG	# Offset
+80	# Time To Live
+01	# Protocol : ICMP
+00 00	# Header Checksum
+@@SIP	# Source IP
+@@DIP	# Dest IP
+
+# Internet Control Message Protocol
+@@ICMP_TYPE	# Type
+@@ICMP_CODE # Code
+00 00	# Checksum
+00 01	# Identifier
+00 05	# Sequence number
+61 62 63 64 65 66
+67 68 69 6a 6b 6c 6d 6e  6f 70 71 72 73 74 75 76
+77 61 62 63 64 65 66 67  68 69	# Data
+}
+

