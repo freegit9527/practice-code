@@ -85,11 +85,6 @@ my %CONFIG = (
 
 );
 
-
-# ========================================
-# PROGRAM BEGIN...
-# ========================================
-
 $CONFIG{TOTINCREMENTS} = $#{$CONFIG{BANINCREMENTS}};
 $CONFIG{LISTFILE}      = "$CONFIG{LOGDIR}/bannedips.txt";
 $CONFIG{LASTDAY}       = 0;
@@ -100,7 +95,13 @@ if ( ! -d $CONFIG{LOGDIR})
   mkdir $CONFIG{LOGDIR},700;
 }
 
-my $command = qq($CONFIG{NETSTAT} -ntu | awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' | grep ^[0-9] | sort | uniq -c | sort -nr | head -30 );
+my $command = qq($CONFIG{NETSTAT} -ntu |
+                awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' |
+                grep ^[0-9] |
+                sort |
+                uniq -c |
+                sort -nr |
+                head -30 );
 
 &rotatelog();
 
@@ -123,11 +124,6 @@ while (1)
 
   sleep $CONFIG{INTERVAL};
 }
-
-
-# ========================================
-# PROGRAM END... 
-# ========================================
 
 sub rotatelog
 {
@@ -303,7 +299,8 @@ sub loadbanned
       $blocked{$ipaddress}{lastblock}  = 1;
       $blocked{$ipaddress}{passcount}  = 0;
 
-      &debug("- Loading blocked IP $ipaddress") if ($CONFIG{DEBUG} > 0);
+      &debug("- Loading blocked IP $ipaddress") 
+      if ($CONFIG{DEBUG} > 0);
 
     }
   }
