@@ -100,12 +100,16 @@ if ( ! -d $CONFIG{LOGDIR})
   mkdir $CONFIG{LOGDIR},700;
 }
 
-my $command = qq($CONFIG{NETSTAT} -ntu | awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' | grep ^[0-9] | sort | uniq -c | sort -nr | head -30 );
+my $command = qq($CONFIG{NETSTAT} -ntu | 
+    awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' | 
+    grep ^[0-9] | sort | uniq -c | sort -nr | head -30 );
 
 &rotatelog();
 
 if ($CONFIG{TESTMODE} == 1)
 {
+    # we are in TESTMODE and we will not change IPTABLE
+    # we write this note to DEBUG file handle
   &debug(qq(** NOTE **\n\nTest mode - No IPTABLE changes will be made\n));
 }
 
@@ -284,10 +288,13 @@ sub updatesleep
 
 sub loadbanned
 {
+    # delete blocked hash table.
   undef %blocked;
 
+  # test whether LISTFILE exists
   if (-f $CONFIG{LISTFILE})
   {
+      # append LISTFILE to LIST filehandle
     open(LIST, "< $CONFIG{LISTFILE}");
     my @list = <LIST>;
     close (LIST);
@@ -324,8 +331,12 @@ sub debug
 
   print DEBUG localtime() . " $line \n";
 
+  # print to standard outpu
+
   if ($CONFIG{STDOUT})
   {
     print localtime() . " $line \n";
   }
 }
+
+
