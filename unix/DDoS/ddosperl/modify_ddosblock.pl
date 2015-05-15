@@ -162,7 +162,10 @@ sub check
   foreach my $item (@input)
   {
     chomp($item);
-
+    # modifier 'o' is an optimization in the case that the regex includes a 
+    # variable reference. It indicates that the regex does not change 
+    # even though it has a variable within it. This allows for 
+    # optimizations that would not be possible otherwise.
     $item =~ s/^ +//io;
     $item =~ s/ +/ /io;
 
