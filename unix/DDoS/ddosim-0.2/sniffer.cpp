@@ -5,7 +5,8 @@
 
 Sniffer::Sniffer()
 {
-	dev = "eth0";
+//	dev = "eth0";
+	dev = "wlan0";
 	//catch SYN-ACK, RST-ACK and FIN-ACK
 	filter_exp = "tcp[tcpflags]&tcp-syn != 0 && tcp[tcpflags]&tcp-ack != 0 ";
 	filter_exp += "|| tcp[tcpflags]&tcp-rst != 0 && tcp[tcpflags]&tcp-ack != 0 ";

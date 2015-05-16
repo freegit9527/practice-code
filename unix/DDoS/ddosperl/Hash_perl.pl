@@ -59,3 +59,32 @@ say "";
 $t_k{lst} = [1, 2, 3, 4, 5];
 
 print "len = $#{$t_k{lst}} + 1\n";
+
+my %new_ha;
+
+$new_ha{ha} = 0;
+
+print "$new_ha{ha}\n";
+
+if ($new_ha{ha}) {
+    print "0 is true";
+}
+else {
+    print "0 is false";
+}
+say "";
+
+if ($new_ha{SUNDAY}) {
+    print "SUNDAY exists.\n";
+}
+else {
+    print "SUNDAY does not exist.\n";
+}
+
+my ($a, $b);
+
+($a, $b) = (-1, 2);
+
+$b = $a + 1 || 1;
+
+print "b = $b\n";

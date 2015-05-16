@@ -27,7 +27,8 @@ int main(int argc, char **argv)
 	u_long srcNet = 0;	//network-byte order
 	u_long localIp = 0;	//the IP address of sending interface
 	int victimPort = 0;
-	string victimIpStr, ifName = "eth0", localIpStr, victimPortStr;
+//	string victimIpStr, ifName = "eth0", localIpStr, victimPortStr;
+	string victimIpStr, ifName = "wlan0", localIpStr, victimPortStr;
 	string srcNetStr;
 	int count = 1;		//total number of connections to initiate
 	int wait = 1;		//wait between initiating connections

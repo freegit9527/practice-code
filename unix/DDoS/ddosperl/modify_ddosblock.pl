@@ -108,8 +108,9 @@ my $command = qq($CONFIG{NETSTAT} -ntu |
 
 if ($CONFIG{TESTMODE} == 1)
 {
-    # we are in TESTMODE and we will not change IPTABLE
-    # we write this note to DEBUG file handle
+    # we are in TESTMODE and we will not change 
+    # IPTABLE # we write this note to DEBUG 
+    # file handle
   &debug(qq(** NOTE **\n\nTest mode - No IPTABLE changes will be made\n));
 }
 
