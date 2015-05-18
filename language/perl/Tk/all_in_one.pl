@@ -67,7 +67,7 @@ my $copy_entry = $left_frame->Entry(
 
 my $copy_button = $left_frame->Button(
     -text => "Copy text",
-    -command => \&copy_entry
+    -command => \&copy_entry_fun
 )->pack(
     -side => "right"
 );
@@ -91,7 +91,7 @@ sub clear_entry
     $paste_text->delete('0.0', 'end')
 }
 
-sub copy_entry
+sub copy_entry_fun
 {
     my $copied_text = $copy_entry->get();
     my $num = 100;
@@ -100,9 +100,9 @@ sub copy_entry
         my $test_str = sprintf("a-b-c-d" . "-e-f" . $num . "\n");
         $paste_text->insert("end", $test_str);
         $cnt -= 1;
-        sleep(2);
+#        sleep(2);
     }
-#    $paste_text->insert("end", $copied_text);
+    $paste_text->insert("end", $copied_text);
 }
 
 MainLoop;

@@ -30,24 +30,28 @@ my %CONFIG = (
   ## 2 = Actions + unix commands reported
   ## 3 = Verbose in the extreme
 
-  DEBUG => 2,
+#  DEBUG => 2,
+  DEBUG => 3,
 
   ## Do we perform checks only - no IPTABLE changes - 
   ## Good for debugging
 
-  TESTMODE => 0,
+#  TESTMODE => 0,
+  TESTMODE => 1,
 
   ## Ban IP addresses above this number of accesses
 
-  THRESHOLD => 150,
+#  THRESHOLD => 150,
+  THRESHOLD => 20,
 
   ## How long, in seconds, between checks
 
-  INTERVAL => 30,
+#  INTERVAL => 30,
+  INTERVAL => 3,
 
   ## If we have APF use that, otherwise fallback on iptables
 
-  USEAPF => 0,
+  USEAPF => 1,
 
   ## How long (in seconds) do we ban people for
   ## escalating each time they're bad
@@ -63,7 +67,8 @@ my %CONFIG = (
 
   ## IP ADDRESSES THAT WE WILL NEVER BAN
 
-  EXCLUDEIPS => [ "127.0.0.1", "10.0.0.1" ],
+#  EXCLUDEIPS => [ "127.0.0.1", "10.0.0.1" ],
+  EXCLUDEIPS => [ "10.0.0.1" ],
 
   ## UNIX COMMANDS 
 
@@ -97,6 +102,8 @@ $CONFIG{TOTINCREMENTS} = $#{$CONFIG{BANINCREMENTS}};
 $CONFIG{LISTFILE}      = "$CONFIG{LOGDIR}/bannedips.txt";
 # init is as Sunday
 $CONFIG{LASTDAY}       = 0;
+
+our $DEBUG;
 
 if ( ! -d $CONFIG{LOGDIR})
 {
@@ -152,19 +159,21 @@ sub rotatelog
 ## indicating Wednesday
   my $weekday = $date[6];
 
-  # not Sunday
+  # today is not CONFIG{LASTDAY}
   if ($weekday != $CONFIG{LASTDAY})
   {
       # not Sunday
     if ($CONFIG{LASTDAY})
     {
-      close(DEBUG);
+      close($DEBUG);
     }
     $CONFIG{LASTDAY} = $weekday;
 
-    open(DEBUG, 
+    open($DEBUG, 
         "> $CONFIG{LOGDIR}/doslog.$weekday.txt");
   }
+    open($DEBUG, 
+        "> $CONFIG{LOGDIR}/doslog.$weekday.txt");
 }
 
 
@@ -203,7 +212,7 @@ sub debug
 {
   my ($line) = @_;
 
-  print DEBUG localtime() . " $line \n";
+  print $DEBUG localtime() . " $line \n";
 
   # print to standard outpu
 
@@ -369,5 +378,14 @@ sub release
   {
     &savebanned(\%blocked);
   }
+}
+
+sub savebanned
+{
+  my ($list) = @_;
+
+  open(LIST, "> $CONFIG{LISTFILE}");
+  print LIST join("\n", keys %blocked);
+  close (LIST);
 }
 
