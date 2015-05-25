@@ -24,6 +24,15 @@ use warnings;
 use vars qw(%CONFIG %blocked);
 
 $| = 1;
+# If set to nonzero, forces a flush right away and after every write or print 
+# on the currently selected output channel. Default is 0 (regardless of whether 
+# the channel is really buffered by the system or not; $| tells you only whether 
+# you've asked Perl explicitly to flush after each write). STDOUT will typically 
+# be line buffered if output is to the terminal and block buffered otherwise. 
+# Setting this variable is useful primarily when you are outputting to a pipe or 
+# socket, such as when you are running a Perl program under rsh and want to see 
+# the output as it's happening. This has no effect on input buffering. See getc 
+# for that. See select on how to select the output channel. See also IO::Handle.
 
 my %CONFIG = (
 
