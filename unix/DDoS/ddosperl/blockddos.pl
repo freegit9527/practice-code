@@ -1,38 +1,27 @@
-#!/usr/bin/perl
-
+#!/usr/bin/env perl 
 ###############################################################################
-## DDOSBlock version 0.1 Author: David Brown < david@splut.com >              #
-##                                                                            #
-## Download from https://sourceforge.net/projects/ddosblock                   #
-##                                                                            #
+##         FILE: blockddos.pl
+##       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
+## ORGANIZATION: Hunan University
+##      CREATED: 05/15/2015 05:44:50 PM
+## DESCRIPTIONG:
 ## To execute, run:                                                           #
 ##                                                                            #
 ## ./ddosblock-0.2.pl                                                         #
 ##                                                                            #
-## Changes:                                                                   #
-## 0.3                                                                        #
-##  - Now reports port being affected (Request by Stephen Rolt)               #
-## 0.2                                                                        #
-##  - Changed name to DDOSBlock so people don't think it's a DDOS script      # 
-##  - Fixed problem with logging                                              #
+##                                                                            #
 ##                                                                            #
 ###############################################################################
 
+
 use strict;
 use warnings;
+use utf8;
+use 5.014;
 
 use vars qw(%CONFIG %blocked);
 
 $| = 1;
-# If set to nonzero, forces a flush right away and after every write or print 
-# on the currently selected output channel. Default is 0 (regardless of whether 
-# the channel is really buffered by the system or not; $| tells you only whether 
-# you've asked Perl explicitly to flush after each write). STDOUT will typically 
-# be line buffered if output is to the terminal and block buffered otherwise. 
-# Setting this variable is useful primarily when you are outputting to a pipe or 
-# socket, such as when you are running a Perl program under rsh and want to see 
-# the output as it's happening. This has no effect on input buffering. See getc 
-# for that. See select on how to select the output channel. See also IO::Handle.
 
 my %CONFIG = (
 
@@ -41,30 +30,36 @@ my %CONFIG = (
   ## 2 = Actions + unix commands reported
   ## 3 = Verbose in the extreme
 
-  DEBUG => 2,
+#  DEBUG => 2,
+  DEBUG => 3,
 
-  ## Do we perform checks only - no IPTABLE changes - Good for debugging
+  ## Do we perform checks only - no IPTABLE changes - 
+  ## Good for debugging
 
-  TESTMODE => 0,
+#  TESTMODE => 0,
+  TESTMODE => 1,
 
   ## Ban IP addresses above this number of accesses
 
-  THRESHOLD => 150,
+#  THRESHOLD => 150,
+  THRESHOLD => 20,
 
   ## How long, in seconds, between checks
 
-  INTERVAL => 30,
+#  INTERVAL => 30,
+  INTERVAL => 3,
 
   ## If we have APF use that, otherwise fallback on iptables
 
-  USEAPF => 0,
+  USEAPF => 1,
 
   ## How long (in seconds) do we ban people for
   ## escalating each time they're bad
   ## This resets to the first item, when they have gone
   ## a full interval without being flagged
   ##
-  ## 60, 300, 3600 would mean that they are banned for 60 seconds, then 5 minutes, then an hour
+  ## 60, 300, 3600 would mean that they are banned for 
+  ## 60 seconds, then 5 minutes, then an hour
   ## 
   ## This list can have as many increment levels as you like
 
@@ -72,7 +67,8 @@ my %CONFIG = (
 
   ## IP ADDRESSES THAT WE WILL NEVER BAN
 
-  EXCLUDEIPS => [ "127.0.0.1", "10.0.0.1" ],
+#  EXCLUDEIPS => [ "127.0.0.1", "10.0.0.1" ],
+  EXCLUDEIPS => [ "10.0.0.1" ],
 
   ## UNIX COMMANDS 
 
@@ -86,17 +82,28 @@ my %CONFIG = (
 
   ## WHERE TO STORE/SAVE OUTPUT
 
-  LOGDIR => "/var/log/ddosblock",
+#  LOGDIR => "/var/log/ddosblock",
+  LOGDIR => "./log",
 
-  MAILTO => "nobody\@example.com", # NOTE: Under Perl you have to escape the @ symbol with a slash
+  MAILTO => "nobody\@example.com", # NOTE: Under Perl 
+  ## you have to escape the @ symbol with a slash
 
-  STDOUT => 1, # In addition to logging, do we want to report it to STDOUT
+  STDOUT => 1, # In addition to logging, do 
+  ## we want to report it to STDOUT
 
 );
 
+# ========================================
+# PROGRAM BEGIN...
+# ========================================
+
+
 $CONFIG{TOTINCREMENTS} = $#{$CONFIG{BANINCREMENTS}};
 $CONFIG{LISTFILE}      = "$CONFIG{LOGDIR}/bannedips.txt";
+# init is as Sunday
 $CONFIG{LASTDAY}       = 0;
+
+our $DEBUG;
 
 if ( ! -d $CONFIG{LOGDIR})
 {
@@ -105,7 +112,8 @@ if ( ! -d $CONFIG{LOGDIR})
 }
 
 my $command = qq($CONFIG{NETSTAT} -ntu |
-                awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' |
+                awk '{ sub(/(.*)\:/,"",\$4); 
+                sub(/\:(.*)/,"",\$5); print \$5,\$4}' |
                 grep ^[0-9] |
                 sort |
                 uniq -c |
@@ -116,7 +124,11 @@ my $command = qq($CONFIG{NETSTAT} -ntu |
 
 if ($CONFIG{TESTMODE} == 1)
 {
-  &debug(qq(** NOTE **\n\nTest mode - No IPTABLE changes will be made\n));
+    # we are in TESTMODE and we will not change 
+    # IPTABLE # we write this note to DEBUG 
+    # file handle
+  &debug(qq(** NOTE **\n\n
+      Test mode - No IPTABLE changes will be made\n));
 }
 
 &loadbanned();
@@ -134,22 +146,82 @@ while (1)
   sleep $CONFIG{INTERVAL};
 }
 
+
+# ========================================
+# PROGRAM END... 
+# ========================================
+
 sub rotatelog
 {
   my @date = localtime();
+## $date[6] is the day of the week, 
+## with 0 indicating Sunday and 3 
+## indicating Wednesday
   my $weekday = $date[6];
 
+  # today is not CONFIG{LASTDAY}
   if ($weekday != $CONFIG{LASTDAY})
   {
+      # not Sunday
     if ($CONFIG{LASTDAY})
     {
-      close(DEBUG);
+      close($DEBUG);
     }
     $CONFIG{LASTDAY} = $weekday;
 
-    open(DEBUG, "> $CONFIG{LOGDIR}/doslog.$weekday.txt");
+    open($DEBUG, 
+        "> $CONFIG{LOGDIR}/doslog.$weekday.txt");
+  }
+    open($DEBUG, 
+        "> $CONFIG{LOGDIR}/doslog.$weekday.txt");
+}
+
+
+sub loadbanned
+{
+    # delete blocked hash table.
+  undef %blocked;
+
+  # test whether LISTFILE exists
+  if (-f $CONFIG{LISTFILE})
+  {
+      # append LISTFILE to LIST filehandle
+    open(LIST, "< $CONFIG{LISTFILE}");
+    my @list = <LIST>;
+    close (LIST);
+
+    # Rebuild a list of those things we've blocked
+    foreach my $ipaddress (@list)
+    {
+      chomp($ipaddress);
+
+      # Let them be released and evaluated again
+      $blocked{$ipaddress}{sleepuntil} = 1;
+      $blocked{$ipaddress}{blocklevel} = 1;
+      $blocked{$ipaddress}{lastblock}  = 1;
+      $blocked{$ipaddress}{passcount}  = 0;
+
+      &debug("- Loading blocked IP $ipaddress") 
+      if ($CONFIG{DEBUG} > 0);
+
+    }
   }
 }
+
+sub debug
+{
+  my ($line) = @_;
+
+  print $DEBUG localtime() . " $line \n";
+
+  # print to standard outpu
+
+  if ($CONFIG{STDOUT})
+  {
+    print localtime() . " $line \n";
+  }
+}
+
 
 sub check
 {
@@ -163,7 +235,10 @@ sub check
   foreach my $item (@input)
   {
     chomp($item);
-
+    # modifier 'o' is an optimization in the case that the regex includes a 
+    # variable reference. It indicates that the regex does not change 
+    # even though it has a variable within it. This allows for 
+    # optimizations that would not be possible otherwise.
     $item =~ s/^ +//io;
     $item =~ s/ +/ /io;
 
@@ -182,9 +257,18 @@ sub check
 
       if ($blocked{$ipaddress}{blocklevel} == 1)
       {
+          # -j, --jump target
+          #    This  specifies  the target of the rule; i.e., what to do if the packet matches it.  
+          #    The target can be a user-defined chain (other than the
+          #    one this rule is in), one of the special builtin targets which decide the fate of the 
+          #    packet immediately, or an extension  (see  EXTENSIONS
+          #    below).  If this option is omitted in a rule (and -g is not used), then matching the 
+          #    rule will have no effect on the packet's fate, but the
+          #    counters on the rule will be incremented.
         my $iptcmd     = ($CONFIG{USEAPF}) ?
           "$CONFIG{APF} -d $ipaddress"
         :
+        # IPT is iptables
           "$CONFIG{IPT} -I INPUT -s $ipaddress -j DROP";
 
         my $ok = `$iptcmd` unless ($CONFIG{TESTMODE});
@@ -203,7 +287,8 @@ sub check
       }
       else
       {
-        &debug("Setting $ipaddress to block level $blocked{$ipaddress}{blocklevel} ($hits hits/minute)") if ($CONFIG{DEBUG} > 0);
+        &debug("Setting $ipaddress to block level $blocked{$ipaddress}{blocklevel} ($hits hits/minute)") 
+        if ($CONFIG{DEBUG} > 0);
       }
 
       &updatesleep($ipaddress);
@@ -217,6 +302,26 @@ sub check
   {
     &savebanned();
   }
+}
+
+sub updatesleep
+{
+  my ($ipaddress) = @_;
+
+  my $blocklevel = $blocked{$ipaddress}{blocklevel};
+
+  $blocklevel = ($blocklevel >= $CONFIG{TOTINCREMENTS}) ?
+                  $#{$CONFIG{BANINCREMENTS}} : 
+                  $blocklevel;
+
+  my $increment = $CONFIG{BANINCREMENTS}[$blocklevel - 1];
+
+  $blocked{$ipaddress}{sleepuntil} = time + $increment;
+
+  my $stamp = localtime(time + $increment);
+
+  &debug("- Will check $ipaddress after $increment seconds ($stamp) - Block level $blocklevel") 
+  if ($CONFIG{DEBUG} > 1);
 }
 
 sub release
@@ -244,6 +349,11 @@ sub release
         my $iptcmd = ($CONFIG{USEAPF}) ?
           "$CONFIG{IPT} -u "
           :
+          # -D, --delete chain rule-specification
+          # -D, --delete chain rulenum
+          # Delete  one  or  more  rules from the selected chain.  There are two versions of this command:
+          # the rule can be specified as a number in the
+          # chain (starting at 1 for the first rule) or a rule to match.
           "$CONFIG{IPT} -D INPUT -s $ipaddress -j DROP";
 
         &debug("Removing block from $ipaddress") if ($CONFIG{DEBUG}> 0);
@@ -270,51 +380,6 @@ sub release
   }
 }
 
-sub updatesleep
-{
-  my ($ipaddress) = @_;
-
-  my $blocklevel = $blocked{$ipaddress}{blocklevel};
-
-  $blocklevel = ($blocklevel >= $CONFIG{TOTINCREMENTS}) ? $#{$CONFIG{BANINCREMENTS}} : $blocklevel;
-
-  my $increment = $CONFIG{BANINCREMENTS}[$blocklevel - 1];
-
-  $blocked{$ipaddress}{sleepuntil} = time + $increment;
-
-  my $stamp = localtime(time + $increment);
-
-  &debug("- Will check $ipaddress after $increment seconds ($stamp) - Block level $blocklevel") if ($CONFIG{DEBUG} > 1);
-}
-
-sub loadbanned
-{
-  undef %blocked;
-
-  if (-f $CONFIG{LISTFILE})
-  {
-    open(LIST, "< $CONFIG{LISTFILE}");
-    my @list = <LIST>;
-    close (LIST);
-
-    # Rebuild a list of those things we've blocked
-    foreach my $ipaddress (@list)
-    {
-      chomp($ipaddress);
-
-      # Let them be released and evaluated again
-      $blocked{$ipaddress}{sleepuntil} = 1;
-      $blocked{$ipaddress}{blocklevel} = 1;
-      $blocked{$ipaddress}{lastblock}  = 1;
-      $blocked{$ipaddress}{passcount}  = 0;
-
-      &debug("- Loading blocked IP $ipaddress") 
-      if ($CONFIG{DEBUG} > 0);
-
-    }
-  }
-}
-
 sub savebanned
 {
   my ($list) = @_;
@@ -324,14 +389,3 @@ sub savebanned
   close (LIST);
 }
 
-sub debug
-{
-  my ($line) = @_;
-
-  print DEBUG localtime() . " $line \n";
-
-  if ($CONFIG{STDOUT})
-  {
-    print localtime() . " $line \n";
-  }
-}

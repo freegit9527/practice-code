@@ -13,10 +13,36 @@ use Net::Pcap;
 use NetPacket::Ethernet;
 use NetPacket::IP;
 use NetPacket::TCP;
+use IO::Handle;
 use Tk;
 #use vars (%uniq_srcip);
 
+$| = 1;
+
+my $THRESHOLD = 100;
+
 my %uniq_srcip;
+
+my $logdir = "./log";
+
+if (! -d $logdir) 
+{
+    print "Creating log directory $logdir\n\n";
+    mkdir $logdir, 0755;
+}
+
+my $LISTFILE = "$logdir/bannedips.txt";
+
+my @date = localtime();
+
+my $weekday = $date[6];
+
+my $log_handle;
+
+open($log_handle, "> $logdir/log.$weekday.txt");
+
+$log_handle->autoflush(1);
+
 if ($>)
 {
     die "You are not root...\n";
@@ -41,6 +67,9 @@ unless (defined $dev)
         die 'Unable to determine network device for monitoring - ', $err;
     }
 }
+
+print "listenging to device: $dev\n";
+print $log_handle "listenging to device: $dev\n";
 
 #   Look up network address information about network 
 #   device using Net::Pcap::lookupnet - This also acts as a 
@@ -123,6 +152,7 @@ sub syn_packets
 
 #    print "NO $num: ";
     print "NO. $packet_num: ";
+    print $log_handle "NO. $packet_num: ";
 
     print
         $ip->{'src_ip'}, ":", $tcp->{'src_port'}, " -> ",
@@ -130,9 +160,13 @@ sub syn_packets
 
     # tcp fileds.
     
-    print 
-      "seqnum: $tcp->{seqnum}\n",
-      "acknum: $tcp->{acknum}\n";
+#    print 
+#      "seqnum: $tcp->{seqnum}\n",
+#      "acknum: $tcp->{acknum}\n";
+#
+#    print $log_handle
+#      "seqnum: $tcp->{seqnum}\n",
+#      "acknum: $tcp->{acknum}\n";
 
 #    $num++;
     $packet_num++;
@@ -140,34 +174,70 @@ sub syn_packets
     {
         print 
           "SYN: 1";
+
+        print $log_handle
+          "SYN: 1";
     }
     else 
     {
         print 
           "SYN: 0";
+
+        print $log_handle
+          "SYN: 0";
     }
     print "\n";
+    print $log_handle "\n";
+
 
     if ($tcp->{flags} & FIN) 
     {
         print 
+          "FIN: 1";
+
+        print $log_handle
           "FIN: 1";
     }
     else 
     {
         print 
           "FIN: 0";
+
+        print $log_handle
+          "FIN: 0";
     }
 
     print "\n\n";
 
+    print $log_handle "\n\n";
+
     print "src_ip\t\tnumOfConnections\n";
+
+    print $log_handle "src_ip\t\tnumOfConnections\n";
+
+    open(LIST, "> $LISTFILE");
+
+    LIST->autoflush(1);
+
+    print LIST "src_ip\t\tnumOfConnections\n";
+
     for my $k (keys %uniq_srcip) 
     {
         print "$k\t\t$uniq_srcip{$k}\n";
+
+        print $log_handle "$k\t\t$uniq_srcip{$k}\n";
+
+        if ($uniq_srcip{$k} > $THRESHOLD) {
+            print LIST "$k\t\t$uniq_srcip{$k}\n";
+        }
     }
+    close(LIST);
+
     print "\n";
     print "=" x 20 . "\n\n";
+
+    print $log_handle "\n";
+    print $log_handle "=" x 20 . "\n\n";
 }
 
 __END__

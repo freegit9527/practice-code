@@ -15,6 +15,34 @@ use Net::Pcap;
 use NetPacket::Ethernet;
 use NetPacket::IP;
 use NetPacket::TCP;
+use IO::Handle;
+
+
+$| = 1;
+
+my $THRESHOLD = 100;
+
+my $number_packet_to_catch;
+
+my $logdir = "./log";
+
+if (! -d $logdir) 
+{
+    print "Creating log directory $logdir\n\n";
+    mkdir $logdir, 0755;
+}
+
+my $LISTFILE = "$logdir/bannedips.txt";
+
+my @date = localtime();
+
+my $weekday = $date[6];
+
+my $log_handle;
+
+open($log_handle, "> $logdir/log.$weekday.txt");
+
+$log_handle->autoflush(1);
 
 if ($>)
 {
@@ -45,7 +73,7 @@ my %uniq_srcip;
 
 my $mw = MainWindow->new;
 
-$mw->geometry("500x580");
+#$mw->geometry("500x580");
 
 $mw->title("TCP CAPTURE TOOL");
 
@@ -152,6 +180,20 @@ my $device_button = $device_frame->Button
     -fill => 'x',
 );
 
+my $number_button = $number_frame->Button
+(
+    -text => "Get Number",
+#    -background => 'white',
+#    -foreground => 'black',
+    -command => \&get_number,
+)->pack 
+(
+    -side => 'right',
+    -anchor => 'w',
+    -expand => 1,
+);
+
+
 my $number_entry = $number_frame->Entry 
 (
     -background => 'white',
@@ -166,7 +208,8 @@ my $number_entry = $number_frame->Entry
 
 my $number_label = $number_frame->Label
 (
-    -text => "Number of Packets:",
+#    -text => "IP: 127.0.0.1 Port: 80",
+    -text => "Number of Packets To Catch:",
     -background => 'white',
     -foreground => 'black',
 )->pack 
@@ -257,7 +300,8 @@ sub start_entry
         die 'Unable to look up device information for ', $dev, ' - ', $err;
     }
 
-    $object = Net::Pcap::open_live($dev, 1500, 0, 0, \$err);
+    my $num_of_packet = $number_entry->get();
+    $object = Net::Pcap::open_live($dev, $num_of_packet, 0, 0, \$err);
 
     unless (defined $object) 
     {
@@ -289,13 +333,14 @@ sub start_entry
 
 #   Set callback function and initiate packet capture loop
 
-    Net::Pcap::loop($object, -1, \&syn_packets, '') ||
+    &get_number;
+    Net::Pcap::loop($object, $number_packet_to_catch, \&syn_packets, '') ||
         die 'Unable to perform packet capture';
 
     Net::Pcap::close($object);
 
 #    $dev= $device_entry->get();
-#    $packet_content->insert("end", $dev);
+    $packet_content->insert("end", $dev);
 }
 
 #   Use network device entered in device_entry or if no 
@@ -305,7 +350,7 @@ sub start_entry
 
 sub getdevice 
 {
-#    $dev = Net::Pcap::lookupdev(\$err);
+    $dev = Net::Pcap::lookupdev(\$err);
     $dev = "lo";
     if (defined $err) 
     {
@@ -313,6 +358,8 @@ sub getdevice
     }
     $device_entry->delete('0.0', 'end');
     $device_entry->insert("end", $dev);
+    print "listenging to device: $dev\n";
+    print $log_handle "listenging to device: $dev\n";
 }
 
 sub syn_packets 
@@ -343,43 +390,148 @@ sub syn_packets
     #   going to!
 
     $packet_content->insert("end",
-      "NO.$packet_num: ");
+      "NO.$packet_num: \n");
+
+    print "NO.$packet_num\n";
+    print $log_handle "NO. $packet_num: \n";
 
     $packet_content->insert("end", 
         $ip->{'src_ip'}. ":". $tcp->{'src_port'}. " -> ".
         $ip->{'dest_ip'}. ":". $tcp->{'dest_port'}. "\n"
     );
 
+    print
+        $ip->{'src_ip'}, ":", $tcp->{'src_port'}, " -> ",
+        $ip->{'dest_ip'}, ":", $tcp->{'dest_port'}, "\n";
+
    # tcp fileds.
    
-    $packet_content->insert("end", 
-      "seqnum: $tcp->{seqnum}\n".
-      "acknum: $tcp->{acknum}\n"
-    );
+#    $packet_content->insert("end", 
+#      "seqnum: $tcp->{seqnum}\n".
+#      "acknum: $tcp->{acknum}\n"
+#    );
 
-    $packet_content->insert("end",
-      "\n\n");
+#    $packet_content->insert("end",
+#      "\n\n");
 
-    $packet_content->insert("end",
-      "src_ip\t\tnumOfConnections\n");
-
-    for my $k (keys %uniq_srcip) 
-    {
-        $packet_content->insert("end",
-          "$k\t\t$uniq_srcip{$k}\n");
-    }
-
-    $packet_content->insert("end",
-      "\n\n");
-
-    $packet_content->insert("end",
-      "\n" . "=" x 20 . "\n\n");
+#    $packet_content->insert("end",
+#      "src_ip\t\tnumOfConnections\n");
+#
+#    for my $k (keys %uniq_srcip) 
+#    {
+#        $packet_content->insert("end",
+#          "$k\t\t$uniq_srcip{$k}\n");
+#    }
+#
+#    $packet_content->insert("end",
+#      "\n\n");
+#
+#    $packet_content->insert("end",
+#      "\n" . "=" x 20 . "\n\n");
 
 #    print "NO.$packet_num\n";
 
 
     $packet_num++;
 
+    if ($tcp->{flags} & SYN) 
+    {
+        print 
+          "SYN: 1";
+
+        print $log_handle
+          "SYN: 1";
+
+        $packet_content->insert("end",
+          "SYN: 1");
+    }
+    else 
+    {
+        print 
+          "SYN: 0";
+
+        print $log_handle
+          "SYN: 0";
+
+        $packet_content->insert("end",
+          "SYN: 0");
+    }
+    print "\n";
+    print $log_handle "\n";
+
+    $packet_content->insert("end",
+      "\n");
+
+    if ($tcp->{flags} & FIN) 
+    {
+        print 
+          "FIN: 1";
+
+        print $log_handle
+          "FIN: 1";
+
+        $packet_content->insert("end",
+          "FIN: 1");
+    }
+    else 
+    {
+        print 
+          "FIN: 0";
+
+        print $log_handle
+          "FIN: 0";
+
+        $packet_content->insert("end",
+          "FIN 0");
+    }
+
+    print "\n\n";
+
+    print $log_handle "\n\n";
+
+    $packet_content->insert("end",
+      "\n\n");
+
+    print "src_ip\t\tnumOfConnections\n";
+
+    print $log_handle "src_ip\t\tnumOfConnections\n";
+
+    $packet_content->insert("end",
+      "src_ip\t\tnumOfConnections\n");
+
+    open(LIST, "> $LISTFILE");
+
+    LIST->autoflush(1);
+
+    print LIST "src_ip\t\tnumOfConnections\n";
+
+    for my $k (keys %uniq_srcip) 
+    {
+        print "$k\t\t$uniq_srcip{$k}\n";
+
+        print $log_handle "$k\t\t$uniq_srcip{$k}\n";
+
+        $packet_content->insert("end",
+          "$k\t\t$uniq_srcip{$k}\n");
+
+        if ($uniq_srcip{$k} > $THRESHOLD) {
+            print LIST "$k\t\t$uniq_srcip{$k}\n";
+        }
+    }
+    close(LIST);
+
+    print "\n";
+    print "=" x 20 . "\n\n";
+
+    print $log_handle "\n";
+    print $log_handle "=" x 20 . "\n\n";
+
+    $packet_content->insert("end",
+      "\n");
+
+    $packet_content->insert("end",
+      "=" x 20 . "\n\n");
+}
 
 #    # tcp fileds.
 #    
@@ -411,5 +563,9 @@ sub syn_packets
 #    }
 
 #    print "\n";
-}
+#}
 
+sub get_number
+{
+    $number_packet_to_catch = $number_entry->get();
+}

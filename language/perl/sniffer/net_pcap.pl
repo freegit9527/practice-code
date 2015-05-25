@@ -24,22 +24,23 @@ my $dumper;
 sub process_packet {
     my ($user_data, $header, $packet) = @_;
     print "#" x 20 . "\n";
-    print "user_data is <$user_data>\n";
-    print "header is: \n";
-    for (sort keys %$header) {
-        print "\t\t$_ : $$header{$_}\n";
-    }
-    print "packet is <$packet>\n";
+#    print "user_data is <$user_data>\n";
+#    print "header is: \n";
+#    for (sort keys %$header) {
+#        print "\t\t$_ : $$header{$_}\n";
+#    }
+#    print "packet is <$packet>\n";
     my $tcp_obj = NetPacket::TCP->decode(ip_strip(eth_strip($packet)));
-    print "tcp_obj data is: <$tcp_obj->{data}> 
-    src_port: $tcp_obj->{src_port}
-    dest_port: $tcp_obj->{dest_port}\n";
+#    print "tcp_obj data is: <$tcp_obj->{data}> 
+#    src_port: $tcp_obj->{src_port}
+#    dest_port: $tcp_obj->{dest_port}\n";
     print "#" x 20 . "\n\n";
     pcap_dump($dumper, $header, $packet);
 }
 
 my $err;
-my $device = Net::Pcap::lookupdev(\$err);
+#my $device = Net::Pcap::lookupdev(\$err);
+my $device = "lo";
 
 print "device is: $device\n";
 

@@ -24,15 +24,6 @@ use warnings;
 use vars qw(%CONFIG %blocked);
 
 $| = 1;
-# If set to nonzero, forces a flush right away and after every write or print 
-# on the currently selected output channel. Default is 0 (regardless of whether 
-# the channel is really buffered by the system or not; $| tells you only whether 
-# you've asked Perl explicitly to flush after each write). STDOUT will typically 
-# be line buffered if output is to the terminal and block buffered otherwise. 
-# Setting this variable is useful primarily when you are outputting to a pipe or 
-# socket, such as when you are running a Perl program under rsh and want to see 
-# the output as it's happening. This has no effect on input buffering. See getc 
-# for that. See select on how to select the output channel. See also IO::Handle.
 
 my %CONFIG = (
 
@@ -94,6 +85,11 @@ my %CONFIG = (
 
 );
 
+
+# ========================================
+# PROGRAM BEGIN...
+# ========================================
+
 $CONFIG{TOTINCREMENTS} = $#{$CONFIG{BANINCREMENTS}};
 $CONFIG{LISTFILE}      = "$CONFIG{LOGDIR}/bannedips.txt";
 $CONFIG{LASTDAY}       = 0;
@@ -104,18 +100,17 @@ if ( ! -d $CONFIG{LOGDIR})
   mkdir $CONFIG{LOGDIR},700;
 }
 
-my $command = qq($CONFIG{NETSTAT} -ntu |
-                awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' |
-                grep ^[0-9] |
-                sort |
-                uniq -c |
-                sort -nr |
-                head -30 );
+my $command = qq($CONFIG{NETSTAT} -ntu | 
+    awk '{ sub(/(.*)\:/,"",\$4); sub(/\:(.*)/,"",\$5); print \$5,\$4}' | 
+    grep ^[0-9] | sort | uniq -c | sort -nr | head -30 );
 
 &rotatelog();
 
 if ($CONFIG{TESTMODE} == 1)
 {
+    # we are in TESTMODE and we will not change 
+    # IPTABLE # we write this note to DEBUG 
+    # file handle
   &debug(qq(** NOTE **\n\nTest mode - No IPTABLE changes will be made\n));
 }
 
@@ -133,6 +128,11 @@ while (1)
 
   sleep $CONFIG{INTERVAL};
 }
+
+
+# ========================================
+# PROGRAM END... 
+# ========================================
 
 sub rotatelog
 {
@@ -163,7 +163,10 @@ sub check
   foreach my $item (@input)
   {
     chomp($item);
-
+    # modifier 'o' is an optimization in the case that the regex includes a 
+    # variable reference. It indicates that the regex does not change 
+    # even though it has a variable within it. This allows for 
+    # optimizations that would not be possible otherwise.
     $item =~ s/^ +//io;
     $item =~ s/ +/ /io;
 
@@ -289,10 +292,13 @@ sub updatesleep
 
 sub loadbanned
 {
+    # delete blocked hash table.
   undef %blocked;
 
+  # test whether LISTFILE exists
   if (-f $CONFIG{LISTFILE})
   {
+      # append LISTFILE to LIST filehandle
     open(LIST, "< $CONFIG{LISTFILE}");
     my @list = <LIST>;
     close (LIST);
@@ -308,8 +314,7 @@ sub loadbanned
       $blocked{$ipaddress}{lastblock}  = 1;
       $blocked{$ipaddress}{passcount}  = 0;
 
-      &debug("- Loading blocked IP $ipaddress") 
-      if ($CONFIG{DEBUG} > 0);
+      &debug("- Loading blocked IP $ipaddress") if ($CONFIG{DEBUG} > 0);
 
     }
   }
@@ -330,8 +335,12 @@ sub debug
 
   print DEBUG localtime() . " $line \n";
 
+  # print to standard outpu
+
   if ($CONFIG{STDOUT})
   {
     print localtime() . " $line \n";
   }
 }
+
+
