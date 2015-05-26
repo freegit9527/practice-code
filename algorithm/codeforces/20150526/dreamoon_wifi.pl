@@ -1,43 +1,42 @@
 #!/usr/bin/env perl 
 #===============================================================================
-#         FILE: dreamoon_wifi.pl
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
-#      CREATED: 05/26/2015 10:56:57 AM
+#      CREATED: 05/26/2015 15:04:25
 #===============================================================================
 
-use strict;
-use warnings;
-use utf8;
-use 5.012;
 
-#chomp(my $drazil = <STDIN>);
-#chomp(my $dreamoon = <STDIN>);
-open DTDIN, "in.txt";
-while (my $drazil = <DTDIN>) {
-    chomp($drazil);
-    chomp(my $dreamoon = <DTDIN>);
-    my($zil_opp, $zil_neg, $oon_opp, $oon_neg, $oon_que);
-
-    $zil_opp = $drazil =~ tr/+//;
-    $zil_neg = $drazil =~ tr/-//;
-
-    $oon_opp = $dreamoon =~ tr/+//;
-    $oon_neg = $dreamoon =~ tr/-//;
-    $oon_que = $dreamoon =~ tr/?//;
-
-    my($goal, $now);
-
-    $goal = $zil_opp - $zil_neg;
-    $now = $oon_opp - $oon_neg;
-
+#@ARGV = qw/in.txt/;
+while(<>)
+{
+    chomp;
+    my $origin = $_;
+    chomp(my $rece = <>);
+    my $pos_origin = $origin =~ tr/+//;
+    my $neg_origin = $origin =~ tr/-//;
+    my $pos_rece = $rece =~ tr/+//;
+    my $neg_rece = $rece =~ tr/-//;
+    my $que_rece = $rece =~ tr/?//;
+    my $goal = $pos_origin - $neg_origin;
+    my $now = $pos_rece - $neg_rece;
     my $gap = abs($goal - $now);
-    my $even = $z - $gap;
-    if ($even < 0 || $even % 2 == 1) {
-        printf("%1.16f\n", 0);
-    } else {
+    my $even = $que_rece - $gap;
+    if ($origin eq $rece) {
+            printf("%1.16f\n", 1);
     }
-
+    elsif ($even >= 0 && $even % 2 == 0) {
+        if ($even == 0) {
+            printf("%1.16f\n", (1/2)**$gap);
+        } else {
+            my $m = $even / 2;
+            my $n = $que_rece - $m;
+            my $res = fac($que_rece) / fac($m) / fac($n) * ((1/2) ** $m) *
+                    ((1/2) ** $n);
+            printf("%1.16f\n", $res);
+        }
+    } else {
+        printf("%1.16f\n", 0);
+    }
 }
 
 sub fac
