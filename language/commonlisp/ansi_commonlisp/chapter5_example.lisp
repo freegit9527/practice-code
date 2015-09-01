@@ -233,3 +233,5 @@
 	((> d n) (values y (- n prev))))))
 
 
+(def add (x y)
+  (+ x y))
