@@ -1,0 +1,12 @@
+(defun foo (a b &optional c d)
+  (list a b c d))
+
+(defun make-rectangle (width &optional (height width))
+  (* width height))
+
+(defun foo (a b &optional (c 3 c-supplied-p))
+  (list a b c c-supplied-p))
+
+(defun foo (&key a b c)
+  (list a b c))
+
