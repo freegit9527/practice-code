@@ -1,4 +1,5 @@
-; 11.2 examples
+					; 11.2 examples
+(format t "~%")
 (dotimes (i 4)
   (format t "~&I is ~S." i))
 
