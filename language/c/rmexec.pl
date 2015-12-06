@@ -17,5 +17,3 @@ for my $f (glob "*") {
         unlink $f unless $f =~ /.*\.pl/;
     }
 }
-
-
