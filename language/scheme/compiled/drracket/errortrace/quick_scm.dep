@@ -1,0 +1,1 @@
+("5.3.6" ("6813dc49ed4782bcaf7377d86b8953974fa4bf2a" . "d252a73cd10d84f8dd39a5b6800bf90fc29b5f1d") (collects #"errortrace" #"errortrace-key.rkt") (collects #"slideshow" #"main.rkt") (collects #"slideshow" #"flash.rkt") #"/home/aries/.racket/planet/300/5.3.6/cache/schematics/random.plt/1/0/random.rkt" (collects #"slideshow" #"lang" #"reader.rkt"))
