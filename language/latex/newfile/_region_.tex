@@ -1,0 +1,71 @@
+\message{ !name(newfile.tex)}\documentclass{article}
+
+% packages
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage[font=small, labelfont=bf, margin=1cm]{caption}
+% settings
+\setlength{\extrarowheight}{4pt}
+\setlength{\abovetopsep}{10pt}
+
+% macros
+\newcommand{\head}[1]{\textnormal{\textbf{#1}}}
+\newcommand{\normal}[1]{\multicolumn{1}{l}{#1}}
+
+% document begins
+\begin{document}
+
+\message{ !name(newfile.tex) !offset(-3) }
+
+
+\begin{table}
+
+\centering
+
+\caption{\LaTeX\ font selection}
+
+\begin{tabular}{@{} l *{2}{>{$\backslash$\ttfamily}l} 
+l<{Example text} r @{}}
+
+\toprule[1.5pt]
+
+& \multicolumn{2}{c}{\head{Input}} & \multicolumn{2}{c}{\head{Output}} \\
+& \normal{\head{Command}} & \normal{\head{Declaration}} & 
+\normal{\head{Single use}} & \normal{\head{Combined}} \\
+
+\cmidrule(lr){2-3} \cmidrule(lr){4-5}
+
+\multirow{3}{*}{Family} & textrm & rmfamily & \rmfamily \\
+& textsf & sffamily & \sffamily \\
+& texttt & ttfamily & \ttfamily \\
+
+\cmidrule(lr){2-3} \cmidrule(lr){4-4}
+
+\multirow{2}{*}{Weight} & textbf & bfseries & \bfseries &
+\multirow{2}{1.8cm}{\bfseries\sffamily Bold and sans-serif} \\
+
+& textmd & mdseries & \mdseries \\
+
+\cmidrule(lr){2-3} \cmidrule(lr){4-4}
+
+\multirow{4}{*}{Shape} & textit & itshape & \itshape & 
+\multirow{4}{1.8cm}{\slshape\sffamily Slanted and sans-serif} \\
+
+& textsl & slshape & \slshape \\
+& textsc & scshape & \scshape \\
+& textup & upshape & \upshape \\
+
+\cmidrule(lr){2-3} \cmidrule(lr){4-4}
+
+Default & textnormal & normalfont \\
+
+\bottomrule[1.5pt]
+
+\end{tabular}
+
+\end{table}
+
+\end{document}
+
+\message{ !name(newfile.tex) !offset(-71) }

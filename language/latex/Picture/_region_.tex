@@ -1,4 +1,4 @@
-\documentclass[a5paper]{article}
+\message{ !name(picture.tex)}\documentclass[a4paper]{article}
 
 % packages
 \usepackage[english]{babel}
@@ -7,13 +7,15 @@
 \usepackage{eso-pic}
 \usepackage{booktabs,caption}
 \usepackage{capt-of}
-\usepackage{wrapfig}
 
 % settings
 \pagestyle{empty}
 \setlength{\abovetopsep}{10pt}
 
 \begin{document}
+
+\message{ !name(picture.tex) !offset(-3) }
+
 
 \section{Including a picture}
 
@@ -41,13 +43,6 @@
 \end{minipage}
 \end{center}
 
-\newpage
-
-\section*{Text flowing around a picture}
-\blindtext
-\begin{wrapfigure}{l}{4.4cm}
-\includegraphics[width=4.4cm]{test}
-\caption{Test figure}
-\end{wrapfigure}
 
 \end{document}
+\message{ !name(picture.tex) !offset(-48) }

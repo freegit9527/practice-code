@@ -1,0 +1,189 @@
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (TeX Live 2013/TeX Live for SUSE Linux) (format=pdflatex 2015.11.18)  21 DEC 2015 20:03
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**&pdflatex prv_newfile.ini \nonstopmode\nofiles\PassOptionsToPackage{active,ti
+ghtpage,auctex}{preview}\AtBeginDocument{\ifx\ifPreview\undefined\RequirePackag
+e[displaymath,floats,graphics,textmath,sections,footnotes]{preview}[2004/11/05]
+\fi} \input newfile.tex
+(./prv_newfile.ini
+LaTeX2e <2011/06/27>
+Babel <3.9f> and hyphenation patterns for 78 languages loaded.
+(/usr/share/texmf/tex/latex/carlisle/mylatex.ltx)
+(/usr/share/texmf/tex/latex/tools/.tex File ignored))
+No auxiliary output files.
+
+(./newfile.tex (/usr/share/texmf/tex/latex/base/article.cls
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/share/texmf/tex/latex/base/size10.clo
+File: size10.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+(/usr/share/texmf/tex/latex/tools/array.sty
+Package: array 2008/09/09 v2.4c Tabular extension package (FMi)
+\col@sep=\dimen103
+\extrarowheight=\dimen104
+\NC@list=\toks14
+\extratabsurround=\skip43
+\backup@length=\skip44
+)
+(/usr/share/texmf/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen105
+\lightrulewidth=\dimen106
+\cmidrulewidth=\dimen107
+\belowrulesep=\dimen108
+\belowbottomsep=\dimen109
+\aboverulesep=\dimen110
+\abovetopsep=\dimen111
+\cmidrulesep=\dimen112
+\cmidrulekern=\dimen113
+\defaultaddspace=\dimen114
+\@cmidla=\count87
+\@cmidlb=\count88
+\@aboverulesep=\dimen115
+\@belowrulesep=\dimen116
+\@thisruleclass=\count89
+\@lastruleclass=\count90
+\@thisrulewidth=\dimen117
+)
+(/usr/share/texmf/tex/latex/multirow/multirow.sty
+\bigstrutjot=\dimen118
+)
+(/usr/share/texmf/tex/latex/caption/caption.sty
+Package: caption 2013/05/02 v3.3-89 Customizing captions (AR)
+
+(/usr/share/texmf/tex/latex/caption/caption3.sty
+Package: caption3 2013/05/02 v1.6-88 caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 57.
+
+(/usr/share/texmf/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks15
+)
+\captionmargin=\dimen119
+\captionmargin@=\dimen120
+\captionwidth=\dimen121
+\caption@tempdima=\dimen122
+\caption@indent=\dimen123
+\caption@parindent=\dimen124
+\caption@hangindent=\dimen125
+)
+\c@ContinuedFloat=\count91
+)
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <7> on input line 17.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 17.
+ )
+Beginning to dump on file prv_newfile.fmt
+ (format=prv_newfile 2015.12.21)
+8097 strings of total length 127271
+81891 memory locations dumped; current usage is 223&70379
+4917 multiletter control sequences
+\font\nullfont=nullfont
+\font\OMX/cmex/m/n/5=cmex10
+\font\tenln=line10
+\font\tenlnw=linew10
+\font\tencirc=lcircle10
+\font\tencircw=lcirclew10
+\font\OT1/cmr/m/n/5=cmr5
+\font\OT1/cmr/m/n/7=cmr7
+\font\OT1/cmr/m/n/10=cmr10
+\font\OML/cmm/m/it/5=cmmi5
+\font\OML/cmm/m/it/7=cmmi7
+\font\OML/cmm/m/it/10=cmmi10
+\font\OMS/cmsy/m/n/5=cmsy5
+\font\OMS/cmsy/m/n/7=cmsy7
+\font\OMS/cmsy/m/n/10=cmsy10
+\font\OT1/cmr/m/n/12=cmr12
+\font\OT1/cmr/m/n/8=cmr8
+\font\OT1/cmr/bx/n/10=cmbx10
+\font\OT1/cmr/bx/it/10=cmbxti10
+\font\OT1/cmr/m/it/10=cmti10
+\font\OT1/cmtt/m/n/10=cmtt10
+\font\OT1/cmss/m/n/10=cmss10
+5716 words of font info for 21 preloaded fonts
+957 hyphenation exceptions
+Hyphenation trie of length 334522 has 8224 ops out of 35111
+  143 for language 78
+  110 for language 77
+  138 for language 76
+  7 for language 75
+  12 for language 74
+  52 for language 73
+  127 for language 72
+  165 for language 71
+  71 for language 70
+  248 for language 69
+  62 for language 68
+  66 for language 67
+  119 for language 65
+  43 for language 64
+  58 for language 63
+  7 for language 62
+  194 for language 61
+  37 for language 60
+  852 for language 59
+  852 for language 58
+  21 for language 57
+  38 for language 56
+  77 for language 55
+  58 for language 54
+  25 for language 53
+  27 for language 52
+  37 for language 51
+  229 for language 50
+  38 for language 49
+  21 for language 48
+  147 for language 36
+  185 for language 35
+  50 for language 34
+  18 for language 33
+  388 for language 32
+  235 for language 31
+  207 for language 30
+  130 for language 29
+  76 for language 28
+  40 for language 27
+  88 for language 26
+  31 for language 25
+  113 for language 22
+  145 for language 21
+  377 for language 20
+  224 for language 19
+  265 for language 18
+  60 for language 17
+  63 for language 16
+  19 for language 15
+  14 for language 14
+  2 for language 13
+  21 for language 12
+  12 for language 11
+  5 for language 10
+  148 for language 7
+  97 for language 6
+  137 for language 5
+  400 for language 4
+  410 for language 3
+  2 for language 1
+  181 for language 0
+0 words of pdfTeX memory
+0 indirect objects
+No pages of output.
+PDF statistics:
+ 0 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 1 words of extra memory for PDF output out of 10000 (max. 10000000)
+
