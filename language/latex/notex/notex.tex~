@@ -1,0 +1,30 @@
+\documentclass[a4paper, 11pt]{article}
+
+\usepackage{graphicx}
+\usepackage{xspace}
+
+\newcommand{\TUG}{\textsc{\TeX\ great}\xspace}
+
+\begin{document}
+
+\title{Example 2}
+\author{@liuxueyang}
+\date{\today}
+
+\maketitle
+
+\begin{center}
+\includegraphics[scale=0.3]{kas.png}
+\end{center}
+
+\section{Part One}
+
+Hello, I am happy.
+
+How to choose, how to work, how to learn.
+
+I \textsc{love} math.
+
+Do you agree \TUG ?
+
+\end{document}

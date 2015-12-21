@@ -1,0 +1,71 @@
+\documentclass{ctexart}
+
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{booktabs}
+
+\begin{document}
+
+我的考研课程表
+
+\begin{tabular}{@{}*{8}{l}@{}}
+\toprule[1.5pt]
+ & 星期一 & 星期二 & 星期三 & 星期四 & 星期五 & 星期六 & 星期日 \\
+\cmidrule{2-8}
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+
+\cmidrule{2-8}
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+
+\cmidrule{2-8}
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+ & 高等数学 & 考研英语 & 操作系统 & 编译原理 & Perl & Lisp & 政治\\
+
+\bottomrule[1.5pt]
+\end{tabular}
+
+\newpage
+
+如何修复Linux里面的\LaTeX{}的中文字体的问题呢？
+
+修改这个文件：
+
+\begin{lstlisting}
+% ctex-xecjk-winfonts.def: Windows 的 xeCJK 字体设置，默认为六种中易字体
+% vim:ft=tex
+
+\setCJKmainfont[BoldFont={SimHei},ItalicFont={KaiTi}]{SimSun}
+\setCJKsansfont{SimHei}
+\setCJKmonofont{FangSong}
+
+\setCJKfamilyfont{zhsong}{SimSun}
+\setCJKfamilyfont{zhhei}{SimHei}
+\setCJKfamilyfont{zhkai}{KaiTi}
+\setCJKfamilyfont{zhfs}{FangSong}
+% \setCJKfamilyfont{zhli}{LiSu}
+% \setCJKfamilyfont{zhyou}{YouYuan}
+
+\newcommand*{\songti}{\CJKfamily{zhsong}} % 宋体
+\newcommand*{\heiti}{\CJKfamily{zhhei}}   % 黑体
+\newcommand*{\kaishu}{\CJKfamily{zhkai}}  % 楷书
+\newcommand*{\fangsong}{\CJKfamily{zhfs}} % 仿宋
+% \newcommand*{\lishu}{\CJKfamily{zhli}}    % 隶书
+% \newcommand*{\youyuan}{\CJKfamily{zhyou}} % 幼圆
+
+\endinput
+
+\end{lstlisting}
+
+参考网址：
+
+字体问题：\url{http://bbs.ctex.org/forum.php?mod=viewthread&tid=79247}
+
+在\LaTeX{}中插入代码问题：\url{http://www.comdyn.cn/from-web/latex/373-latex-listings}
+
+在\LaTeX{}中插入网址问题：\url{http://m.blog.csdn.net/blog/zixie1991/8460207}
+
+\end{document}

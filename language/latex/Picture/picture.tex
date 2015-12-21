@@ -1,0 +1,36 @@
+\documentclass[a4paper]{article}
+
+% packages
+\usepackage[english]{babel}
+\usepackage{blindtext}
+\usepackage{graphicx}
+\usepackage{eso-pic}
+\usepackage{booktabs,caption}
+
+% settings
+\pagestyle{empty}
+\setlength{\abovetopsep}{10pt}
+
+\begin{document}
+
+\section{Including a picture}
+
+\blindtext
+
+\begin{figure}
+\centering
+\caption{Face}
+\includegraphics{face}
+\end{figure}
+
+\begin{figure}
+\centering
+
+\includegraphics[scale=0.5]{kas}
+\caption{Test figure}
+
+\end{figure}
+
+\blindtext
+
+\end{document}
