@@ -27,6 +27,12 @@
       0
     (1+ (our-length-rec (rest lst)))))
 
+(defun split-number (n)
+  (do* ((i n quotient))
+      ((zerop i) 'done)
+    (setf (values quotient remainder) (floor i 10))
+    (format t "~S~%" remainder)))
+
 ;; ====================
 ;; 2.14 Functions as Objects
 
