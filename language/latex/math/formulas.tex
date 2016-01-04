@@ -1,0 +1,57 @@
+\documentclass{article}
+
+\usepackage{ctex}
+
+\begin{document}
+
+\section{Quadratic equations}
+The Quadratic quation
+
+\begin{equation}
+\label{quad}
+ax^{2} + bx + c = 0,
+\end{equation}
+where \( a, b\) and \( c \) are constants and \( a \neq 0 \),
+has two solutions for the variable \( x\):
+
+\begin{equation}
+\label{root}
+x_{1, 2} = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}.
+\end{equation}
+If the \emph{discrimimant} \( \Delta \) with
+\[
+\Delta = b^2 - 4ac
+\]
+is zero, then the equation (\ref{quad}) has a double solution: (\ref{root})
+becomes:
+\[
+x = - \frac{b}{2a}.
+\]
+
+\[ x_{1}^{2} + x_{2}^{2} = 1, \quad 2^{2^{x}} = 64
+\]
+
+\[ \lim_{\Delta x\rightarrow 0} \frac{\ln (x + \Delta x) - \ln(x)}{\Delta x}\]
+
+$a\prime{}$
+
+
+对于任意的正整数 \(n \geq 2, \quad a > 0, \quad b > 1\) 这个公式
+\[
+a - b^{n}
+\]
+
+都可以被因式分解成两个多项式相乘的形式吗？如果可以，请写出一般性因式分解公式呐。
+
+答案：
+
+可以，一般性因式分解公式为：
+\[
+a - b^n = a\left(1 - \left(\frac{b}{\sqrt[n]{a}}\right)^{n}\right) = 
+a\left(1 - \frac{b}{\sqrt[n]{a}}\right)
+\left(1 + \frac{b}{\sqrt[n]{a}} + \left(\frac{b}{\sqrt[n]{a}})\right)^2 + \ldots + 
+\left(\frac{b}{\sqrt[n]{a}}\right)^{n-1}\right)
+\]
+使用等比数列的求和公式可以证明。
+
+\end{document}
