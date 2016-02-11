@@ -221,7 +221,7 @@ gh" #'constituent 0)
 	  (read)))
   (effect nil))
 
-;;(make-polemic)
+(make-polemic)
 
 (defstruct (point (:conc-name p)
 		  (:print-function print-point))

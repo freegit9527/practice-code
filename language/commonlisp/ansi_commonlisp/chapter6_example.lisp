@@ -76,5 +76,4 @@
 (our-adjoin 'a '(a b c))
 
 (our-adjoin 'd '(a b c))
->>>>>>> d31417c28404e7a14551a6297d1cd88f0737aa5c
 

@@ -47,7 +47,7 @@
        '(3 4))
 
 ;does not need the arguments to be packaged in a list
-(funcall #'+ 1 2 3) 
+(funcall #'+ 1 2 3)
 
 (funcall #'(lambda (x)
 	     (+ x 100)) 1)
@@ -55,4 +55,3 @@
 (funcall #'(lambda (a b)
 	     (* a b))
 	 3 4)
-	 
