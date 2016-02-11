@@ -3,6 +3,8 @@
 ;;; in chapter 3
 ;;; Functional Programming
 ;;; 2015/02/27
+;;;
+;;; Time Passed. Now it is 2016/02/06. :(
 ;;;====================
 
 ;;; ====================
