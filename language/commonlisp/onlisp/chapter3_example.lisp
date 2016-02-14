@@ -313,7 +313,10 @@
 
 (merge 'vector #(5 3 1) #(6 2 4) #'<)
 ;; 并没有排序
+(merge 'vector #(1 3 5) #(2 4 6) #'<)
+(merge 'list #(1 3 5) #(2 4 6) #'<)
 
+;; use of merge
 (setq test1 (list 1 3 4 6 7))
 (setq test2 (list 2 5 8))
 (merge 'list test1 test2 #'<)
@@ -335,3 +338,49 @@
 
 ;; (merge '(vector * 4) '(1 5) '(2 4 6) #'<) should signal an error. :)
 ;; because specified vector length is shorter than result vector length.
+
+(subseq "foobarbaz" 3)
+(subseq "foobarbaz" 3 6)
+
+(defparameter *x* (copy-seq "foobarbaz"))
+(setf (subseq *x* 3 6) "xxx")
+(format t "~%~S" *x*)
+
+(setf (subseq *x* 3 6) "abcd")
+(format t "~%~S" *x*)
+
+(setf (subseq *x* 3 6) "xx")
+(format t "~%~S" *x*)
+
+(position #\b "foobarbaz")
+(search "bar" "foobarbaz")
+
+(mismatch "foobarbaz" "foom")
+
+(mismatch "foobar" "bar" :from-end t)
+(mismatch (vector 1 2 3 4 5) (vector 7 8) :from-end t)
+
+(every #'evenp #(1 2 3 4 5))
+(some #'evenp #(1 2 3 4 5))
+(notany #'evenp #(1 2 3 4 5))
+(notevery #'evenp #(1 2 3 4 5))
+
+(every #'> #(1 2 3 4) #(5 4 3 2))
+(some #'> #(1 2 3 4) #(5 4 3 2))
+(notany #'> #(1 2 3 4) #(5 4 3 2))
+(notevery #'> #(1 2 3 4) #(5 4 3 2))
+
+(map 'vector #'* #(1 2 3 4 5) #(10 9 8 7 6))
+
+(setq a '(1 2 3))
+(setq b '(4 5 6))
+(setq c '(7 8 9))
+(map-into a #'+ a b c)
+(format t "~%~S" a)
+
+(reduce #'+ #(1 2 3 4 5 6 7 8 9 10))
+
+(reduce #'max #(5 8 1 2 3))
+
+;; two strings with the same contents aren't necessarily EQL
+
