@@ -12,10 +12,10 @@
 
 (defun good-reverse (lst)
   (labels ((rec (lst acc)
-		(if (null lst)
-		    acc
-                    (rec (cdr lst)
-                         (cons (first lst) acc)))))
+             (if (null lst)
+                 acc
+                 (rec (cdr lst)
+                      (cons (first lst) acc)))))
     (rec lst nil)))
 
 (good-reverse '(a b c d e))
@@ -57,7 +57,7 @@
 (defun exclaim (expression)
   (append expression '(oh my)))
 
-; type following three expressions in REPL
+                                        ; type following three expressions in REPL
 
 (nconc (exclaim '(lions and tigers and bears)) '(goodness))
 
@@ -65,7 +65,7 @@
 
 (exclaim '(fixnums and bignums and floats))
 
-; so we should write:
+                                        ; so we should write:
 
 (defun exclaim (expression)
   (append expression (list 'oh 'my)))
@@ -91,6 +91,9 @@
 
 ;; use of mapcar, mapcan, maplist, mapc, mapl
 ;; refer to: https://psg.com/~dlamkins/sl/chapter12.html
+
+;; mapc is like mapcar, map
+
 ;; mapcar
 (mapcar #'car '((1 a)
                 (2 b)
@@ -118,6 +121,13 @@
       '(a b c d e)
       '(x y e))
 (format t " ~S" dummy)
+(setq dummy nil)
+(mapcar #'(lambda (&rest x)
+            (setq dummy (append dummy x)))
+        '(1 2 3 4)
+        '(a b c d e)
+        '(x y e))
+(format t " ~S" dummy)
 
 ;; mapcan
 (mapcan #'(lambda (x y)
@@ -141,7 +151,11 @@
 (setq dummy nil)
 (mapl #'(lambda (x) (push x dummy))
       '(1 2 3 4))
-(format t "dummy: ~S~%" dummy)
+(format t " dummy: ~S~%" dummy)
+(setq dummy nil)
+(maplist #'(lambda (x) (push x dummy))
+         '(1 2 3 4))
+(format t " dummy: ~S~%" dummy)
 
 ;; mapcon
 (mapcon #'list '(1 2 3 4))
@@ -214,6 +228,8 @@
 (make-sequence 'string 4 :initial-element #\a)
 (setq ar1 (make-sequence '(vector double-float) 100 :initial-element 1d0))
 (elt ar1 0)
+(make-sequence 'vector 5 :initial-element 1)
+(make-sequence '(vector * 5) 5 :initial-element 100)
 
 ;; vector
 (vector)
@@ -384,3 +400,28 @@
 
 ;; two strings with the same contents aren't necessarily EQL
 
+(defparameter *h* (make-hash-table))
+(gethash 'foo *h*)
+(setf (gethash 'foo *h*) 'quux)
+(gethash 'foo *h*)
+
+(defun show-value (key hash-table)
+  (multiple-value-bind (value present)
+      (gethash key hash-table)
+    (if present
+        (format nil "Value ~a actually present." value)
+        (format nil "Value ~a because key not found." value))))
+
+(setf (gethash 'bar *h*) nil)
+
+(show-value 'foo *h*)
+(show-value 'bar *h*)
+(show-value 'baz *h*)
+
+(maphash #'(lambda (k v) (format t " ~a => ~a~%" k v)) *h*)
+(maphash #'(lambda (k v) (when (and (numberp v) (< v 10))
+                           (remhash k *h*))) *)
+
+;; (make-sequence 'vector :initial-element 1)
+
+(find 3 '((1 2) (3 4) (5 6)) :key 'car)
