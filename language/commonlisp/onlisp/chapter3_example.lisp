@@ -74,6 +74,8 @@
   (nconc a '(e f g))
   a)
 
+;; 2016/02/13
+
 (let ((x 0))
   (defun total (y)
     (incf x y)))
@@ -200,6 +202,9 @@
      (list 1 2 3)
      (list 4 5 6))
 
+
+;; 2016/02/14
+
 ;; make-sequence
 (make-sequence 'list 0)
 (make-sequence 'string 26 :initial-element #\.)
@@ -261,3 +266,72 @@
 
 (count "foo" #("foo" "bar" "baz") :test #'string=)
 (find 'c #((a 10) (b 20) (c 30) (d 40)) :key #'first)
+
+(find 'c #((a 10) (b 20) (c 30) (d 40)) :key #'first :start 0 :end 2)
+
+(find 'a #((a 10) (b 20) (c 30) (d 40)) :key #'first)
+(find 'a #((a 10) ( 20) (a 30) (b 40)) :key #'first :from-end t)
+
+(remove #\a "foobarbaz" :count 1)
+(remove #\a "foobarbaz" :count 1 :from-end t)
+
+(defparameter *v* #((a 10) (b 20) (a 30) (b 40)))
+(defun verbose-first (x)
+  (format t "~%Looking at ~s~%" x)
+  (first x))
+(count 'a *v* :key #'verbose-first)
+(count 'a *v* :key #'verbose-first :from-end t)
+
+(count-if #'evenp #(1 2 3 4 5))
+(count-if-not #'evenp #(1 2 3 4 5))
+
+(position-if #'digit-char-p "abcd0001")
+(remove-if-not
+ #'(lambda (x) (char= (elt x 0) #\f))
+ #("foo" "bar" "baz" "foom"))
+
+(count-if #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)
+(count-if-not #'evenp #((1 a) (2 b) (3 c) (4 d) (5 e)) :key #'first)
+(remove-if-not #'alpha-char-p
+               #("foo" "bar" "1baz") :key #'(lambda (x) (elt x 0)))
+
+(remove-duplicates #(1 2 1 2 3 1 2 3 4))
+
+(copy-seq '(1 2 3 4))
+(reverse '(1 2 3 4))
+
+(concatenate 'vector #(1 2 3) '(4 5 6))
+(concatenate 'list #(1 2 3) '(4 5 6))
+(concatenate 'string "abc" '(#\d #\e #\f))
+
+(sort (vector "foo" "bar" "baz") #'string<)
+(defparameter *my-vec* (vector 5 2 3 4 1))
+(format t "~%~S" *my-vec*)
+(sort *my-vec*  #'<)
+(format t "~%~S" (elt *my-vec* 0))
+(format t "~%~S" *my-vec*)
+
+(merge 'vector #(5 3 1) #(6 2 4) #'<)
+;; 并没有排序
+
+(setq test1 (list 1 3 4 6 7))
+(setq test2 (list 2 5 8))
+(merge 'list test1 test2 #'<)
+
+(setq test1 (copy-seq "OBY"))
+;; 好像排序了？
+(setq test2 (copy-seq "onsy"))
+(merge 'string test1 test2 #'char-lessp)
+
+(setq test1 "OBY")
+(setq test2 "onsy")
+(merge 'string test1 test2 #'char-lessp)
+
+(setq test1 (vector '(red . 1) '(blue . 4)))
+;; there is a bug in: http://clhs.lisp.se/Body/f_merge.htm
+(setq test2 (vector '(yellow . 2) '(green . 7)))
+;; 2016/02/14
+(merge 'vector test1 test2 #'< :key #'cdr)
+
+;; (merge '(vector * 4) '(1 5) '(2 4 6) #'<) should signal an error. :)
+;; because specified vector length is shorter than result vector length.
