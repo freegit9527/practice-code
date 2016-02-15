@@ -469,3 +469,93 @@
 123d23
 
 (setq c #c(2 1))
+(setq c #c(2/3 3/4))
+(setq c #c(2 1.0))
+(setq c #c(2.0 1.0d0))
+(setq c #c(3 0))
+(setq c #c(3.0 0.0))
+;; it is not the same with 0.0
+(setq c #c(1/2 0))
+(setq c #c(-6/3 0))
+
+(+)
+;; return 0
+(*)
+;; return 1
+
+(+ 1 2)
+(+ 1 2 3)
+(+ 10.0 3.0)
+(+ #c (1 2) #c (3 4))
+(- 5 4)
+(- 2)
+(- 10 3 5)
+(* 2 3)
+(* 2 3 4)
+(/ 10 5)
+(/ 10 5 2)
+(/ 2 3)
+(/ 4)
+
+(truncate -1 5)
+(multiple-value-bind (x y) (truncate -1 5)
+  (format t "~%x = ~a" x)
+  (format t "~%y = ~a" y))
+(rem -1 5)
+
+(multiple-value-bind (x y) (floor -1 5)
+  (format t "~%x = ~a" x)
+  (format t "~%y = ~a" y))
+(mod -1 5)
+
+(let ((x -1)
+      (y 5))
+  (+
+   (* (floor (/ x y)) y)
+   (mod x y)))
+
+(let ((x -1)
+      (y 5))
+  (+
+   (* (truncate (/ x y)) y)
+   (rem x y)))
+
+(let ((x 10) (incf))
+  (incf x 10)
+  (print x)
+  (decf x 10)
+  (print x)
+  (incf x)
+  (print x)
+  (decf x)
+  (print x))
+
+(= 1 1)
+(= 10 20/2)
+(= 1 1.0 #c (1.0 0.0) #c (1 0))
+
+(/= 1 1)
+(/= 1 2)
+(/= 1 2 3)
+(/= 1 2 3 1)
+(/= 1 2 3 1.0)
+
+(< 2 3)
+(> 2 3)
+(> 3 2)
+(< 2 3 4)
+(< 2 3 3)
+(<= 2 3 3)
+(<= 2 3 3 4)
+(<= 2 3 4 3)
+
+(max 10 11)
+(min -12 -10)
+(max -1 2 -3)
+
+(zerop 0)
+(minusp -1)
+(plusp 1)
+
+(evenp 2)
+(oddp 3)
