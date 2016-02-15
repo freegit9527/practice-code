@@ -394,6 +394,18 @@
 (map-into a #'+ a b c)
 (format t "~%~S" a)
 
+(let ((a (make-sequence 'list 3)))
+  (print a)
+  (map-into a #'+ (list 1 2 3) (list 4 5 6)))
+
+(let ((a (make-sequence 'vector 3)))
+  (print a)
+  (map-into a #'+ (list 1 2 3) (list 4 5 6)))
+
+(let ((a (make-sequence 'vector 3 :initial-element 0)))
+  (print a)
+  (map-into a #'+ (list 1 2 3) (list 4 5 6)))
+
 (reduce #'+ #(1 2 3 4 5 6 7 8 9 10))
 
 (reduce #'max #(5 8 1 2 3))
@@ -425,3 +437,35 @@
 ;; (make-sequence 'vector :initial-element 1)
 
 (find 3 '((1 2) (3 4) (5 6)) :key 'car)
+
+10
+10/2
+#xa
+
+123
++123
+-123
+123.
+2/3
+-2/3
+4/6
+6/3
+#b10101
+#b1010/1011
+#o777
+#xdada
+#36rabcdefghijklmnopqrstuvwxyz
+
+1.0
+1e0
+1d0
+123.0
+123e0
+0.123
+.123
+123e-3
+123E-3
+0.123e20
+123d23
+
+(setq c #c(2 1))
