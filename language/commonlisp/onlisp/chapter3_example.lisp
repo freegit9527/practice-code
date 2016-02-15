@@ -559,3 +559,13 @@
 
 (evenp 2)
 (oddp 3)
+
+(format t " Hello, this is space _~c_:)" #\Space)
+(format t " Hello, this is newline _~c_:)" #\Newline)
+
+(string= "foobarbaz" "quuxbarfoo" :start1 3 :end1 6 :start2 4 :end2 7)
+(string= "foobarbaz" "quuxbarfoo" :start1 3 :start2 4)
+(string= "foobarbaz" "quuxbarfoo" :end1 6 :end2 7)
+(string/= "lisp" "lissome")
+(string< "lisp" "lisper")
+(string< "foobar" "abaz" :start1 3 :start2 1)
