@@ -569,3 +569,37 @@
 (string/= "lisp" "lissome")
 (string< "lisp" "lisper")
 (string< "foobar" "abaz" :start1 3 :start2 1)
+
+most-positive-fixnum
+;; is (1- (expt 2 48))
+
+most-negative-fixnum
+;; is (- (expt 2 48))
+
+(random 100)
+(random 1)
+;; (random 0) should be positive and and integer or float.
+;; (random -3)
+(floor (random 10.0))
+
+(let ((alst nil) (blst nil) (s (make-random-state)))
+  (dotimes (i 10)
+    (print (1+ i))
+    (push (random (1+ i) s) alst)
+    (push (random (1+ i)) blst))
+  (format t "~& ~a~%" alst)
+  (format t " ~a~%" blst))
+;; alst is equal to blst
+
+(let* ((rs1 (make-random-state nil))
+       (rs2 (make-random-state t))
+       (rs3 (make-random-state rs2))
+       (rs4 nil))
+  (list (loop for i from 1 to 10
+           collect (random 100)
+           when (= i 5)
+           do (setq rs4 (make-random-state)))
+        (loop for i from 1 to 10 collect (random 100 rs1))
+        (loop for i from 1 to 10 collect (random 100 rs2))
+        (loop for i from 1 to 10 collect (random 100 rs3))
+        (loop for i from 1 to 10 collect (random 100 rs4))))
