@@ -603,3 +603,40 @@ most-negative-fixnum
         (loop for i from 1 to 10 collect (random 100 rs2))
         (loop for i from 1 to 10 collect (random 100 rs3))
         (loop for i from 1 to 10 collect (random 100 rs4))))
+
+(defmacro my-when (condition &rest body)
+  `(if ,condition (progn ,@body)))
+
+(my-when (> 10 8)
+         (format t " 10 > 8~%")
+         (format t " it is ok~%"))
+
+(dolist (x '(1 2 3))
+  (print x))
+
+(dolist (x '(1 2 3))
+  (print x)
+  (if (evenp x)
+      (return)))
+
+(dotimes (i 4)
+  (print i))
+
+(dotimes (x 20)
+  (dotimes (y 20)
+    (format t " ~3d " (* (1+ x)
+                         (1+ y))))
+  (format t "~%"))
+
+(do ((n 0 (1+ n))
+     (cur 0 next)
+     (next 1 (+ next cur)))
+    ((= 10 n) cur)
+  (print cur))
+
+(do ((i 0 (1+ i)))
+    ((>= i 4))
+  (print i))
+
+(dotimes (i 4)
+  (print i))
