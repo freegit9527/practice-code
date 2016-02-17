@@ -640,3 +640,38 @@ most-negative-fixnum
 
 (dotimes (i 4)
   (print i))
+
+(do ((nums nil)
+     (i 1 (1+ i)))
+    ((> i 10)
+     (nreverse nums))
+  (push i nums))
+
+(loop for i from 1 to 10 collecting i)
+
+(loop for i from 1 to 10 summing (expt i 2))
+
+(loop for x across "the quick brown fox jumps over the lazy dog"
+   counting (find x "aeiou"))
+
+(loop for i below 10
+   and a = 0 then b
+   and b = 1 then (+ b a)
+   finally (return a))
+
+(defun primep (number)
+  (when (> number 1)
+    (loop for fac from 2 to (isqrt number) never
+         (zerop (mod number fac)))))
+
+(defun next-prime (number)
+  (loop for n from number when (primep n)
+     return n))
+
+(primep 20)
+(next-prime 32)
+
+(do ((p (next-prime 0)
+        (next-prime (1+ p))))
+    ((> p 19))
+  (format t "~d " p))
