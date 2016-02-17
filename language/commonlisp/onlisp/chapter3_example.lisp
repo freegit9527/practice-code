@@ -498,11 +498,14 @@
 (/ 4)
 
 (truncate -1 5)
+;; truncate and ftruncate produce a quotient that has been truncated towards zero;
 (multiple-value-bind (x y) (truncate -1 5)
   (format t "~%x = ~a" x)
   (format t "~%y = ~a" y))
 (rem -1 5)
 
+(floor -1 5)
+;; floor and ffloor produce a quotient that has been truncated toward negative infinity;
 (multiple-value-bind (x y) (floor -1 5)
   (format t "~%x = ~a" x)
   (format t "~%y = ~a" y))
@@ -674,4 +677,36 @@ most-negative-fixnum
 (do ((p (next-prime 0)
         (next-prime (1+ p))))
     ((> p 19))
+  (format t "~d " p))
+
+(defmacro do-primes (var-and-range &rest body)
+  (let ((var (first var-and-range))
+        (start (second var-and-range))
+        (end (third var-and-range)))
+    `(do ((,var (next-prime ,start)
+                (next-prime (1+ ,var))))
+         ((> ,var ,end))
+       ,@body)))
+
+(do-primes (p 3 15)
+  (format t "~d " p))
+
+(defmacro do-primes-1 ((var start end) &body body)
+  `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+       ((> ,var ,end))
+     ,@body))
+
+(do-primes-1
+    (p 3 15)
+  (format t "~d " p))
+
+(macroexpand-1 '(do-primes-1
+                 (p 3 15)
+                 (format t "~d " p)))
+
+(do
+ ((p
+   (next-prime 3)
+   (next-prime (1+ p))))
+ ((> p 15))
   (format t "~d " p))
