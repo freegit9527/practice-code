@@ -695,7 +695,6 @@ most-negative-fixnum
   `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
        ((> ,var ,end))
      ,@body))
-
 (do-primes-1
     (p 3 15)
   (format t "~d " p))
@@ -709,4 +708,89 @@ most-negative-fixnum
    (next-prime 3)
    (next-prime (1+ p))))
  ((> p 15))
+  (format t "~d " p))
+
+(macroexpand-1 '(defmacro do-primes-1 ((var start end) &body body)
+                 `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+                      ((> ,var ,end))
+                    ,@body)))
+
+;; results the following:
+
+(let nil
+  (eval-when (compile load eval) (system::remove-old-definitions 'do-primes-1)
+             (system::%putd 'do-primes-1
+                            (system::make-macro
+                             (function do-primes-1
+                                       (lambda (system::<macro-form> system::<env-arg>)
+                               (declare (cons system::<macro-form>))
+                               (declare (ignore system::<env-arg>))
+                               (if (not (system::list-length-in-bounds-p system::<macro-form> 2 2 t))
+                                   (system::macro-call-error system::<macro-form>)
+                                   (let*
+                                       ((g3738 (cadr system::<macro-form>))
+                                        (g3739
+                                         (if (not (system::list-length-in-bounds-p g3738 3 3 nil))
+                                             (system::error-of-type 'source-program-error :form
+                                                                    system::<macro-form> :detail g3738
+                                                                    (system::text "~s: ~s does not match lambda list element ~:s")
+                                                                    'do-primes-1 g3738 '(var start end))
+                                             g3738))
+                                        (var (car g3739)) (start (cadr g3739)) (end (caddr g3739))
+                                        (body (cddr system::<macro-form>)))
+                                     (block do-primes-1
+                                       `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+                                            ((> ,var ,end)) ,@body))))))
+                             '((var start end) &body body))))
+  (eval-when (eval)
+    (system::%put 'do-primes-1 'system::definition
+                  (cons
+                   '(defmacro do-primes-1 ((var start end) &body body)
+                     `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))) ((> ,var ,end))
+                        ,@body))
+                   (the-environment))))
+  'do-primes-1)
+
+(do-primes-1 (p 0 (random 100))
+  (format t "~d " p))
+;; results: (with bugs:( )
+(do
+ ((p
+   (next-prime 0)
+   (next-prime (1+ p))))
+ ((> p (random 100)))
+  (format t "~d " p))
+
+(defmacro do-primes-1 ((var start end) &body body)
+  `(do ((ending-value ,end)
+        (,var (next-prime ,start) (next-prime (1+ ,var))))
+       ((> ,var ending-value))
+     ,@body))
+;; still has bug :(
+(do-primes-1 (p 0 (random 100))
+  (format t "~d " p))
+(do
+ ((ending-value (random 100))
+  (p
+   (next-prime 0)
+   (next-prime (1+ p))))
+ ((> p ending-value))
+  (format t "~d " p))
+
+(defmacro do-primes-1 ((var start end) &body body)
+  `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+        (ending-value ,end))
+       ((> ,var ending-value))
+     ,@body))
+;; swap order of two variable definitions.
+
+(do-primes-1 (p 0 (random 100))
+  (format t "~d " p))
+
+(do
+ ((p
+   (next-prime 0)
+   (next-prime (1+ p)))
+  (ending-value (random 100)))
+ ((> p ending-value))
   (format t "~d " p))
