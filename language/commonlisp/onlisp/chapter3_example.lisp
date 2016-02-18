@@ -783,7 +783,6 @@ most-negative-fixnum
        ((> ,var ending-value))
      ,@body))
 ;; swap order of two variable definitions.
-
 (do-primes-1 (p 0 (random 100))
   (format t "~d " p))
 
@@ -794,3 +793,89 @@ most-negative-fixnum
   (ending-value (random 100)))
  ((> p ending-value))
   (format t "~d " p))
+
+;; there is a bug in previous macro because: 
+(do-primes-1 (ending-value 0 10)
+  (print ending-value))
+(do
+ ((ending-value
+   (next-prime 0)
+   (next-prime (1+ ending-value)))
+  (ending-value 10))
+ ((> ending-value ending-value))
+  (print ending-value))
+
+;; or because:
+
+(let ((ending-value 0))
+  (do-primes-1
+      (p 0 10)
+    (incf ending-value p))
+  ending-value)
+;; expands to:
+
+(let ((ending-value 0))
+  ;; (do-primes-1 (p 0 10)
+  ;;   (incf ending-value p))
+  (do
+   ((p
+     (next-prime 0)
+     (next-prime (1+ p)))
+    (ending-value 10))
+   ((> p ending-value))
+    (incf ending-value p))
+  ending-value)
+
+;; fix the name bug
+(defmacro do-primes-1 ((var start end) &body body)
+  (let ((ending-value-name (gensym)))
+    `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+          (,ending-value-name ,end))
+         ((> ,var ,ending-value-name))
+       ,@body)))
+
+(do-primes-1 (ending-value 0 10)
+  (print ending-value))
+(do
+ ((ending-value
+   (next-prime 0)
+   (next-prime (1+ ending-value)))
+  (g3717 10))
+ ((> ending-value g3717))
+  (print ending-value))
+(let ((ending-value 0))
+  (do-primes-1
+      (p 0 10)
+    (incf ending-value p))
+  ending-value)
+(let ((ending-value 0))
+  ;; (do-primes-1
+  ;;     (p 0 10)
+  ;;   (incf ending-value p))
+  (do
+   ((p
+     (next-prime 0)
+     (next-prime (1+ p)))
+    (g3718 10))
+   ((> p g3718))
+    (incf ending-value p))
+  ending-value)
+
+(defmacro with-gensyms-1 ((&rest names) &body body)
+  `(let ,(loop for n in names collect `(,n (gensym)))
+     ,@body))
+
+(with-gensyms-1 (a b c)
+  (format t "~s " a)
+  (format t "~s " b)
+  (format t "~s " c))
+
+(defmacro do-primes-2 ((var start end) &body body)
+  (with-gensyms-1 (ending-value-name)
+    `(do ((,var (next-prime ,start) (next-prime (1+ ,var)))
+          (,ending-value-name ,end))
+         ((> ,var ,ending-value-name))
+       ,@body)))
+
+(do-primes-2 (p 2 17)
+  (format t " ~d" p))
