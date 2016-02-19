@@ -879,3 +879,24 @@ most-negative-fixnum
 
 (do-primes-2 (p 2 17)
   (format t " ~d" p))
+
+(defmacro once-only ((&rest names) &body body)
+  (let ((gensyms (loop for n in names collect (gensym))))
+    `(let (,@(loop for g in gensyms collect `(,g (gensym))))
+       `(let (,,@(loop for g in gensyms for n in names collect ``(,,g ,,n)))))))
+
+`(let (,@(loop for g in '(a b c) collect ``(,g (gensym))))
+   (print a)
+   (print b)
+   (print c))
+
+(once-only (a b c))
+
+(defmacro do-primes-3 ((var start end) &body body)
+  (once-only (start end)
+             `(do ((,var (next-prime ,start) (next-prime (1+ ,var))))
+                  ((> ,var ,end))
+                ,@body)))
+
+(do-primes-3 (p 3 20)
+  (format t "~d " p))
