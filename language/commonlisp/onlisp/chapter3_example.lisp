@@ -920,3 +920,6 @@ most-negative-fixnum
 (format nil "The value is: ~a" 10)
 (format nil "The value is: ~a" "foo")
 (format nil "The value is: ~a" (list 1 2 3))
+
+(format t "Hello, ~3% I am liuxueyang")
+(format t "Hello, ~3~ I am liuxueyang")
