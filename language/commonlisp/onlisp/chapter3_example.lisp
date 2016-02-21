@@ -905,3 +905,8 @@ most-negative-fixnum
   (loop for cons on lst
      do (format t "~a" (car cons))
      when (cdr cons) do (format t ", ")))
+
+`(a ,@(list 1 2) c)
+(format t "~$" pi)
+(format t "~5$" pi)
+
