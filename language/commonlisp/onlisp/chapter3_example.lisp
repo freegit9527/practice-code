@@ -923,3 +923,12 @@ most-negative-fixnum
 
 (format t "Hello, ~3% I am liuxueyang")
 (format t "Hello, ~3~ I am liuxueyang")
+
+(format t " Syntax error. Unexpected character: ~:c~%" #\a)
+(format t " Syntax error. Unexpected character: ~@c~%" #\a)
+(format nil " Syntax error. Unexpected character: ~:@c~%" (code-char 0))
+
+(format nil "~d" 1000000)
+(format nil "~:d" 1000000)
+(format nil "~@d" 1000000)
+(format nil "~@:d" 1000000)
