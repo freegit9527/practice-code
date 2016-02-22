@@ -932,3 +932,48 @@ most-negative-fixnum
 (format nil "~:d" 1000000)
 (format nil "~@d" 1000000)
 (format nil "~@:d" 1000000)
+
+(format nil "~12d" 100000)
+(format nil "~12,'0d" 100000)
+
+(format nil "~4,'0d-~2,'0d-~2,'0d" 2016 2 22)
+
+(format nil "~:d" 10000000000)
+(format nil "~,,'.,4:d" 10000000000)
+
+(format nil "~x" 100000)
+(format nil "~:x" 100000)
+(format nil "~o" 100000)
+(format nil "~b" 100000)
+(format nil "~:b" 100000)
+(format nil "~11:r" 100000)
+
+(format nil "~f" pi)
+(format nil "~,4f" pi)
+(format nil "~e" pi)
+(format nil "~,4e" pi)
+(format nil "~$" pi)
+(format nil "~2,4$" pi)
+
+(format nil "~r" 1234)
+(format nil "~:r" 1234)
+(format nil "~:r" 1243)
+(format nil "~@r" 1243)
+(format nil "~:@r" 1243)
+
+(format nil "file~p" 1)
+(format nil "file~p" 10)
+(format nil "file~p" 0)
+
+(format nil "~r file~:p" 1)
+(format nil "~r file~:p" 10)
+(format nil "~r file~:p" 0)
+
+(format nil "~r famil~:@p" 1)
+(format nil "~r famil~:@p" 10)
+(format nil "~r famil~:@p" 0)
+
+(format nil "~(~a~)" "THE QUICK BROWN FOX -.-")
+(format nil "~@(~a~)" "THE QUICK BROWN FOX -.-")
+(format nil "~:(~a~)" "THE QUICK BROWN FOX -.-")
+(format nil "~:@(~a~)" "the quick brown fox -.-")
