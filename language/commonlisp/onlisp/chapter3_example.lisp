@@ -977,3 +977,20 @@ most-negative-fixnum
 (format nil "~@(~a~)" "THE QUICK BROWN FOX -.-")
 (format nil "~:(~a~)" "THE QUICK BROWN FOX -.-")
 (format nil "~:@(~a~)" "the quick brown fox -.-")
+
+(format nil "~[cero~;uno~;dos~]" 0)
+(format nil "~[cero~;uno~;dos~]" 1)
+(format nil "~[cero~;uno~;dos~]" 2)
+(format nil "~[cero~;uno~;dos~]" 3)
+
+(format nil "~[cero~;uno~:;dos~]" 3)
+(format nil "~[cero~;uno~:;dos~]" 100)
+
+(defparameter *list-etc*
+  "~#[NONE~;~a~;~a and ~a~:;~a, ~a~]~#[~; and ~a~:;, ~a, etc~].")
+
+(format nil *list-etc*)
+(format nil *list-etc* 'a)
+(format nil *list-etc* 'a 'b)
+(format nil *list-etc* 'a 'b 'c)
+(format nil *list-etc* 'a 'b 'c 'd)
