@@ -917,12 +917,36 @@ most-negative-fixnum
 (dotimes (i 5)
   (format t " ~&~v$" (1+ i) pi ))
 
+;; ==============================
+;; write macro to implement this
+
 (defmacro print-n-m-pi (start end)
   `(progn
       (format t " ~&~$" ,start)
       (format t " ~&~$" ,end)))
+
+;; ==============================
+;; learn to use loop
+
+(loop for i upto 10
+   collect i)
+(loop for i from 0 downto -10
+   collect i)
+(loop for i from 20 downto 10 collect i)
+(loop for i downfrom 20 to 10 collect i)
+
+(loop for i in (list 10 20 30 40) collect i)
+(loop for i in (list 10 20 30 40) by #'cddr collect i)
+(loop for i on (list 10 20 30 40) collect i)
+(loop for i on (list 10 20 30 40) by #'cddr collect i)
+
+(loop for i across "abcd" collect i)
+
+;; ==============================
 ;; this macro print n-precise to m-precise of pi value.
 ;; now it is just for test. :)
+
+;; ==============================
 
 (print-n-m-pi 3 4)
 
