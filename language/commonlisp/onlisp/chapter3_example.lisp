@@ -907,25 +907,40 @@ most-negative-fixnum
      when (cdr cons) do (format t ", ")))
 
 `(a ,@(list 1 2) c)
-(format t "~$" pi)
-(format t "~5$" pi)
-(format t "~v$" 3 pi)
-(format t "~#$" pi)
-(format t "~,5f" pi)
-(format t " ~d" 1000000)
-(format t " ~:d" 1000000)
-(format t " ~@d" 1000000)
-(format t " ~@:d" 1000000)
+(format nil "~$" pi)
+(format nil "~5$" pi)
+(format nil "~v$" 3 pi)
+(format nil "~v$" 100 pi)
+(format nil "~#$" pi)
+(format nil "~#$" pi 1 2 3)
+
+(dotimes (i 5)
+  (format t " ~&~v$" (1+ i) pi ))
+
+(defmacro print-n-m-pi (start end)
+  `(progn
+      (format t " ~&~$" ,start)
+      (format t " ~&~$" ,end)))
+;; this macro print n-precise to m-precise of pi value.
+;; now it is just for test. :)
+
+(print-n-m-pi 3 4)
+
+(format nil "~,5f" pi)
+(format nil " ~d" 1000000)
+(format nil " ~:d" 1000000)
+(format nil " ~@d" 1000000)
+(format nil " ~@:d" 1000000)
 
 (format nil "The value is: ~a" 10)
 (format nil "The value is: ~a" "foo")
 (format nil "The value is: ~a" (list 1 2 3))
 
-(format t "Hello, ~3% I am liuxueyang")
-(format t "Hello, ~3~ I am liuxueyang")
+(format nil "Hello, ~3% I am liuxueyang")
+(format nil "Hello, ~3~ I am liuxueyang")
 
-(format t " Syntax error. Unexpected character: ~:c~%" #\a)
-(format t " Syntax error. Unexpected character: ~@c~%" #\a)
+(format nil " Syntax error. Unexpected character: ~:c~%" #\a)
+(format nil " Syntax error. Unexpected character: ~@c~%" #\a)
 (format nil " Syntax error. Unexpected character: ~:@c~%" (code-char 0))
 
 (format nil "~d" 1000000)
@@ -996,7 +1011,7 @@ most-negative-fixnum
 (format nil *list-etc* 'a 'b 'c 'd)
 
 (let ((test-result nil))
-  (format t " ~:[FAILE~;PASS~]" test-result)
+  (format nil " ~:[FAILE~;PASS~]" test-result)
   (setf test-result t)
   (format nil "~:[FAILE~;PASS~]" test-result))
 
@@ -1004,3 +1019,8 @@ most-negative-fixnum
 (format nil "~@[x = ~a~]~@[ y = ~a~]" 10 nil)
 (format nil "~@[x = ~a~]~@[ y = ~a~]" nil 20)
 (format nil "~@[x = ~a~]~@[ y = ~a~]" nil nil)
+
+(format nil "~{~a, ~}" (list 1 2 3))
+(format nil "~{~a~^, ~}" (list 1 2 3))
+
+(format nil "~@{~a~^, ~}" 1 2 3)
