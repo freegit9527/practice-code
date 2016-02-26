@@ -994,3 +994,13 @@ most-negative-fixnum
 (format nil *list-etc* 'a 'b)
 (format nil *list-etc* 'a 'b 'c)
 (format nil *list-etc* 'a 'b 'c 'd)
+
+(let ((test-result nil))
+  (format t " ~:[FAILE~;PASS~]" test-result)
+  (setf test-result t)
+  (format nil "~:[FAILE~;PASS~]" test-result))
+
+(format nil "~@[x = ~a~]~@[ y = ~a~]" 10 20)
+(format nil "~@[x = ~a~]~@[ y = ~a~]" 10 nil)
+(format nil "~@[x = ~a~]~@[ y = ~a~]" nil 20)
+(format nil "~@[x = ~a~]~@[ y = ~a~]" nil nil)
