@@ -1024,3 +1024,25 @@ most-negative-fixnum
 (format nil "~{~a~^, ~}" (list 1 2 3))
 
 (format nil "~@{~a~^, ~}" 1 2 3)
+
+;; review format directives
+(format nil "~$" pi)
+(format nil "~5$" pi)
+(format nil "~v$" 10 pi)
+(format nil "~#$" pi 10 3 5)
+
+(format nil "~,5f" pi)
+
+(format nil "~d" 100000)
+(format nil "~:d" 100000)
+(format nil "~@d" 100000)
+(format nil "~@:d" 100000)
+(format nil "~:@d" 100000)
+
+(format nil "The value is: ~a" 10)
+(format nil "The value is: ~a" "foo")
+(format nil "The value is: ~a" '(1 2 3))
+
+(format nil "The value is: ~s" 10)
+(format nil "The value is: ~s" "foo")
+(format nil "The value is: ~s" '(1 2 3))
