@@ -1049,7 +1049,8 @@ most-negative-fixnum
 
 (format nil "~@{~a~^, ~}" 1 2 3)
 
-;; review format directives
+;; REVIEW format directives
+;; 2016/03/01 Tuesday
 (format nil "~$" pi)
 (format nil "~5$" pi)
 (format nil "~v$" 10 pi)
@@ -1116,3 +1117,79 @@ most-negative-fixnum
 (format nil "~14,,,'.,4:r" 1000000000)
 (format nil "~17,,,'.,4:r" 1000000000)
 ;; argument: base-number, width, padding char, split char, group size
+
+(format nil "~f" pi)
+(format nil "~,4f" pi)
+(format nil "~e" pi)
+(format nil "~,4e" pi)
+
+(format nil "~$" pi)
+(format nil "~2,4$" pi)
+
+(format nil "~@$" pi)
+(format nil "~2,4@$" pi)
+
+(format nil "~r" 1234)
+;; r means human readable
+
+(do ((i 1 (1+ i)))
+    ((> i 20))
+  (format t "~r " i)
+  (if (equal (mod i 4) 0)
+      (format t "~&")))
+
+(do ((i 1 (1+ i)))
+    ((> i 20))
+  (format t "~:r " i)
+  (if (equal (mod i 4) 0)
+      (format t "~&")))
+
+(do ((i 1 (1+ i)))
+    ((> i 20))
+  (format t "~@r " i)
+  (if (equal (mod i 4) 0)
+      (format t "~&")))
+
+(format nil "file~p" 1)
+(format nil "file~p" 10)
+(format nil "file~p" 0)
+
+(format nil "~r file~:p" 1)
+(format nil "~r file~:p" 10)
+(format nil "~r file~:p" 0)
+
+(format nil "~r famil~:@p" 1)
+(format nil "~r famil~:@p" 10)
+(format nil "~r famil~:@p" 0)
+
+(format nil "~a is ~a" "Hello" "HELLO")
+(format nil "~(~a is ~a~)" "Hello" "HELLO")
+(format nil "~(~@r~)" 144)
+(format nil "~(~r~)" 144)
+(format nil "~@(~r~)" 144)
+(format nil "~:(~r~)" 144)
+(format nil "~@(~a~)" "this is an apple")
+(format nil "~:(~a~)" "this is an apple")
+(format nil "~@:(~a~)" "this is an apple")
+
+;; CONDITIONAL FORMATTING
+(format nil "~[cero~;uno~;dos~]" 0)
+(format nil "~[cero~;uno~;dos~]" 1)
+(format nil "~[cero~;uno~;dos~]" 2)
+(format nil "~[cero~;uno~;dos~]" 3)
+(format nil "~[cero~;uno~:;dos~]" 3)
+(format nil "~[cero~;uno~:;dos~]" 100)
+
+(defparameter *list-etc*
+  "~#[NONE~;~a~;~a and ~a~:;~a, ~a~]~#[~; and ~a~:;, ~a, etc~].")
+(format nil *list-etc* 'a 'b)
+(format nil *list-etc* 'a)
+(format nil *list-etc*)
+(format nil *list-etc* 'a 'b 'c)
+(format nil *list-etc* 'a 'b 'c 'd)
+(format nil "~:[FAILE~;PASS~]" t)
+(format nil "~:[FAILE~;PASS~]" nil)
+
+(format nil "~@[x = ~a~]~[ y = ~a~]" 10 20)
+(format nil "~@[x = ~a~]~@[ y = ~a~]" 10 20)
+(format nil "~@[x = ~a~]~@[ y = ~a~]" 10 nil)
