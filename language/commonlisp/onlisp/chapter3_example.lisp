@@ -1085,3 +1085,34 @@ most-negative-fixnum
 (format nil "char: ~:c" #\a)
 (format nil "char: ~@c" #\a)
 (format nil "char: ~@c" #\b)
+
+(format nil "~:@c" (code-char 65))
+(format nil "~:@c" (code-char 0))
+
+(format nil "~d" 1000000)
+(format nil "~@d" 1000000)
+(format nil "~:d" 1000000)
+(format nil "~:@d" 1000000)
+(format nil "~8:d" 1000000)
+;; put modifier just before the directive
+;; put argument before the modifier
+(format nil "~8d" 1000000)
+(format nil "~10:d" 1000000)
+(format nil "~10:@d" 1000000)
+(format nil "~11:@d" 1000000)
+(format nil "~12,'0:@d" 1000000)
+(format nil "~12,'*:@d" 1000000)
+;; there should not be space after the comma
+(format nil "~4,'0d-~2,'0d-~2,'0d" 2016 3 2)
+
+(format nil "~,,'.,4:d" 1000000000)
+(format nil "~,,'.,4d" 1000000000)
+;; must have colon modifier before the directive indentifier
+(format nil "~,,'.,4:x" 1000000000)
+(format nil "~,,'.,4:o" 1000000000)
+(format nil "~,,'.,4:d" 1000000000)
+;; argument: width, padding char, split char, group size
+
+(format nil "~14,,,'.,4:r" 1000000000)
+(format nil "~17,,,'.,4:r" 1000000000)
+;; argument: base-number, width, padding char, split char, group size
