@@ -1070,3 +1070,18 @@ most-negative-fixnum
 (format nil "The value is: ~s" 10)
 (format nil "The value is: ~s" "foo")
 (format nil "The value is: ~s" '(1 2 3))
+
+(format nil "nil is ~s" nil)
+(format nil "nil is ~a" nil)
+(format nil "nil is ~s" ())
+(format nil "nil is ~a" ())
+
+(format nil "Hello~2%Hello")
+(format nil "Hello~%~2&Hello")
+
+(format nil "~2~, ~~")
+
+(format nil "char: ~c" #\a)
+(format nil "char: ~:c" #\a)
+(format nil "char: ~@c" #\a)
+(format nil "char: ~@c" #\b)
