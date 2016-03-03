@@ -1,10 +1,15 @@
 class Shuffle1 {
     public static void main(String[] args) {
         int x = 3;
+
+        if (x > 2) {
+            System.out.print("a");
+        }
+
         while (x > 0) {
-            if (x > 2) {
-                System.out.print("a");
-            }
+            x -= 1;
+            System.out.print("-");
+
             if (x == 2) {
                 System.out.print("b c");
             }
@@ -12,8 +17,6 @@ class Shuffle1 {
                 System.out.print("d");
                 x -= 1;
             }
-            x -= 1;
-            System.out.print("-");
         }
     }
 }
