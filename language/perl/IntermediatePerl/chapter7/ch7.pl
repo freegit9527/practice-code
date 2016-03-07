@@ -34,9 +34,20 @@ for my $greeter (@everyone) {
     say "";
 }
 
-my @start_directories = qw(.);
+my @start_directories = qw(..);
 find(
     sub {
         say "$File::Find::name";
     },
     @start_directories);
+
+my $totalsize = 0;
+find(sub{$totalsize += -s if -f}, '..');
+say $totalsize;
+
+my $callback;
+{
+    my $count = 0;
+    $callback = sub {print ++$count, ": $File::Find::name\n" if -f};
+}
+find($callback, '..');
