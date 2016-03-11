@@ -4,6 +4,7 @@
 #       AUTHOR: Phoenix Ikki (liuxueyang.github.io), liuxueyang457@gmail.com
 # ORGANIZATION: Hunan University
 #      CREATED: 04/14/2015 11:31:23 AM
+#      ADDED: 03/11/2016 
 #===============================================================================
 
 use strict;
@@ -24,7 +25,6 @@ my @odd_digit_nums = grep {
 } @inputnumbers;
 
 say "odd_digit_nums are: @odd_digit_nums";
-say "hello", ", world!";
 
 my @alphas = qw(c b d e a g f);
 say join ' ', @alphas;

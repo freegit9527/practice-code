@@ -1,3 +1,15 @@
+/*
+ * =====================================================================================
+ *       Filename : dfs_1.c
+ *    Description : 
+ *    Version     : 
+ *        Created : 03/12/16 07:09
+ *         Author : Liu Xue Yang (LXY), liuxueyang457@163.com
+ *         Motto  : Suicide is Painless
+ * =====================================================================================
+ */
+
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
