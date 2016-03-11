@@ -14,6 +14,7 @@ use 5.014;
 my @inputnumbers = (1..20);
 
 print $_, " " for @inputnumbers;
+
 say "";
 
 my @odd_digit_nums = grep {
@@ -22,7 +23,61 @@ my @odd_digit_nums = grep {
   $sum % 2;
 } @inputnumbers;
 
-say "";
-print "odd_digit_nums are: @odd_digit_nums\n";
+say "odd_digit_nums are: @odd_digit_nums";
+say "hello", ", world!";
 
+my @alphas = qw(c b d e a g f);
+say join ' ', @alphas;
+say join ' ', sort @alphas;
 
+say join ' ', reverse @alphas;
+
+push @alphas, "liu";
+say join ' ', @alphas;
+
+my @nums = (1, 2, 4, 8, 16, 32, 64);
+my @bigger_than_10 = grep $_ > 10, @nums;
+say join ' ', @bigger_than_10;
+
+my @end_with_4 = grep /4$/, @nums;
+say join ' ', @end_with_4;
+
+system("clear");
+
+my @odd_digit_sum = grep digit_sum_is_odd($_), @nums;
+
+say join ' ', grep digit_sum_is_odd($_), @nums;
+say join ' ', @odd_digit_sum;
+
+sub digit_sum_is_odd {
+    my $sum = 0;
+    $sum += $_ for split //, shift;
+    $sum % 2;
+}
+
+say join ' ', map $_ + 100, @nums;
+say join ' ', map {$_, $_ * 3, $_ * 5} @nums;
+my %hash = map {$_, $_ * 3} @nums;
+say $_, " -> ", $hash{$_} for sort {$a <=> $b} keys %hash;
+
+say join ' ', map {
+    #my $sum = 0;
+    #$sum += $_ for split / /, $_;
+    my @nums = split //;
+    if ($nums[-1] == 4) {
+        $_;
+    }
+    else {
+        ();
+    }
+} @nums;
+
+say join ' ', map {
+    my $sum = 0;
+    $sum += $_ for split //;
+    if ($sum % 2 == 0) {
+        $_;
+    } else {
+        ();
+    }
+} @nums;
