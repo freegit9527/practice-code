@@ -81,3 +81,21 @@ say join ' ', map {
         ();
     }
 } @nums;
+my ($total, $count) = (100, 0);
+eval {$total / $count};
+say "error: $@" if $@;
+
+for (qw(+ - * /)) {
+    my $result = eval "2 $_ 0";
+    say "Error: $@" if $@;
+    say "$result" unless $@;
+}
+
+my $cond = 2;
+my $bowler = do {
+    if ($cond == 1) {100}
+    elsif ($cond == 2) {102}
+    else {103}
+};
+say "bowler = ", $bowler;
+
