@@ -10,6 +10,7 @@
 use strict;
 use warnings;
 use utf8;
+use 5.014;
 
 $\ = $/;
 my @required = qw (
@@ -30,6 +31,16 @@ for my $item (@required) {
 		print "Skipper is missing $item.\n";
 	}
 }
+
+sub check_required_items_pre {
+    my $who = shift;
+    my %whos_items = map {$_, 1} @_;
+    my @required = qw(preserver sunscreen water_bottle jacket);
+    for (@required) {
+        say "$who is missing $_" unless $whos_items{$_};
+    }
+}
+
 
 sub check_required_items {
 	my $who = shift;
@@ -52,9 +63,10 @@ my @skipper = qw (
 	jacket
 	preserver
 	sunscreen);
-check_required_items_2('The skipper', \@skipper);
+check_required_items_1('The skipper', \@skipper);
+check_required_items_pre('The skipper', @skipper);
 
-my @professor = qw (sunscreen water_bottle slide_rule 
+my @professor = qw (sunscreen water_bottle slide_rule
 	batteries radio);
 check_required_items_2('Professor', \@professor);
 

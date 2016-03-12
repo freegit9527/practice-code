@@ -19,37 +19,24 @@ int rec[ROW][COLUMN];
 int point_count;
 int bfs_queue[1000 * 1000 + 1];
 int already_visit[1000 * 1000 + 1];
-int already_visit_count = 0;
 
 void bfs(int start) {
-  int head, tail;
+  int head = 1, tail = 1;
 
-  head = 1;
-  tail = 1;
   bfs_queue[head] = start;
+  already_visit[start] = 1;
   ++tail;
 
   while(head < tail) {
-    /*
-    if (already_visit_count == point_count) {
-      return;
-    }
-    // this also works :)
-    */
-    /*
-    if (head != 1 && (tail - head) == 1) {
-      return;
-    }
-    */
-    
     printf("%d ", bfs_queue[head]);
-    ++already_visit_count;
-    already_visit[bfs_queue[head]] = 1;
 
     for(int i = 1; i <= point_count; ++i) {
       if (rec[i][bfs_queue[head]] == 1 &&
           already_visit[i] == 0) {
         bfs_queue[tail] = i;
+        // mark the point visited HERE! NOT before
+        // the for loop :(
+        already_visit[i] = 1;
         ++tail;
       }
     }
