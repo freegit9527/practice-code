@@ -89,11 +89,11 @@ sub check_required_items_1 {
 }
 
 sub check_required_items_2 {
-	my $who = shift;
-	my $items = shift;
+	my $who        = shift;
+	my $items      = shift;
 	my %whos_items = map {$_, 1} @$items;
-	my @required = qw (preserver sunscreen water_bottle jacket);
-	my @missing = ();
+	my @required   = qw (preserver sunscreen water_bottle jacket);
+	my @missing    = ();
 	for my $item (@required) {
 		unless ($whos_items{$item}) {
 			print "$who is missing $item.\n";
@@ -106,14 +106,47 @@ sub check_required_items_2 {
 	}
 }
 
-my @num = qw (first second);
-my @lang = qw (c java perl python);
-my @num_name = ('number' => \@num);
-my @lang_name = ('language' => \@lang);
+my @num           =  qw (first second);
+my @lang          =  qw (c java perl python);
+my @num_name      =  ('number' => \@num);
+my @lang_name     =  ('language' => \@lang);
 
-my @num_and_lang = (\@num_name, \@lang_name);
+my @num_and_lang  =  (\@num_name, \@lang_name);
 for my $i (@num_and_lang) {
 	print "${$i}[0]: (@{${$i}[1]})";
 }
 
+sub check_required_items_3 {
+    my %items_hash = map {$_, 1} @{$_[1]};
+    my @required = qw (1 2 3 4 5 6);
+    for (@required) {
+        unless ($items_hash{$_}) {
+            print "$_[0] is missing $_";
+            # here $_[0] and $_ is not the same thing:
+            # $_[0] is the first argument of the function,
+            # $_ if the default loop variable of `for`
+        }
+    }
+}
 
+my $name      = "liuxueyang";
+my @my_number = qw (2 5 7);
+check_required_items_3($name, \@my_number);
+
+my @liu_items          =  qw (1 2 3);
+my @gu_items           =  qw (4 5 6);
+my @song_items         =  qw (7 8 9);
+my @liu_name_items     =  ('liu' => \@liu_items);
+my @gu_name_items      =  ('gu' => \@gu_items);
+my @song_name_items    =  ('song' => \@song_items);
+my @all_name_items     =  (
+    \@liu_name_items,
+    \@gu_name_items,
+    \@song_name_items
+  );
+for (@all_name_items) {
+    say $$_[0], ': ';
+    # &check_required_items_3($$_[0], $$_[1]);
+    # or like this:
+    &check_required_items_3(@$_);
+}
