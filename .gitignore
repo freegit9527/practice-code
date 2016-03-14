@@ -70,3 +70,4 @@ site-lisp/package/
 /backups
 /bookmarks
 /semanticdb
+*.swp
