@@ -16,3 +16,19 @@ chdir "$dir" or die "cannot not chdir to $dir: $!";
 
 my @all_files = glob '*.pl'; # glob 并不会递归查找文件
 print join "\n", @all_files, "\n";
+
+$dir = '/etc';
+my @dir_files = <$dir/* $dir/.*>;
+#say join ' ', @dir_files;
+
+my $dir_to_process = '/home/aries/Hack';
+opendir my $dh, $dir_to_process or
+  die "Cannot open $dir_to_process: $!";
+
+for (readdir $dh) {
+    next if /^\./;
+    say "one file in $dir_to_process is: $_";
+}
+
+closedir $dh;
+
