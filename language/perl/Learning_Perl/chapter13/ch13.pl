@@ -10,6 +10,7 @@ use strict;
 use warnings;
 use utf8;
 use 5.014;
+use File::Spec::Functions;
 
 my $dir = '.';
 chdir "$dir" or die "cannot not chdir to $dir: $!";
@@ -27,7 +28,8 @@ opendir my $dh, $dir_to_process or
 
 for (readdir $dh) {
     next if /^\./;
-    say "one file in $dir_to_process is: $_";
+    my $full_path = catfile($dir_to_process, $_);
+    say "one file in $dir_to_process is: $full_path";
 }
 
 closedir $dh;
