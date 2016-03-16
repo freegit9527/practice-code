@@ -6,9 +6,9 @@
 #      CREATED: 03/16/2016 05:42:26 PM
 #===============================================================================
 
-use strict;
-use warnings;
-use utf8;
+#use strict;
+#use warnings;
+#use utf8;
 
 while (<>) {
     my ($n, $b) = split;
@@ -26,8 +26,25 @@ while (<>) {
     for (@input) {
         if ($_->{t} < $now and $queue_remain > 0) {
             push @queue, $_;
-            $queue_remain++;
+            $queue_remain--;
+        } elsif ($_->{t} < $now and $queue_remain == 0) {
+            $res[$_->{p}] = -1;
+        } elsif ($_->{t} >= $now) {
+            if (@queue) {
+                my $cur = shift @queue;
+                $now += $cur->{d};
+                $res[$cur->{p}] = $now;
+                push @queue, $_;
+            } else {
+                push @queue, $_;
+                $queue_remain--;
+            }
         }
+    }
+    while (@queue) {
+        my $cur = shift @queue;
+        $now += $cur->{d};
+        $res[$cur->{p}] = $now;
     }
     print join ' ', @res;
     print "\n";
