@@ -31,24 +31,6 @@ while (<>) {
 #         ...
 #        }
     }
-
-    my	%hash_str2str;
-    my	%reverse_hash_str2str;
-    for (keys %{$hash}) {
-        $hash_str2str{$_} = join '', @{$hash->{$_}};
-        # hash_str2str = {
-        # 'http:...' => '//test/aaa/bab',
-        # ...
-        # }
-        #unless ($reverse_hash_str2str{$hash_str2str{$_}}) {
-            push @{$reverse_hash_str2str{$hash_str2str{$_}}}, $_;
-            #}
-        # reverse_hash_str2str = {
-        # '/test//aaa/abb' => ['http:/aba', 'http....'],
-        # ...
-        # }
-    }
-=begin
     my $res;
     for (values %{$hash}) {
         for my $j (keys %{$hash}) {
@@ -62,17 +44,12 @@ while (<>) {
             }
         }
     }
-=end
-=cut
     my @result;
-    for (values %reverse_hash_str2str) {
-        push @result, $_ if @{$_} > 1;
+    for (values %{$res}) {
+        unless (str_array_in_array_of_array($_, \@result)) {
+            push @result, $_ if @{$_} > 1;
+        }
     }
-#    for (values %{$res}) {
-#        unless (str_array_in_array_of_array($_, \@result)) {
-#            push @result, $_ if @{$_} > 1;
-#        }
-#    }
     print scalar @result, "\n";
     for (0..$#result) {
         if (@{$result[$_]} > 1) { print_array($result[$_]); }
