@@ -107,10 +107,9 @@ sub num_array_in_array_of_array {
 #     SEE ALSO: n/a
 #===============================================================================
 sub str_array_cmp {
-    my $lena = @{$_[0]};
-    my $lenb = @{$_[1]};
-    return 0 if $lena != $lenb;
-    for (0..$lena-1) { return 0 unless ($_[0][$_] eq $_[1][$_]); }
+    return 0 if @{$_[0]} != @{$_[1]};
+    my $len = @{$_[0]};
+    for (0..$len-1) { return 0 unless ($_[0][$_] eq $_[1][$_]); }
     return 1;
 } ## --- end sub str_array_cmp
 
@@ -125,10 +124,9 @@ sub str_array_cmp {
 #     SEE ALSO: n/a
 #===============================================================================
 sub num_array_cmp {
-    my $lena = @{$_[0]};
-    my $lenb = @{$_[1]};
-    return 0 if $lena != $lenb;
-    for (0..$lena-1) { return 0 unless ($_[0][$_] == $_[1][$_]); }
+    return 0 if @{$_[0]} != @{$_[1]};
+    my $len = @{$_[0]};
+    for (0..$len-1) { return 0 unless ($_[0][$_] == $_[1][$_]); }
     return 1;
 } ## --- end sub num_array_cmp
 
