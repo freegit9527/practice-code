@@ -9,7 +9,7 @@
 #         BUGS: ---
 #        NOTES: ---
 #       AUTHOR: Lpaste (yesterday2young.github.io), liuxueyang457@163.com
-# ORGANIZATION: 
+# ORGANIZATION: Solution 1.
 #      VERSION: 1.0
 #      CREATED: 2016/03/17 21时31分48秒
 #     REVISION: ---
@@ -20,15 +20,11 @@
 #use utf8;
 #use List::MoreUtils qw(uniq);
 #use 5.020;
+use List::Util qw(max);
 $\ = $/;
-
 while (<>) {
-    my $a = [split ' ', <>];
-    my ($h, $c, $ans) = ({}, {}, 0);
-    $h->{$_}++ for @$a;
-    for (keys %$h) {
-        print "$_ -> $h->{$_}";
-    }
+    $n = $_; $h->{$_}++ for split ' ', <>;
+    print $n - max(values %{$h});
 }
 
 #===  FUNCTION  ================================================================
