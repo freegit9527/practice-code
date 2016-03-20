@@ -20,23 +20,31 @@ use warnings;
 use utf8;
 #use 5.020;
 $\ = $/;
-my  $n = 100;
+my  $n = 5;
 my  @tree;
 my  @num = (1..$n);
-$tree[1] = { l => 1, r => $n}
-#for (1..2*$n+1) {
-#    $tree[$_] = {
-#        l => 
-#    }
-#}
-create_tree(\@tree, $tree[1], 1);
+$tree[1] = { l => 1, r => $n};
+create_tree(\@tree, 1);
 
 sub create_tree {
-    my  ( $tree, $root, $pos ) = @_;
-    my  ( $l, $r ) = ($root->{l}, $root->{r});
+    my  ( $tree, $pos ) = @_;
+    my  ( $l, $r ) = ($tree[$pos]->{l}, $tree[$pos]->{r});
+    #print "<$l, $r>, $pos";
     return $l if ($l == $r);
-    my  $mid = int($l + $r);
+    my  $mid = int(($l + $r) / 2);
+    $tree[$pos * 2] = { l => $l, r => $mid };
+    $tree[$pos * 2 + 1] = { l => $mid + 1, r => $r };
+    create_tree($tree, $pos * 2);
+    create_tree($tree, $pos * 2 + 1);
 }
+#print scalar @tree;
+for (1..$#tree) {
+    print "<$tree[$_]->{l}, $tree[$_]->{r}>, $_";
+}
+
+#for (@tree) {
+#    print "$_->{l}, $_->{r}";
+#}
 
 #===  FUNCTION  ================================================================
 #         NAME: str_array_in_array_of_array
