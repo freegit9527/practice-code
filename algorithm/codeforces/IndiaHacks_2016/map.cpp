@@ -30,7 +30,7 @@ typedef vector<int> VI;
 typedef map<int,int> MI;
 typedef long long ll;
 typedef pair<int,int> PII;
-const ll mod=1000000007;
+//const ll mod=1000000007;
 
 
   int

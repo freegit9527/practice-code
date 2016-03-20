@@ -32,7 +32,7 @@ typedef long long ll;
 typedef pair<int,int> PII;
 //const ll mod=1000000007;
 
-int n, t[150000];
+int n, t[151000];
 VI bad_index;
 MI used_bad_index;
 
@@ -42,7 +42,7 @@ is_good_index ( int index )
   if ( index < 1 || index > n ) {
     return 1;
   }
-  if ( index % 2 == 0 ) {
+  if ( index % 2 == 0 ) {                       /* even */
     return ((index == 1 || t[index] > t[index-1]) && (index == n || t[index] > t[index+1]));
   }
   else {
@@ -85,6 +85,14 @@ freopen("3", "r", stdin);
     }
     int result = 0;
 
+    /*-----------------------------------------------------------------------------
+     *  03/20/16
+     *-----------------------------------------------------------------------------*/
+    for ( int i = 0; i < SZ(bad_index); ++i ) {
+      printf ( "%d ", bad_index[i] );
+    }
+    printf ( "\n" );
+
     if ( SZ(bad_index) > 4 ) {
       printf ( "0\n" );
     }
@@ -94,6 +102,10 @@ freopen("3", "r", stdin);
           if (!( (used_bad_index[i] == 1) || (i == bad_index[j]) )) {
             if ( swap_bad_and_other(i, bad_index[j]) ) {
               ++result;
+              /*-----------------------------------------------------------------------------
+               *  
+               *-----------------------------------------------------------------------------*/
+              printf ( "i = %d, bad_index[j] = %d\n", i, bad_index[j] );
             }
           }
         }
@@ -101,6 +113,7 @@ freopen("3", "r", stdin);
       }
       printf ( "%d\n", result );
     }
+    printf ( "************\n" );
   }
 
     return EXIT_SUCCESS;

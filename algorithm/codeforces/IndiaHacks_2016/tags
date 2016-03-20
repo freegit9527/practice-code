@@ -1,0 +1,83 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+Can	3_3.cpp	/^bool Can(int x) {$/;"	f
+F	3_1.cpp	/^int F(int x) {$/;"	f
+Find	3_3.cpp	/^bool Find(int x, int y) {$/;"	f
+LL	3_1.cpp	/^typedef long long LL;$/;"	t	file:
+M	3_3.cpp	/^const int M = 1000500;$/;"	v
+MI	3.cpp	/^typedef map<int,int> MI;$/;"	t	file:
+MI	map.cpp	/^typedef map<int,int> MI;$/;"	t	file:
+N	3_1.cpp	/^const int N = 150005;$/;"	v
+N	3_3.cpp	/^const int N = 100500;$/;"	v
+N	3_4.cpp	/^const int N = 150005;$/;"	v
+P	3_3.cpp	/^const int P = 105;$/;"	v
+PII	3.cpp	/^typedef pair<int,int> PII;$/;"	t	file:
+PII	map.cpp	/^typedef pair<int,int> PII;$/;"	t	file:
+Q	3_1.cpp	/^const int Q = 1e9 + 7;$/;"	v
+Q	3_3.cpp	/^const int Q = 1050;$/;"	v
+R	3_4.cpp	/^inline void R(T &x) {$/;"	f
+S	3_4.cpp	/^set<pair<int, int>> S;$/;"	v
+SZ	3.cpp	/^#define SZ(/;"	d	file:
+SZ	map.cpp	/^#define SZ(/;"	d	file:
+VI	3.cpp	/^typedef vector<int> VI;$/;"	t	file:
+VI	map.cpp	/^typedef vector<int> VI;$/;"	t	file:
+a	3_1.cpp	/^int n , a[N] , cnt;$/;"	v
+a	3_2.cpp	/^int n, a[200005];$/;"	v
+a	3_4.cpp	/^int n, a[N], s[N];$/;"	v
+all	3.cpp	/^#define all(/;"	d	file:
+all	map.cpp	/^#define all(/;"	d	file:
+bad_index	3.cpp	/^VI bad_index;$/;"	v
+check	3_1.cpp	/^int check(int i , int j) {$/;"	f
+check	3_4.cpp	/^int check() {$/;"	f
+cnt	3_1.cpp	/^int n , a[N] , cnt;$/;"	v
+f	3_1.cpp	/^bool f[N] , p[N];$/;"	v
+fi	3.cpp	/^#defin/;"	d	file:
+fi	map.cpp	/^#defin/;"	d	file:
+fir	3_4.cpp	/^#define fir /;"	d	file:
+forbid	3_3.cpp	/^int forbid[M];$/;"	v
+getint	3_3.cpp	/^int getint() {$/;"	f
+is_good_index	3.cpp	/^is_good_index ( int index )$/;"	f
+ll	3.cpp	/^typedef long long ll;$/;"	t	file:
+ll	3_4.cpp	/^typedef long long ll;$/;"	t	file:
+ll	map.cpp	/^typedef long long ll;$/;"	t	file:
+m	3_3.cpp	/^int n, m, p;$/;"	v
+main	3.cpp	/^main ( int argc, char *argv[] )$/;"	f
+main	3_1.cpp	/^int main() {$/;"	f
+main	3_2.cpp	/^int main() {$/;"	f
+main	3_3.cpp	/^int main() {$/;"	f
+main	3_4.cpp	/^int main() {$/;"	f
+main	map.cpp	/^main ( int argc, char *argv[] )$/;"	f
+mp	3.cpp	/^#define mp /;"	d	file:
+mp	3_4.cpp	/^#define mp /;"	d	file:
+mp	map.cpp	/^#define mp /;"	d	file:
+n	3.cpp	/^int n, t[151000];$/;"	v
+n	3_1.cpp	/^int n , a[N] , cnt;$/;"	v
+n	3_2.cpp	/^int n, a[200005];$/;"	v
+n	3_3.cpp	/^int n, m, p;$/;"	v
+n	3_4.cpp	/^int n, a[N], s[N];$/;"	v
+p	3_1.cpp	/^bool f[N] , p[N];$/;"	v
+p	3_3.cpp	/^int n, m, p;$/;"	v
+pb	3.cpp	/^#define pb /;"	d	file:
+pb	3_4.cpp	/^#define pb /;"	d	file:
+pb	map.cpp	/^#define pb /;"	d	file:
+pcheck	3_4.cpp	/^bool pcheck(int i) {$/;"	f
+per	3.cpp	/^#define per(/;"	d	file:
+per	map.cpp	/^#define per(/;"	d	file:
+pos	3_4.cpp	/^vector<int> pos;$/;"	v
+pos_is_nice	3.pl	/^sub pos_is_nice {$/;"	s
+qcheck	3_4.cpp	/^bool qcheck(int l, int r) {$/;"	f
+rep	3.cpp	/^#define rep(/;"	d	file:
+rep	map.cpp	/^#define rep(/;"	d	file:
+s	3_4.cpp	/^int n, a[N], s[N];$/;"	v
+se	3.cpp	/^#define se /;"	d	file:
+se	map.cpp	/^#define se /;"	d	file:
+sec	3_4.cpp	/^#define sec /;"	d	file:
+swap_bad_and_other	3.cpp	/^swap_bad_and_other ( int i, int j )$/;"	f
+swap_bad_and_other	3.pl	/^sub swap_bad_and_other {$/;"	s
+t	3.cpp	/^int n, t[151000];$/;"	v
+used_bad_index	3.cpp	/^MI used_bad_index;$/;"	v
+xu	3_3.cpp	/^int xu[M];$/;"	v
