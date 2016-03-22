@@ -21,71 +21,74 @@ use utf8;
 #use 5.020;
 $\ = $/;
 
-my @index;
+my @bad_index;
+my @mark_index;
+my @lne;
+my $n;
 while (<>) {
-    my $n = $_; 
-    my $lne = [split ' ', <>];
-    @index = ();
-    unshift @{$lne}, 0;
+    $n = $_; 
+    @lne = split ' ', <>;
+    unshift @lne, 0;
+    @bad_index = ();
+    for (1..$n) { $mark_index[$_] = 0; }
     for (1..$n) {
-        unless (pos_is_nice($_, $lne)) {
-            push @index, $_;
+        unless (pos_is_nice($_)) {
+            push @bad_index, $_;
+            $mark_index[$_] = 1;                # 1 is bad
         }
     }
-    if ($n == 150000 and $lne->[1] == 79667) {
-        print join ' ', @index;
-    }
-    #print join ' ', @index;
     my $result = 0;
-    if (@index > 4) {
-        #print "hello";
+    if (@bad_index > 10) {
         print "0";
     } else {
-        my $used_index = {};
-        for my $bad (@index) {
-            for (1..$n) {
-                next if ($used_index->{$_} or ($_ == $bad));
-                if (swap_bad_and_other($lne, $bad, $_)) {
-                    #print "<$bad, $_>";
-                    $result++;
+        for my $bad (1..$n) {
+            if ($mark_index[$bad] == 1) {
+                for (1..$n) {
+                    if (($_ > $bad) or ($mark_index[$_] == 0)) {
+                        if (swap_bad_and_other($bad, $_)) {
+                            $result++;
+                        }
+                    }
                 }
             }
-            $used_index->{$bad} = 1;
         }
         print $result;
     }
-    if ($n == 150000 and $result != 45285) {
-        print join ' ', @index;
-    }
-    #print "=" x 20;
 }
 
 sub swap_bad_and_other {
-    my ($array, $bad, $other) = @_;
-    ($array->[$bad], $array->[$other]) = ($array->[$other], $array->[$bad]);
-    my $mark = 0;
-    $mark = 1 if (pos_is_nice($bad, $array) and pos_is_nice($other, $array) and 
-      pos_is_nice($bad+1, $array) and pos_is_nice($other+1, $array) and
-      pos_is_nice($bad-1, $array) and pos_is_nice($other-1, $array));
-    if (($bad == 1 and $other == 5) or ($bad == 5 and $other == 1)) {
-        #print "mark = $mark";
+    my ($bad, $other) = @_;
+    ($lne[$bad], $lne[$other]) = ($lne[$other], $lne[$bad]);
+    my $mark = 1;
+    if (pos_is_nice($bad) and pos_is_nice($other) and 
+        pos_is_nice($bad + 1) and pos_is_nice($other + 1) and 
+        pos_is_nice($bad - 1) and pos_is_nice($other - 1)) {
+        for (@bad_index) {
+            unless (pos_is_nice($_)) {
+                $mark = 0;
+                last;
+            }
+        }
+    } else {
+        $mark = 0;
     }
-    ($array->[$bad], $array->[$other]) = ($array->[$other], $array->[$bad]);
+    ($lne[$bad], $lne[$other]) = ($lne[$other], $lne[$bad]);
     $mark;
 }
 
 sub pos_is_nice {
-    my ($pos, $array) = @_;
-    return 1 if (($pos < 1) or ($pos > @$array - 1));
+    my $pos = shift;
+    return 1 if (($pos < 1) or ($pos > $n));
     if ($pos % 2 == 1) {
         # odd
-        (($pos == 1) or ($array->[$pos] < $array->[$pos-1])) and (($pos == @$array - 1) or ($array->[$pos] < $array->[$pos+1]))
+        (($pos == 1) or ($lne[$pos] < $lne[$pos-1]))
+            and (($pos == $n) or ($lne[$pos] < $lne[$pos+1]))
     } else {
         # even
-        (($pos == 1) or ($array->[$pos] > $array->[$pos-1])) and (($pos == @$array - 1) or ($array->[$pos] > $array->[$pos+1]))
+        ($lne[$pos] > $lne[$pos-1])
+            and (($pos == $n) or ($lne[$pos] > $lne[$pos+1]))
     }
 }
 
 exit 0;
-
 
