@@ -22,7 +22,7 @@ while (<>) {
     eval {
         find( sub { say "$File::Find::name" if (-f and 
                       $File::Find::name =~ /$pattern/);},
-            '/home/aries/Hack/',);
+            '/',);
     };
     print "pattern error: $@" if $@;
 }
