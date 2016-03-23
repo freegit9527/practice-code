@@ -17,6 +17,9 @@
 
 # Executables
 *.exe
+!masm.exe
+!link.exe
+!debug.exe
 *.out
 *.app
 
