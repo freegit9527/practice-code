@@ -15,7 +15,7 @@
       ()
     (:quit-event () t)
     (:key-down-event ()
-                     (push-quit-event))
+                     (sdl:push-quit-event))
     (:video-expose-event ()
                          (sdl:update-display))))
 
@@ -107,4 +107,4 @@
              ;; Redraw the display
              (sdl:update-display)))))
 
-(mouse-react-2d)
+ (mouse-react-2d)
