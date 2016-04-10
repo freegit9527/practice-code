@@ -68,7 +68,7 @@
          (set-random-color-shape 'rectangle))
         ((sdl:mouse-right-p)
          (set-random-color-shape 'circle)))
-  (sdl:clear-display sdl:*black*)
+  (sdl:clear-display sdl:*white*)
   (sdl:draw-surface-at-*
               (sdl:load-image
                "./new-face.png")
@@ -95,7 +95,10 @@
     (sdl:window
      512
      512
-     :title-caption "Lpaste")
+     :title-caption "Lpaste"
+     :resizable t
+     ;; :no-frame t
+     )
     (setf (sdl:frame-rate) 60)
     (sdl:with-events
         ()
@@ -107,4 +110,4 @@
              ;; Redraw the display
              (sdl:update-display)))))
 
- (mouse-react-2d)
+(mouse-react-2d)
