@@ -1,9 +1,19 @@
 (ql:quickload '(:lispbuilder-sdl-mixer :lispbuilder-sdl))
+
+(defun initialize-my-parameters (music cover width height)
+  (defparameter *music* music)
+  (defparameter *window-width* width)
+  (defparameter *window-height* height)
+  (defparameter *cover* cover))
+(initialize-my-parameters "xiaoyaoxing.ogg" "yinlin.png" 500 500)
+(initialize-my-parameters "xiaoyaoxing.ogg" "xuwei.jpeg" 500 500)
+
 (sdl:with-init (sdl:sdl-init-video sdl:sdl-init-audio)
-  (sdl:window 350 410)
+  (sdl:window *window-width* *window-height*)
   (sdl-mixer:OPEN-AUDIO)
-  (let ((music (sdl-mixer:load-music
-                #P"/home/liu/Hack/language/commonlisp/lispbuilder/baseball.ogg")))
+  (let ((music
+         (sdl-mixer:load-music
+          *music*)))
     (sdl-mixer:play-music music :loop t)
     (sdl:with-events ()
       (:quit-event ()
@@ -12,26 +22,30 @@
                    (sdl-mixer:close-audio)
                    t)
       (:key-down-event ()
-                       (sdl:push-quit-event))
+                       (when (or (sdl:key-down-p :sdl-key-q)
+                                 (sdl:key-down-p :sdl-key-escape))
+                         (sdl:push-quit-event)))
       (:idle ()
              (sdl:clear-display sdl:*black*)
              (sdl:draw-surface-at-*
-              (sdl:load-image "./yinlin.png"
+              (sdl:load-image *cover*
                               :alpha 90)
-              (- (/ 350 2) (floor (/ 145 2)))
-              (- (/ 410 2) (/ 220 2))
+              (- (/ *window-width* 2) (floor (/ 145 2)))
+              (- (/ *window-height* 2) (/ 220 2))
               ;; (- (sdl:mouse-x) 150)
               ;; (- (sdl:mouse-y) 70)
               )
-             (cond ((sdl:mouse-left-p)
+             (cond ((or (sdl:mouse-left-p)
+                        (sdl:key-down-p :sdl-key-space))
                     (sdl-mixer:pause-music))
-                   ((sdl:mouse-right-p)
+                   ((or (sdl:mouse-right-p)
+                        (sdl:key-down-p :sdl-key-r))
                     (sdl-mixer:resume-music)))
              (sdl:update-display)))))
 
 (sdl-mixer:init-mixer :ogg)
 (when  (sdl-mixer:open-audio)
-  (setf yinlin (sdl-mixer:load-sample #P"/home/liu/Hack/language/commonlisp/lispbuilder/baseball.ogg"))
+  (setf yinlin (sdl-mixer:load-sample #P"xiaoyaoxing.ogg"))
   (sdl-mixer:register-sample-finished
    (lambda (channel)
      (declare (ignore channel))
