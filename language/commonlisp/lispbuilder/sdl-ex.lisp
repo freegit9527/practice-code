@@ -97,6 +97,7 @@
      512
      :title-caption "Lpaste"
      :resizable t
+     :position #(200 200)
      ;; :no-frame t
      )
     (setf (sdl:frame-rate) 60)
