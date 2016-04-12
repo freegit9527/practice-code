@@ -5,8 +5,9 @@
 ;; Press: 'h' to display a grid
 ;; Press: 'c' to display the center of each meta-ball
 (ql:quickload :lispbuilder-sdl)
-(in-package :lispbuilder-sdl)
 (ql:quickload :lispbuilder-sdl-examples)
+
+(in-package :lispbuilder-sdl)
 (in-package :lispbuilder-sdl-examples)
 (in-package #:sdl-examples)
 
