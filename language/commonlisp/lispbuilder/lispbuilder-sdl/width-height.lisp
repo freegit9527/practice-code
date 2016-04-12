@@ -27,4 +27,3 @@
 	(:video-expose-event () (sdl:update-display))))))
 
 (width-height)
-
