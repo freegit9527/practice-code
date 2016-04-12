@@ -29,7 +29,13 @@
                                  (sdl:key-down-p :sdl-key-escape))
                          (sdl:push-quit-event)))
       (:idle ()
-             (sdl:clear-display sdl:*white*)
+             (sdl:clear-display (sdl:color :r 127 :g 127 :b 127))
+             (sdl:draw-box
+              (sdl:rectangle :x (floor (/ *window-width* 3))
+                             :y (floor (/ *window-height* 3))
+                             :w (floor (/ *window-width* 3))
+                             :h (floor (/ *window-height* 3)))
+              :color (sdl:color :r 200 :g 200 :b 200))
              (sdl:draw-surface-at-*
               (sdl:load-image *cover*
                               :alpha 90)
