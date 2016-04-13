@@ -23,9 +23,10 @@
                                        0 255)))
            (sdl:draw-filled-circle-* x y speed
                                      :color sdl:*white*
-                                     :stroke-color sdl:*black*)
+                                     :stroke-color sdl:*red*)
            (setf prev-mouse-x x
-                 prev-mouse-y y)))))))
+                 prev-mouse-y y)
+           ))))))
 
 (stroke)
 
