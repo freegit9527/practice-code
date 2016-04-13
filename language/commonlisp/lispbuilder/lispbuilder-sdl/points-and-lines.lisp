@@ -3,6 +3,7 @@
 ;;;;; (C)2006 Luke J Crook
 
 (in-package #:sdl-examples)
+(ql:quickload :lispbuilder-sdl)
 
 (defun points-and-lines ()
   (let ((width 200) (height 200))
@@ -26,5 +27,9 @@
       (sdl:update-display)
       (sdl:with-events ()
         (:quit-event () t)
+        (:key-down-event ()
+                         (when (or (sdl:key-down-p :sdl-key-escape)
+                                   (sdl:key-down-p :sdl-key-q))
+                           (sdl:push-quit-event)))
         (:video-expose-event () (sdl:update-display))))))
 (points-and-lines)
