@@ -1,3 +1,8 @@
+;; Play: space
+;; Pause : space/c
+;; Resume: r
+;; Quit: q/Esc
+
 (ql:quickload '(:lispbuilder-sdl-mixer :lispbuilder-sdl))
 
 (defun initialize-my-parameters (music cover width height)
@@ -9,7 +14,7 @@
 (initialize-my-parameters "sample.wav" "yinlin.png" 500 500)
 (initialize-my-parameters "xiaoyaoxing.ogg" "xuwei.jpeg" 500 500)
 
-(defun draw-box-load-image ()
+(defun box-image ()
   (sdl:draw-box
    (sdl:rectangle :x (floor (/ *window-width* 3))
                   :y (floor (/ *window-height* 3))
@@ -21,25 +26,6 @@
                    :alpha 90)
    (- (/ *window-width* 2) (floor (/ 145 2)))
    (- (/ *window-height* 2) (/ 220 2))))
-
-(defun control-music ()
-  (cond ((or (sdl:mouse-left-p)
-             (sdl:key-down-p :sdl-key-c)
-             (and (sdl:key-down-p :sdl-key-space)
-                  (equal step 1)))
-         (sdl-mixer:pause-music)
-         (setf step 0))
-        ((or (sdl:mouse-right-p)
-             (sdl:key-down-p :sdl-key-r)
-             (and (sdl:key-down-p :sdl-key-space)
-                  (zerop step)))
-         (sdl-mixer:resume-music)
-         (setf step 1))))
-
-(defun handle-keyboard-event ()
-  (when (or (sdl:key-down-p :sdl-key-q)
-            (sdl:key-down-p :sdl-key-escape))
-    (sdl:push-quit-event)))
 
 (sdl:with-init (sdl:sdl-init-video sdl:sdl-init-audio)
   (sdl:window *window-width* *window-height*)
@@ -56,15 +42,25 @@
                    (sdl-mixer:free music)
                    (sdl-mixer:close-audio)
                    t)
-      (:key-down-event () (handle-keyboard-event))
+      (:key-down-event ()
+                       (when (or (sdl:key-down-p :sdl-key-q)
+                                 (sdl:key-down-p :sdl-key-escape))
+                         (sdl:push-quit-event)))
       (:idle ()
              (sdl:clear-display (sdl:color :r 127 :g 127 :b 127))
-             (draw-box-load-image)
-             (let ((playing 1))
-               (control-music)
-               (if (zerop playing)
-                   (setf step 0)
-                   (setf step 1)))
+             (box-image)
+             (cond ((or (sdl:mouse-left-p)
+                        (sdl:key-down-p :sdl-key-c)
+                        (and (sdl:key-down-p :sdl-key-space)
+                             (equal step 1)))
+                    (sdl-mixer:pause-music)
+                    (setf step 0))
+                   ((or (sdl:mouse-right-p)
+                        (sdl:key-down-p :sdl-key-r)
+                        (and (sdl:key-down-p :sdl-key-space)
+                             (zerop step)))
+                    (sdl-mixer:resume-music)
+                    (setf step 1)))
              (decf x step)
              (when (< x 0)
                (setf x *window-width*))
@@ -73,6 +69,11 @@
                              :clipping nil
                              :color (sdl:color :r 150 :g 100 :b 200))
              (sdl:update-display)))))
+
+;; ==============================
+;; ==============================
+;; ==============================
+
 
 (defun setup-and-draw-vline ()
   (let ((width 500) (height 500)
