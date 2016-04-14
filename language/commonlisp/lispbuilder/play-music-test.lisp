@@ -1,8 +1,3 @@
-;; Play: space
-;; Pause : space/c
-;; Resume: r
-;; Quit: q/Esc
-
 (ql:quickload '(:lispbuilder-sdl-mixer :lispbuilder-sdl))
 (defparameter *root-path* #P"/home/liu/Hack/language/commonlisp/lispbuilder/")
 (defun initialize-my-parameters (music cover width height)
@@ -71,54 +66,3 @@
                              :clipping nil
                              :color (sdl:color :r 150 :g 100 :b 200))
              (sdl:update-display)))))
-
-;; ==============================
-;; ==============================
-;; ==============================
-
-
-(defun setup-and-draw-vline ()
-  (let ((width 500) (height 500)
-	(x 10))
-    (sdl:with-init ()
-      (sdl:window width height :title-caption "Setup and Draw, from Processing.org")
-      (setf (sdl:frame-rate) 30)
-      (sdl:with-events ()
-	(:quit-event () t)
-        (:key-down-event ()
-                         (when (or (sdl:key-down-p :sdl-key-q)
-                                   (sdl:key-down-p :sdl-key-escape))
-                           (sdl:push-quit-event)))
-	(:idle ()
-               (sdl:clear-display (sdl:color :r 150 :g 100 :b 200))
-               (decf x 1)
-               (when (< x 0)
-                 (setf x width))
-               (sdl:draw-vline x (- height 40) height
-                               :clipping nil
-                               :color (sdl:color :r 255 :g 255 :b 255))
-               (sdl:update-display))))))
-
-(sdl-mixer:init-mixer :ogg)
-(when  (sdl-mixer:open-audio)
-  (setf yinlin (sdl-mixer:load-sample #P"xiaoyaoxing.ogg"))
-  (sdl-mixer:register-sample-finished
-   (lambda (channel)
-     (declare (ignore channel))
-     (format t "sample finished on channel: ~S" channel)
-     nil))
-  (sdl-mixer:allocate-channels 16)
-  (sdl-mixer:play-sample yinlin :loop t))
-(sdl-mixer:halt-sample :channel t)
-(sdl-mixer:close-audio)
-
-(when  (sdl-mixer:open-audio)
-  (setf yinlin (sdl-mixer:load-sample #P"/home/liu/Hack/language/commonlisp/lispbuilder/sample.wav"))
-  (setf yinlin (sdl-mixer:load-music #P"/home/liu/Hack/language/commonlisp/lispbuilder/sample.wav"))
-  (sdl-mixer:register-sample-finished
-   (lambda (channel)
-     (declare (ignore channel))
-     (format t "sample finished on channel: ~S" channel)
-     nil))
-  (sdl-mixer:allocate-channels 16)
-  (sdl-mixer:play-sample yinlin :loop t))
