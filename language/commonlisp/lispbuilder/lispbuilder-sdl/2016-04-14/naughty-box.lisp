@@ -37,8 +37,7 @@
                                  ((sdl:key-pressed-p
                                    :sdl-key-r)
                                   (if (zerop step)
-                                          (setf step backup-step))
-                                  (format t "step is: ~d~&" step))))
+                                      (setf step backup-step)))))
           (:video-expose-event ()
                                (sdl:update-display))
           (:idle ()
