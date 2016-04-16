@@ -189,4 +189,85 @@ say-hello-default("Laura");
 
 ## 8. Functional Programming
 
+say "exists" with @array;
 
+@array = <1 2 3 4 5>;
+sub squared($x) {
+  $x ** 2;
+}
+
+say map(&squared, @array);
+
+say map(-> $x {$x ** 2}, @array);
+
+my $squared = -> $x {
+  $x ** 2;
+}
+say $squared(9);
+
+# two argumens for lambda ;-)
+my $squared-two = -> $x, $y {
+  $x ** 2 + $y ** 2;
+}
+say $squared-two(10, 11);
+
+@array = <7 8 9 0 1 2 4 3 5 6 7 8 9>;
+my @final-array = reverse(sort(unique(@array)));
+say @final-array;
+
+@final-array = @array.unique.sort.reverse;
+say @final-array;
+
+@array ==> unique()
+       ==> sort()
+       ==> reverse()
+       ==> my @final-array-v1;
+
+say @final-array-v1;
+
+my @final-array-v2 <== reverse()
+                   <== sort()
+                   <== unique()
+                   <== @array;
+say @final-array-v2;
+
+@array = <0 1 2 3 4 5 6 7 8 9 10>;
+sub is-even ($var) { $var %% 2 };
+
+say @array>>.is-prime;
+say @array>>.&is-even;
+
+with $var {
+  say "var exits";
+  say $var.WHAT;
+}
+
+sub whether-defined($var) {
+  say "var exists, var = $var";
+  say $var.WHAT;
+}
+
+whether-defined($var) if defined($var);
+
+$var = 2;
+if $var == 1 | 2 | 3 {
+  say "The variable is 1 or 2 or 3.";
+}
+
+my $lazylist = (1 ... 10);
+say $lazylist;
+
+$lazylist = (1 ... Inf);
+say $lazylist;
+
+$lazylist = (0, 2 ... 10);
+say $lazylist;
+
+$lazylist = (0, {$_ + 3} ... 12);
+say $lazylist;
+
+$lazylist = (0, {$_ + 3} ... 10);
+say $lazylist;
+
+$lazylist = (0, {$_ + 3} ...^ * > 10);
+say $lazylist;
