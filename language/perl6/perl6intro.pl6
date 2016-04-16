@@ -271,3 +271,39 @@ say $lazylist;
 
 $lazylist = (0, {$_ + 3} ...^ * > 10);
 say $lazylist;
+
+# 9. Classes & Objects
+
+class Human {
+  has $!name;
+  has $.age;
+  has $!sex;
+  has $!nationality;
+
+  method new ($name, $age, $sex, $nationality) {
+    self.bless(:$name, :$age, :$sex, :$nationality);
+  }
+}
+
+#my $john = Human.new(name => 'John',
+#                      age => 23, 
+#                      sex => 'M',
+#                      nationality => 'American');
+my $john = Human.new('John', 23, 'M', 'American');
+
+say $john;
+
+whether-defined($var) if defined $var;
+
+$var = 7;
+say $var;
+
+$var = 7;
+sub sayvar {
+  $var;
+}
+say sayvar;
+
+say $john.age;
+my $bob = Human.new('John', 23, 'F', 'China');
+say $bob;
