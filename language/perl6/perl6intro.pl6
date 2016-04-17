@@ -307,3 +307,51 @@ say sayvar;
 say $john.age;
 my $bob = Human.new('John', 23, 'F', 'China');
 say $bob;
+
+class Human1 {
+  has $.name;
+  has $.age;
+  has $.sex;
+  has $.nationality;
+  has $.eligible;
+
+  method access-eligibility {
+    if self.age < 21 {
+      $!eligible = 'No';
+    } else {
+      $!eligible = 'Yes';
+    }
+    self!iamprivate;
+  }
+
+  method !iamprivate {
+    say "I am private";
+  }
+}
+
+$john = Human1.new(name => 'John', age => 23, 
+                sex => 'M', nationality => 'China');
+$john.access-eligibility;
+say $john.eligible;
+say $john;
+
+class Human2 {
+  has $.name;
+  my $.counter = 0;
+  method new ($name) {
+    Human2.counter++;
+    self.bless(:$name);
+  }
+}
+
+whether-defined($a) if defined $a;
+whether-defined($b) if defined $b;
+
+$a = Human2.new('a');
+$b = Human2.new('b');
+
+say Human2.counter;
+say $a.name;
+say $b.name;
+
+
