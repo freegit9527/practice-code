@@ -354,4 +354,86 @@ say Human2.counter;
 say $a.name;
 say $b.name;
 
+class Human3 {
+  has $.name;
+  has $.age is rw;
+}
 
+$john = Human3.new(name => 'John', age => 23);
+say $john.age;
+
+$john.age= 21;
+say $john.age;
+
+class Human4 {
+  has $.name;
+  has $.age;
+}
+
+class Employee {
+  has $.name;
+  has $.age;
+  has $.company;
+  has $.salary;
+}
+
+class Human5 {
+  has $.name;
+  has $.age;
+
+  method introduce-yourself {
+    say "Hi i am a human being, my name is " ~
+      ~ self.name ~ ".";
+  }
+}
+
+class Employee1 is Human5 {
+  has $.company;
+  has $.salary;
+
+  method introduce-yourself {
+    say 'Hi I am an employee, my name is ' ~
+      self.name ~ ' and I work at: ' ~
+      $!company ~ '.';
+  }
+}
+
+$john = Human5.new(name => "John", age => 23);
+my $jane = Employee1.new(name => 'Jane', age => 25,
+                    company => 'Acme', salary => '4k');
+$john.introduce-yourself;
+$jane.introduce-yourself;
+
+class bar-chart {
+  has Int @.bar-values;
+
+  method plot {
+    say @.bar-values;
+  }
+}
+
+class line-chart {
+  has Int @.line-values;
+
+  method plot {
+    say @.line-values;
+  }
+}
+
+class combo-chart is bar-chart is line-chart {
+}
+
+my $actual-sales = bar-chart.new(bar-values =>
+                [10, 9, 11, 8, 7, 10]);
+my $forecast-sales = line-chart.new(line-values =>
+                [9, 9, 10, 7, 6, 9]);
+my $actual-vs-forecast = combo-chart.new(bar-values =>
+                [10, 9, 11, 8, 7, 10], line-values =>
+                [9, 8, 10, 7, 6, 9]);
+
+say "Actual sales:";
+$actual-sales.plot;
+say "Forecast sales:";
+$forecast-sales.plot;
+say "Actual vs Forecast:";
+$actual-vs-forecast.plot;
