@@ -1,5 +1,5 @@
 (ql:quickload '(:lispbuilder-sdl-mixer :lispbuilder-sdl))
-(defparameter *root-path* #P"/home/liu/Hack/language/commonlisp/lispbuilder/")
+(defparameter *root-path* #P"/home/wuc/Hack/language/commonlisp/lispbuilder/")
 (defun initialize-my-parameters (music cover width height)
   (defparameter *window-width* width)
   (defparameter *window-height* height)
@@ -7,6 +7,7 @@
   (defparameter *cover* (sdl:create-path *root-path* cover)))
 (initialize-my-parameters "sample.wav" "yinlin.png" 500 500)
 (initialize-my-parameters "xiaoyaoxing.ogg" "xuwei.jpeg" 500 500)
+(initialize-my-parameters "april.ogg" "xuwei.jpeg" 500 500)
 
 (defun box-image ()
   (sdl:draw-box
@@ -51,7 +52,7 @@
   (sdl:draw-vline x (- (floor (/ *window-height* 2)) 70)
                   (+ (floor (/ *window-height* 2)) 70)
                   :clipping nil
-                  :color (sdl:color :r 150 :g 100 :b 200)))
+                  :color sdl:*red*))
 (sdl:with-init (sdl:sdl-init-video sdl:sdl-init-audio)
   (sdl:window *window-width* *window-height*)
   (sdl-mixer:OPEN-AUDIO)
