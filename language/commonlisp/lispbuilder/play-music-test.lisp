@@ -1,5 +1,5 @@
 (ql:quickload '(:lispbuilder-sdl-mixer :lispbuilder-sdl))
-(defparameter *root-path* #P"/home/wuc/Hack/language/commonlisp/lispbuilder/")
+(defparameter *root-path* #P"/home/aries/Hack/language/commonlisp/lispbuilder/")
 (defun initialize-my-parameters (music cover width height)
   (defparameter *window-width* width)
   (defparameter *window-height* height)
