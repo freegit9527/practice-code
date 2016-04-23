@@ -1,3 +1,5 @@
+;; Chapter 11. CLOS
+
 ;;; 11.1 Object-Oriented Programming
 
 (defstruct rectangle
