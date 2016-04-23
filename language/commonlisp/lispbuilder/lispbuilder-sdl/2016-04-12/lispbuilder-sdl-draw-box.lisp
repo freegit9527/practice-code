@@ -1,4 +1,6 @@
 (ql:quickload :lispbuilder-sdl)
+(asdf:operate 'asdf:load-op :lispbuilder-sdl)
+(asdf:operate 'asdf:load-op :cocoahelper)
 (defun draw-a-box-in-window ()
   (sdl:with-init
       ()
@@ -28,4 +30,9 @@
         (:key-down-event ()
                          (when (sdl:key-down-p :sdl-key-q)
                            (sdl:push-quit-event)))))))
-(draw-a-box-in-window)
+(defun main (argv &aux (argc (length argv)))
+  (draw-a-box-in-window))
+
+(sb-int:with-float-traps-masked
+    (:invalid :inexact :overflow)
+  (main *posix-argv*))
