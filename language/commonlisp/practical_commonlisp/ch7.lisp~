@@ -1,7 +1,0 @@
-(defmacro my-when (condition &rest body)
-  (if ,condition (progn ,@body)))
-
-(my-when (> 3 2)
-	 (format t "It is true.~%")
-	 (format t "Goodbye ;)"))
-
