@@ -4,3 +4,6 @@
 [submodule "language/common-lisp/games/3x0ng"]
 	path = language/common-lisp/games/3x0ng
 	url = https://gitlab.com/dto/3x0ng.git
+[submodule "language/common-lisp/games/xelf"]
+	path = language/common-lisp/games/xelf
+	url = https://gitlab.com/dto/xelf.git
