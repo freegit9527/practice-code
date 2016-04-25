@@ -79,3 +79,12 @@
   'bow)
 
 (speak (make-instance 'courtier) "kings will last")
+
+;; with-slots
+(defclass thing ()
+  ((x :initarg :x
+      :accessor thing-x)
+   (y :initarg :y
+      :accessor thing-y)))
+
+(defmethod (setf thing-x))
