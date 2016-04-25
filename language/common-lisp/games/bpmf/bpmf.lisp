@@ -109,7 +109,9 @@
 (defmethod collide ((ball ball) (brick brick))
   (with-slots (heading) ball
     (destroy brick)
-    (incf heading (radian-angle 90))))
+    (setf heading (- heading))
+    ;; (incf heading (radian-angle 90))
+    ))
 
 ;; Now we define some useful shorthand functions to refer to the ball and
 ;; paddle.
@@ -129,7 +131,7 @@
    (width :initform (units 8))
    (color :initform "white")))
 
-(defparameter *paddle-speed* 3)
+(defparameter *paddle-speed* 5)
 
 ;; Now we define some handy functions to check whether the player is
 ;; pressing left or right on the keyboard. Numeric keypad is also
@@ -173,7 +175,10 @@
 (defmethod collide ((paddle paddle) (wall wall))
   (with-slots (direction) paddle
     (setf direction (opposite-direction direction))
-    (move paddle (direction-heading direction) (* *paddle-speed* 2))))
+    (move paddle (direction-heading direction)
+          *paddle-speed*
+          ;; (* *paddle-speed* 2)
+          )))
 
 ;; The "english" is the directional force applied to the ball because
 ;; of the player's moving the paddle to the left or right at the
@@ -184,8 +189,27 @@
     (case direction
       (:left (direction-heading :upleft))
       (:right (direction-heading :upright))
-      (otherwise (+ (slot-value (ball) 'heading)
-		    (radian-angle 90))))))
+      (otherwise
+       ;; (+ (slot-value (ball) 'heading)
+       ;;    (radian-angle 90))
+       (let ((direction (slot-value (ball) 'heading)))
+         (format t "~&direction: ~S" direction)
+         (if (or (< (abs (- (radian-angle 180)
+                            (abs direction)))
+                    (radian-angle 20))
+                 (< (abs direction)
+                    (radian-angle 20)))
+             (radian-angle
+              (cond ((plusp direction)
+                     (if (> direction
+                            (radian-angle 90))
+                         (direction-degrees :upright)
+                         (direction-degrees :upleft)))
+                    (t (if (< direction
+                              (radian-angle -90))
+                           (direction-degrees :downright)
+                           (direction-degrees :downleft)))))
+             (- (slot-value (ball) 'heading))))))))
 
 ;; In the BALL,PADDLE collision method, the english is applied and the
 ;; ball is bounced away.
