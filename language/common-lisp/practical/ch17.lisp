@@ -1,4 +1,4 @@
-;; 17.2
+;; 17.2, 17.3
 
 (defvar *account-numbers* 0)
 (defclass bank-account ()
@@ -30,3 +30,16 @@
                  :opening-bonus-percentage 5))
 
 (slot-value *account* 'balance)
+
+;; 16.4
+(defgeneric withdraw (account amount)
+  (:documentation "Withdraw the specified amount from the account.
+Signal an error if the current balance is less than the amount."))
+
+(defmethod withdraw ((account bank-account)
+                     amount)
+  (when (< (slot-value account 'balance)
+           amount)
+    (error "Account overdrawn."))
+  (decf (slot-value account 'balance)
+        amount))
