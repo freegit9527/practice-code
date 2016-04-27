@@ -1,4 +1,4 @@
-(ql:quickload :lispbuiler-sdl)
+(ql:quickload :lispbuilder-sdl)
 (defun ex-draw-stroke ()
   (let ((x-prev-pos 0)
         (y-prev-pos 0))

@@ -1,0 +1,17 @@
+#!/bin/bash - 
+#===============================================================================
+#
+#          FILE: ogg2wav
+# 
+#         USAGE: ./ogg2wav FILENAME (without extension 'ogg')
+#        AUTHOR: liuxueyang (lxy), liuxueyang457@163.com
+#  ORGANIZATION: Hunan University
+#       CREATED: 2016年04月11日 16:19
+#===============================================================================
+
+set -o nounset                              # Treat unset variables as an error
+
+ffmpeg -i "$1.ogg" "$1.wav"
+
+echo "Success:-) by Lpaste"
+
