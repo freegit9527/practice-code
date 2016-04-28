@@ -16,6 +16,7 @@
 ;; configure resources
 
 (defresource "touch.wav" :volume 20)
+(defresource "bip.wav" :volume 20)
 
 ;; ;-)
 
@@ -74,18 +75,18 @@
           (add-node (current-buffer)
                     (make-instance 'brick :color
                                    (row-color column))
-                    (+ (* 100 column)
+                    (+ (* 120 column)
                        (* column *brick-width*)
-                       80)
+                       200)
                     (* row *brick-height*)))
         (do ((row (+ 5 cur-row) (1+ row)))
             ((>= row 30))
             (add-node (current-buffer)
                       (make-instance 'brick :color
                                      (row-color column))
-                      (+ (* 100 column)
+                      (+ (* 120 column)
                          (* column *brick-width*)
-                         80)
+                         200)
                       (* row *brick-height*)))))))
 
 ;; (defun ball (slot-value (current-buffer) 'ball))
@@ -111,15 +112,36 @@
 (defmethod update ((ball ball))
   (with-slots (heading speed) ball
     (let ((head (find-direction)))
+      (unless head)
       (if head
-          (setf heading (direction-heading head))
-          (setf heading (direction-heading :down))))
-    ;; (format t "~&direction: ~S" direction)
+          ;; (setf heading (direction-heading head))
+          ;; (go-upward (ball head))
+          (speed-up ball head)
+          ;; (speed-up ball :down)
+          (setf heading (direction-heading :down))
+          ))
+    (format t "~&speed: ~S" speed)
     (move ball heading speed)))
+
+(defmethod speed-up ((ball ball)
+                      head)
+  (with-slots (heading speed) ball
+    (setf heading (direction-heading head))
+    (incf speed 25)
+    (format t "~&speed: ~S" speed)))
+
+(defmethod speed-up :after ((ball ball)
+                             head)
+  (with-slots (speed) ball
+    (setf speed 7)))
 
 (defmethod update ((brick brick))
   (with-slots (heading speed) brick
     (move brick heading speed)))
+
+(defmethod collide :after ((ball ball)
+                           (node node))
+  (play-sample "bip.wav"))
 
 ;; XELF:INSERT is called on one object to insert it
 ;; into the (CURRENT-BUFFER)
