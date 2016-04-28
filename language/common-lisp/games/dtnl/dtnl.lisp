@@ -81,13 +81,13 @@
                     (* row *brick-height*)))
         (do ((row (+ 5 cur-row) (1+ row)))
             ((>= row 30))
-            (add-node (current-buffer)
-                      (make-instance 'brick :color
-                                     (row-color column))
-                      (+ (* 120 column)
-                         (* column *brick-width*)
-                         200)
-                      (* row *brick-height*)))))))
+          (add-node (current-buffer)
+                    (make-instance 'brick :color
+                                   (row-color column))
+                    (+ (* 120 column)
+                       (* column *brick-width*)
+                       200)
+                    (* row *brick-height*)))))))
 
 ;; (defun ball (slot-value (current-buffer) 'ball))
 
@@ -123,13 +123,13 @@
     (move ball heading speed)))
 
 (defmethod speed-up ((ball ball)
-                      head)
+                     head)
   (with-slots (heading speed) ball
     (setf heading (direction-heading head))
     (incf speed 25)))
 
 (defmethod speed-up :after ((ball ball)
-                             head)
+                            head)
   (with-slots (speed) ball
     (setf speed 7)))
 
@@ -169,7 +169,7 @@
   (setf *resizable* t)
   (setf *scale-output-to-window* t)
   (with-session
-      (open-project :dtnl)
+    (open-project :dtnl)
     (index-pending-resources)
     (play-sample "touch.wav")
     (let ((universe (make-instance 'universe)))
