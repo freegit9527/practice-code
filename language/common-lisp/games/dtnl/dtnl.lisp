@@ -120,15 +120,13 @@
           ;; (speed-up ball :down)
           (setf heading (direction-heading :down))
           ))
-    (format t "~&speed: ~S" speed)
     (move ball heading speed)))
 
 (defmethod speed-up ((ball ball)
                       head)
   (with-slots (heading speed) ball
     (setf heading (direction-heading head))
-    (incf speed 25)
-    (format t "~&speed: ~S" speed)))
+    (incf speed 25)))
 
 (defmethod speed-up :after ((ball ball)
                              head)
