@@ -29,7 +29,7 @@
   ((height :initform (units 1))
    (widht :initform (units 1))
    (color :initform "black")
-   (speed :initform 5)
+   (speed :initform 7)
    (heading :initform (direction-heading :down))))
 
 (defclass wall (node)
@@ -44,7 +44,9 @@
 (defclass brick (node)
   ((color :initform "gray60")
    (height :initform *brick-height*)
-   (width :initform *brick-width*)))
+   (width :initform *brick-width*)
+   (heading :initform (direction-heading :left))
+   (speed :initform 2)))
 
 (defmethod initialize-instance :after ((brick brick)
                                        &key color)
@@ -66,22 +68,22 @@
 
 (defun make-puzzle ()
   (with-new-buffer
-    (dotimes (column 6)
+    (dotimes (column 30)
       (let ((cur-row (random 30)))
         (dotimes (row cur-row)
           (add-node (current-buffer)
                     (make-instance 'brick :color
                                    (row-color column))
-                    (+ (* 50 column)
+                    (+ (* 100 column)
                        (* column *brick-width*)
                        80)
                     (* row *brick-height*)))
-        (do ((row (+ 3 cur-row) (1+ row)))
+        (do ((row (+ 5 cur-row) (1+ row)))
             ((>= row 30))
             (add-node (current-buffer)
                       (make-instance 'brick :color
                                      (row-color column))
-                      (+ (* 50 column)
+                      (+ (* 100 column)
                          (* column *brick-width*)
                          80)
                       (* row *brick-height*)))))))
@@ -97,6 +99,10 @@
 (defun holding-escape ()
   (keyboard-down-p :escape))
 
+(defun holding-shift-up ()
+  (and (keyboard-down-p :lshift)
+       (keyboard-down-p :up)))
+
 (defun find-direction ()
   (cond ((holding-up-arrow) :up)
         ((holding-down-arrow) :down)
@@ -106,10 +112,14 @@
   (with-slots (heading speed) ball
     (let ((head (find-direction)))
       (if head
-          (setf heading (direction-heading (find-direction)))
+          (setf heading (direction-heading head))
           (setf heading (direction-heading :down))))
     ;; (format t "~&direction: ~S" direction)
     (move ball heading speed)))
+
+(defmethod update ((brick brick))
+  (with-slots (heading speed) brick
+    (move brick heading speed)))
 
 ;; XELF:INSERT is called on one object to insert it
 ;; into the (CURRENT-BUFFER)
@@ -129,7 +139,7 @@
     (with-buffer universe
       (insert ball)
       ;; (insert paddle)
-      (move-to ball 80 0)
+      (move-to ball 40 0)
       ;; (move-to paddle 110 0)
       (paste universe (make-puzzle)))))
 
