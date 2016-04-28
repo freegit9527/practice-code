@@ -13,10 +13,12 @@
 (defparameter *width* 640)
 (defparameter *height* 480)
 (defparameter *unit* 16)
-(defparameter *ball-image* "transparent-bird.png")
+(defparameter *bird-image* "bird.png")
+(defparameter *bird-fly-image* "bird-fly.png")
 (defun units (n) (* *unit* n))
 (defparameter *brick-width* (units 2))
 (defparameter *brick-height* (units 1))
+(defparameter *bird-reload-frames* 30)
 
 ;; configure resources
 
@@ -37,7 +39,8 @@
    (color :initform "white")
    (speed :initform 7)
    (heading :initform (direction-heading :down))
-   (image :initform *ball-image*)))
+   (image :initform *bird-image*)
+   (fly-clock :initform 0 :accessor fly-clock)))
 
 (defclass wall (node)
   ((color :initform "gray50")))
@@ -116,9 +119,10 @@
         ((holding-escape) (quit))))
 
 (defmethod update ((ball ball))
-  (with-slots (heading speed) ball
+  (with-slots (heading speed fly-clock) ball
+    (when (plusp fly-clock)
+      (decf fly-clock))
     (let ((head (find-direction)))
-      (unless head)
       (if head
           (speed-up ball head)
           (setf heading (direction-heading :down))))
@@ -126,16 +130,21 @@
 
 (defmethod speed-up ((ball ball)
                      head)
-  (with-slots (heading speed) ball
+  (with-slots (heading speed image jump-clock) ball
     (setf heading (direction-heading head))
+    ;; (setf image *bird-fly-image*)
     (incf speed 25)
+    (change-image ball *bird-fly-image*)
+    (setf jump-clock *bird-reload-frames*)
     ;; (incf speed 1)
     ))
 
 (defmethod speed-up :after ((ball ball)
                             head)
-  (with-slots (speed) ball
+  (with-slots (speed image) ball
     (setf speed 7)
+    (change-image ball *bird-image*)
+    ;; (setf image *bird-image*)
     ;; (setf speed 1)
     ))
 
@@ -154,7 +163,7 @@
 ;; this current buffer
 
 (defclass universe (buffer)
-  ((background-color :initform "black")
+  ((background-color :initform "white")
    (width :initform *width*)
    (height :initform *height*)
    (paddle :initform (make-instance 'paddle))
@@ -176,9 +185,13 @@
   (setf *scale-output-to-window* t)
   (with-session
     (open-project :dtnl)
-    (index-pending-resources)
+    ;; INDEX-ALL-IMAGES doesn't really INDEX them...
+    ;; instead it adds them to a list.
+    ;; but INDEX-PENDING-RESOURCES finally indexes
     (index-all-images)
+    (index-pending-resources)
     (play-sample "touch.wav")
+    (format t "liuxueyang-bug, path: ~S" xelf:*project-path*)
     (let ((universe (make-instance 'universe)))
       (switch-to-buffer universe)
       (start-game universe))))
