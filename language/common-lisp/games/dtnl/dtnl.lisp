@@ -1,5 +1,9 @@
 ;;;; dtnl.lisp
 
+;; based on plong game: https://gitlab.com/dto/plong
+
+;; just a demo.
+
 (in-package #:dtnl)
 
 ;;; "dtnl" goes here. Hacks and glory await!
@@ -9,6 +13,7 @@
 (defparameter *width* 640)
 (defparameter *height* 480)
 (defparameter *unit* 16)
+(defparameter *ball-image* "transparent-bird.png")
 (defun units (n) (* *unit* n))
 (defparameter *brick-width* (units 2))
 (defparameter *brick-height* (units 1))
@@ -29,9 +34,10 @@
 (defclass ball (node)
   ((height :initform (units 1))
    (widht :initform (units 1))
-   (color :initform "black")
+   (color :initform "white")
    (speed :initform 7)
-   (heading :initform (direction-heading :down))))
+   (heading :initform (direction-heading :down))
+   (image :initform *ball-image*)))
 
 (defclass wall (node)
   ((color :initform "gray50")))
@@ -70,7 +76,7 @@
 (defun make-puzzle ()
   (with-new-buffer
     (dotimes (column 30)
-      (let ((cur-row (random 30)))
+      (let ((cur-row (random 27)))
         (dotimes (row cur-row)
           (add-node (current-buffer)
                     (make-instance 'brick :color
@@ -114,24 +120,24 @@
     (let ((head (find-direction)))
       (unless head)
       (if head
-          ;; (setf heading (direction-heading head))
-          ;; (go-upward (ball head))
           (speed-up ball head)
-          ;; (speed-up ball :down)
-          (setf heading (direction-heading :down))
-          ))
+          (setf heading (direction-heading :down))))
     (move ball heading speed)))
 
 (defmethod speed-up ((ball ball)
                      head)
   (with-slots (heading speed) ball
     (setf heading (direction-heading head))
-    (incf speed 25)))
+    (incf speed 25)
+    ;; (incf speed 1)
+    ))
 
 (defmethod speed-up :after ((ball ball)
                             head)
   (with-slots (speed) ball
-    (setf speed 7)))
+    (setf speed 7)
+    ;; (setf speed 1)
+    ))
 
 (defmethod update ((brick brick))
   (with-slots (heading speed) brick
@@ -148,7 +154,7 @@
 ;; this current buffer
 
 (defclass universe (buffer)
-  ((background-color :initform "white")
+  ((background-color :initform "black")
    (width :initform *width*)
    (height :initform *height*)
    (paddle :initform (make-instance 'paddle))
@@ -171,9 +177,8 @@
   (with-session
     (open-project :dtnl)
     (index-pending-resources)
+    (index-all-images)
     (play-sample "touch.wav")
     (let ((universe (make-instance 'universe)))
       (switch-to-buffer universe)
       (start-game universe))))
-
-(dtnl)
