@@ -74,9 +74,11 @@
     ;; back away from wall
     (move ball (opposite-heading heading) speed)
     ;; point toward player. (The function PADDLE is defined later.)
-    (aim ball (heading-between ball (paddle)))
+    ;; (aim ball (heading-between ball (paddle)))
+    (aim ball (opposite-heading heading))
     ;; sometimes choose another direction to prevent getting stuck
-    (percent-of-time 10 (incf heading (radian-angle 90)))))
+    ;; (percent-of-time 10 (incf heading (radian-angle 90)))
+    ))
 
 ;; The ball should emit a retro beep when colliding with any node. We
 ;; use DEFRESOURCE to let Xelf know about the sound file. (The Xelf
