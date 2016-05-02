@@ -1,8 +1,7 @@
-(defmacros do-primes ((var start end)
-                      &body body)
-  (let ((ending-value-name (gensym)))
-    `(do ((,var (next-prime ,start)
-                (next-prime (1+ ,var)))
-          (,ending-value-name ,end))
-         ((> ,var ,ending-value-name))
-       ,@body)))
+(defun primep (number)
+  (loop for i from 2 to (isqrt number)
+     never (zerop (mod number i))))
+
+(defun next-prime (number)
+  (loop for i from number
+     if (primep i) return i))
