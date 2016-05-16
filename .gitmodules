@@ -16,3 +16,6 @@
 [submodule "language/common-lisp/games/cypress"]
 	path = language/common-lisp/games/cypress
 	url = https://gitlab.com/dto/cypress.git
+[submodule "Cousera/ruby-on-rails-intro/week2/fullstack-course1-module2"]
+	path = Cousera/ruby-on-rails-intro/week2/fullstack-course1-module2
+	url = https://github.com/jhu-ep-coursera/fullstack-course1-module2
