@@ -19,3 +19,7 @@
 ;;  ALREADY
 ;;  WON!)
 (append p 'of town 'may 'have 'already 'won!)
+
+(defun last-name (name)
+  "Select the last name from a name represented as a list."
+  (first (last name)))
