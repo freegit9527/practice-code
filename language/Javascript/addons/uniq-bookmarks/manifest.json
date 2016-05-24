@@ -1,0 +1,14 @@
+{
+  "name": "uniq-bookmarks",
+  "version": "1.0",
+  "description": "uniq all of your bookmarks, even the same bookmarks in different folder",
+  "icons": {"128": "icon.png"},
+  "background_page": "bg.html",
+  "browser_action": {
+    "default_title": "uniq your bookmarks",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+}
+
+
