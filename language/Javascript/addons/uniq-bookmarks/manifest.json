@@ -1,11 +1,15 @@
 {
+<<<<<<< HEAD
   "manifest_version": 2,
+=======
+>>>>>>> 8445e4c2b4dca25db022ee3ae61bff29b242a0ae
   "name": "uniq-bookmarks",
   "version": "1.0",
   "description": "uniq all of your bookmarks, even the same bookmarks in different folder",
   "icons": {"128": "icon.png"},
   "background_page": "bg.html",
   "browser_action": {
+<<<<<<< HEAD
     "default_icon": "icon.png",
     "default_popup": "popup.html",
     "default_title": "uniq all of your bookmarks"
@@ -14,6 +18,12 @@
     "activeTab",
     "https://ajax.googleapis.com/"
   ]
+=======
+    "default_title": "uniq your bookmarks",
+    "default_icon": "icon.png",
+    "default_popup": "popup.html"
+  }
+>>>>>>> 8445e4c2b4dca25db022ee3ae61bff29b242a0ae
 }
 
 

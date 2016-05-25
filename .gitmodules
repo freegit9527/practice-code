@@ -1,0 +1,21 @@
+[submodule "language/common-lisp/games/plong"]
+	path = language/common-lisp/games/plong
+	url = https://gitlab.com/dto/plong.git
+[submodule "language/common-lisp/games/3x0ng"]
+	path = language/common-lisp/games/3x0ng
+	url = https://gitlab.com/dto/3x0ng.git
+[submodule "language/common-lisp/games/xelf"]
+	path = language/common-lisp/games/xelf
+	url = https://gitlab.com/dto/xelf.git
+[submodule "language/common-lisp/games/1x0ng"]
+	path = language/common-lisp/games/1x0ng
+	url = https://gitlab.com/dto/1x0ng.git
+[submodule "language/common-lisp/games/2fr0g"]
+	path = language/common-lisp/games/2fr0g
+	url = https://gitlab.com/dto/2fr0g.git
+[submodule "language/common-lisp/games/cypress"]
+	path = language/common-lisp/games/cypress
+	url = https://gitlab.com/dto/cypress.git
+[submodule "Cousera/ruby-on-rails-intro/week2/fullstack-course1-module2"]
+	path = Cousera/ruby-on-rails-intro/week2/fullstack-course1-module2
+	url = https://github.com/jhu-ep-coursera/fullstack-course1-module2
