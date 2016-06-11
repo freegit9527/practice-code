@@ -56,22 +56,31 @@ main ( void )
 #endif     /* -----  ONLINE_JUDGE  ----- */
 
   int j = 0;
-  for (int i = 2; i <= 50; ++i) {
+  rep(i, 2, 51) {
     if (isPrime(i)) {
       a[j] = i;
       ++j;
     }
   }
+  rep(i, 0, j) {
+    printf ( "%d ", a[i] );
+  }
+  printf ( "\n" );
   // j is len
   // a. 2, 3, 5, 7 -> ... 
   // b. primes less than 50
 
   string str;
   int cnt = 0;
-  for ( int i = 0; i < j; ++i) {
+  rep (i, 0, j) {
     if ( isDivisible(a[i]) ) {
       ++cnt;
-      if ( a[i] <= 7 && isDivisible(a[i] * a[i]) ) {
+      if ( cnt >= 2 ) {
+        printf ( "composite\n" );
+        fflush(stdout);
+        return EXIT_SUCCESS;
+      }
+      if ( a[i] <= 7 && isDivisible(a[i] * a[i])) {
         ++cnt;
       }
       if ( cnt >= 2 ) {
