@@ -45,7 +45,7 @@
 
 (defun search-value (tree-node
                      value)
-  (if (null tree-node) (return-from search-value))
+  (if (null tree-node) (return-from search-value nil))
   (if (equal value (value tree-node))
       (return-from search-value tree-node))
   (search-value (if (< value (value tree-node))
@@ -68,7 +68,30 @@
 (post-order root)
 (format t "~%")
 
-(do ((in (read) (read)))
-    ((null in) (format t "exit"))
-  (format t "~&in = ~d~%" in))
+;; use C-c C-d h to read the documentation.
+;; use C-u RET to input EOF in the SLIME REPL
 
+;; (do ((in (read nil nil) (read nil nil)))
+;;     ((null in) (format t "exit"))
+;;   (format t "~&in = ~d~%" in))
+
+;; another way to loop input from the STDIN
+
+;; (format t "Search? ")
+;; (loop for in = (read nil nil)
+;;       while in
+;;       do
+;;          (format t "~&in = ~d~%" in)
+;;          (format t "Search ? "))
+
+(format t "Search? ")
+(loop for in = (read nil nil)
+      while in
+      do
+         (let ((found (search-value root in)))
+           (if found
+               (format t "Found ~d at ~a~%"
+                       (value found)
+                       found)
+               (format t "No ~d in the tree.~%" in))
+           (format t "Search? ")))
