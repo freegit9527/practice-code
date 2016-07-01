@@ -1,13 +1,28 @@
+;; Finished at 2016/07/07 7:51:23 AM
+
 (defvar *n*)
-(defparameter *maxn* 10)
+(defparameter *maxn* 20)
 
 (defclass node ()
-  ((left :accessor left)
-   (right :accessor right)
-   (ori-position :accessor ori-position)))
+  ((left :accessor left
+         :initarg :left)
+   (right :accessor right
+          :initarg :right)
+   (ori-position :accessor ori-position
+                 :initarg :ori-position)))
 
-(defparameter *s* (make-array *maxn* :element-type 'node
-                                     :initial-element (make-instance 'node)))
+(defparameter *s* (make-array *maxn*
+                              :element-type 'node
+                              :fill-pointer 0
+                              :adjustable t))
+(defparameter *fenwick* (make-array *maxn*
+                                    :element-type 'integer
+                                    :fill-pointer 0
+                                    :adjustable t))
+(defparameter *ans* (make-array *maxn*
+                                    :element-type 'integer
+                                    :fill-pointer 0
+                                    :adjustable t))
 
 (defun print-array ()
   (loop for i from 0 to (1- *n*) do
@@ -16,37 +31,53 @@
                    (left (aref *s* i))
                    (right (aref *s* i)))))
 
-;; (defun clean-array ()
-;;   (loop for i from 0 to 
-;;     (setf (left (aref *s* i)) 0)
-;;     (setf (right (aref *s* i)) 0)
-;;     (setf (ori-position (aref *s* i)) 0)))
+(defun lowbit (x)
+  (boole boole-and x (- x)))
+
+(defun presum (index)
+  (let ((ans 0))
+    (do ((i index
+            (- i (lowbit i))))
+        ((<= i 0) ans)
+      (incf ans (elt *fenwick* (1- i))))))
+
+(defun update-fenwick (index)
+  (do ((i index (+ i (lowbit i))))
+      ((> i *n*))
+    (incf (elt *fenwick* (1- i)))))
 
 (with-open-file
     (*standard-input*
-     "in.txt")
+     "in.txt"
+     :if-does-not-exist nil)
   (setq *n* (read))
   (loop for i from 0 to (1- *n*) do
-    (setf (left (aref *s* i)) (read))
-    (setf (right (aref *s* i)) (read))
-    (setf (ori-position (aref *s* i)) i)
-    (format t "i = ~d, l = ~d, r = ~d~%"
-            i
-            (left (aref *s* i))
-            (right (aref *s* i)))))
+    (vector-push-extend
+     (make-instance 'node
+                    :left (read)
+                    :right (read)
+                    :ori-position i)
+     *s*)
+    (vector-push-extend 0 *fenwick*)
+    (vector-push-extend 0 *ans*)))
 
-(print-array)
+(sort *s* #'< :key #'right)
 
-;; (dolist (item *s*)
-;;   (format t "~d ~d" (left item)
-;;           (right item)))
+;; compress right
+(loop for i from 0 to (1- *n*) do
+  (setf (right (elt *s* i))
+        (1+ i)))
 
-(format t "-------~%")
+;; sort by left reverse
+(sort *s* #'> :key #'left)
+(loop for i from 0 to (1- *n*) do
+  (setf (elt *ans* (ori-position (elt *s* i)))
+        (presum (right (elt *s* i))))
+  (update-fenwick (right (elt *s* i))))
 
-;; (loop for x being the element of *s*
-;;       do
-;;          (format t "~d ~d~%"
-;;                  (left x)
-;;                  (right x)))
+(defun print-ans ()
+  (loop for i from 0 to (1- *n*) do
+    (format t "~d~%" (elt *ans* i))))
 
-;; (sort *s* #'< :key #'right)
+(print-ans)
+
