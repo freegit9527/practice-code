@@ -16,4 +16,16 @@
           (list i 'x
                 j '= (* i j)))))
 
-(defparameter b (make-array ))
+(defparameter b (make-array 8 :displaced-to a
+                              :displaced-index-offset 2))
+
+(dotimes (i 8)
+  (format t "i = ~d " i)
+  (format t "~s ~%" (aref b i)))
+
+(let ((array #(10 9 8 7 6 5)))
+  (sort (make-array 5 :displaced-to array
+                      :displaced-index-offset 1
+                      :fill-pointer 5)
+        #'<)
+  (print array))
