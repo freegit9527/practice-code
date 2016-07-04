@@ -8,3 +8,5 @@ bounds1: bounds1.cpp algostuff.hpp
 	g++-5 --std=c++1y -Wall -o bounds1 bounds1.cpp
 vector: vector.cpp algostuff.hpp
 	g++-5 --std=c++1y -Wall -o vector vector.cpp
+map: map.cpp algostuff.hpp
+	g++-5 --std=c++1y -Wall -o map map.cpp
