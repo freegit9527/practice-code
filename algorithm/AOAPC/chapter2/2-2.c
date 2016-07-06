@@ -7,7 +7,7 @@ int main(void) {
   for (int i = 1; i <= 9; ++i) {
     for (int j = 0; j <= 9; ++j) {
       n = j * 11 + i * 1100;
-      int m = (int)sqrt(n);
+      int m = floor(sqrt(n) + 0.5);
       if (m * m == n) {
         printf("%d\n", n);
       }
