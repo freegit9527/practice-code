@@ -1,0 +1,13 @@
+(let ((n (read))
+      (m (read))
+      chicken
+      rabbit)
+  (setf chicken (- (* 2 n)
+                   (/ m 2))
+        rabbit (- (/ m 2)
+                  n))
+  (if (or (oddp m)
+          (minusp chicken)
+          (minusp rabbit))
+      (format t "No answer~%")
+      (format t "~d ~d~%" chicken rabbit)))
