@@ -12,15 +12,7 @@
 	gcc -Wall -DDEBUG 3-6.c -o 3-6
 3-7: 3-7.c
 	gcc -Wall -DDEBUG 3-7.c -o 3-7
-3-8: 3-8.c
-	gcc -Wall -DDEBUG 3-8.c -o 3-8
-3-9: 3-9.c
-	gcc -Wall -DDEBUG 3-9.c -o 3-9
-3-10: 3-10.c
-	gcc -Wall -DDEBUG 3-10.c -o 3-10
-3-11: 3-11.c
-	gcc -Wall -DDEBUG 3-11.c -o 3-11
-3-12: 3-12.c
-	gcc -Wall -DDEBUG 3-12.c -o 3-12
-3-13: 3-13.c
-	gcc -Wall -DDEBUG 3-13.c -o 3-13
+uva-340: uva-340.c
+	gcc -Wall -DDEBUG uva-340.c -o uva-340
+uva-1583: uva-1583.c
+	gcc -Wall -DDEBUG uva-1583.c -o uva-1583
