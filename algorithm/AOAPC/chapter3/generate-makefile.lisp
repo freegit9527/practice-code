@@ -11,14 +11,21 @@
               (1+ i)
               (1+ i)))))
 
-(defun append-makefile (problem-number)
+(defun append-makefile (problem-number language)
   (with-open-file (*standard-output*
                    "makefile"
                    :direction :output
                    :if-exists :append)
-    (format t "uva-~d: uva-~d.c~%"
-            problem-number
-            problem-number)
+    (if (equal language "++")
+        (format t "uva-~a++: uva-~a.cpp~%"
+                problem-number
+                problem-number)
+        (format t "uva-~a: uva-~a.c~%"
+                problem-number
+                problem-number))
     (princ #\tab)
-    (format t "gcc -Wall -DDEBUG uva-~d.c -o uva-~d~%"
-            problem-number problem-number)))
+    (if (equal language "++")
+        (format t "g~a -Wall -DDEBUG uva-~a.cpp -o uva-~a++~%"
+                language problem-number problem-number)
+        (format t "g~a -Wall -DDEBUG uva-~a.c -o uva-~a~%"
+                language problem-number problem-number))))
