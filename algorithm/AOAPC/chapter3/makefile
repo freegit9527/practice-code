@@ -46,3 +46,5 @@ uva-11809: uva-11809.c
 	gcc -Wall -DDEBUG uva-11809.c -o uva-11809
 uva-10340++: uva-10340.cpp
 	g++ -Wall -DDEBUG uva-10340.cpp -o uva-10340++
+uva-1587-1: uva-1587-1.c
+	gcc -Wall -DDEBUG uva-1587-1.c -o uva-1587-1
