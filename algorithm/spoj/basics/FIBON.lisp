@@ -1,0 +1,7 @@
+(dotimes (k (read))
+  (let ((n (read))
+        (a 1)
+        (b 1))
+    (dotimes (i (1- n))
+      (psetf a b b (+ a b)))
+    (format t "~d~%" a)))

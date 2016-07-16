@@ -1,0 +1,12 @@
+(defparameter *t* (read))
+
+(dotimes (tt *t*)
+  (let ((n (read))
+        (x (read))
+        (y (read)))
+    (format t "~d" x)
+    (do ((xx (* 2 x) (+ x xx)))
+        ((>= xx n))
+      (unless (zerop (mod xx y))
+        (format t " ~d" xx)))
+    (format t "~%")))
