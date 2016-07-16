@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f14c41b4-19d2-4e83-92b4-baceb33efbba" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/Main.java" afterPath="$PROJECT_DIR$/src/Main.java" />
-    </list>
+    <list default="true" id="f14c41b4-19d2-4e83-92b4-baceb33efbba" name="Default" comment="" />
     <ignored path="SieveOfEratosthenes.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path="$PROJECT_DIR$/out/" />
@@ -560,12 +558,12 @@
       <workItem from="1468415175337" duration="4752000" />
       <workItem from="1468450896220" duration="7811000" />
       <workItem from="1468461556633" duration="2390000" />
-      <workItem from="1468685486954" duration="4212000" />
+      <workItem from="1468685486954" duration="4347000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19401000" />
+    <option name="totallyTimeSpent" value="19536000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1440" height="797" extended-state="6" />
