@@ -122,10 +122,14 @@ int main() {
   scanf("%d", &M);
 
   while (M--) {
-    int lo, hi;
+    int op, lo, hi;
 
-    scanf("%d%d", &lo, &hi);
-    printf("%d\n", st.getValue(lo - 1, hi - 1));
+    scanf("%d%d%d", &op, &lo, &hi);
+    if (op) {
+      printf("%d\n", st.getValue(lo - 1, hi - 1));
+    } else {
+      st.update(lo - 1, hi);
+    }
   }
 
   return 0;
