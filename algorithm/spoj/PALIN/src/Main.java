@@ -7,11 +7,11 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Scanner cin;
 
-        FileInputStream fin;
-        fin = new FileInputStream("/Users/liu/Hack/algorithm/spoj/PALIN/src/input.txt");
-        cin = new Scanner(fin);
+//        FileInputStream fin;
+//        fin = new FileInputStream("/Users/liu/Hack/algorithm/spoj/PALIN/src/input.txt");
+//        cin = new Scanner(fin);
 
-//        cin = new Scanner(System.in);
+        cin = new Scanner(System.in);
 
         int t;
         t = cin.nextInt();
