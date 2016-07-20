@@ -3,29 +3,16 @@
 using namespace std;
 
 struct SegmentTreeNode {
-  int unmatchedLeft, unmatchedRight;
+  // fields on the node
 
-  void assignLeaf(char value) {
-    if (value == '(') {
-      unmatchedLeft = 1;
-      unmatchedRight = 0;
-    }
-    else {
-      unmatchedLeft = 0;
-      unmatchedRight = 1;
-    }
+  void assignLeaf(int value) {
   }
 
   void merge(SegmentTreeNode &left, SegmentTreeNode &right) {
-    int L_unl = left.unmatchedLeft, L_unr = left.unmatchedRight,
-      R_unl = right.unmatchedLeft, R_unr = right.unmatchedRight;
-    int matched = min(L_unl, R_unr);
-    unmatchedLeft = L_unl + R_unl - matched;
-    unmatchedRight = L_unr + R_unr - matched;
-    return;
   }
 
-  bool getValue() { return unmatchedRight == 0 && unmatchedLeft == 0; }
+  int getValue() {
+  }
 };
 
 template <class T, class V> class SegmentTree {
@@ -111,48 +98,3 @@ private:
     return size << 1;
   }
 };
-
-int a[30000];
-char str[30000];
-
-int main() {
-#ifdef DEBUG
-  freopen("input.txt", "r", stdin);
-#endif
-
-  int N;
-  int t = 1;
-  while (scanf("%d", &N) != EOF) {
-    printf("Test %d:\n", t++);
-    scanf("%s", str);
-
-    SegmentTree<char, bool> st(str, N);
-
-    int M;
-    scanf("%d", &M);
-
-    while (M--) {
-      int pos;
-
-      scanf("%d", &pos);
-
-      if (pos) {
-        pos--;
-
-        if (str[pos] == '(') {
-          st.update(pos, ')');
-          // don't forget this, because we use it in the if above...
-          str[pos] = ')';
-        }
-        else {
-          st.update(pos, '(');
-          str[pos] = '(';
-        }
-      }
-      else {
-        printf("%s\n", st.getValue(0, N - 1) ? "YES" : "NO");
-      }
-    }
-  }
-  return 0;
-}
