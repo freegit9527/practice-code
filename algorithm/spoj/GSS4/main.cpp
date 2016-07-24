@@ -13,7 +13,6 @@ typedef long long ll;
 typedef struct TreeNode {
   int start, end;
   ll total;
-  bool lazy;
 } TreeNode;
 
 TreeNode tree[4 * 100000 + 10];
@@ -30,7 +29,6 @@ void printNode(int stIndex) {
 void build(int stIndex, int start, int end) {
   tree[stIndex].start = start;
   tree[stIndex].end = end;
-  tree[stIndex].lazy = false;
 
   if (start == end) {
     tree[stIndex].total = a[start];
@@ -45,62 +43,55 @@ void build(int stIndex, int start, int end) {
     tree[rightChildIndex].total;
 }
 
-void UpdateNode(int stIndex, TreeNode & t, int start, int end,
-                bool updating) {
-  bool isLeaf = (t.start == t.end);
-
-  if (isLeaf) {
-    tree[stIndex].total = floor(sqrt(tree[stIndex].total));
-  }
-  else {
-    int leftChildIndex = stIndex * 2,
-      rightChildIndex = leftChildIndex + 1;
-
-    if (updating) {
-      tree[leftChildIndex].lazy = tree[rightChildIndex].lazy = true;
-    }
-    else {
-      update(leftChildIndex, start, end);
-      update(rightChildIndex, start, end);
-      tree[stIndex].total = tree[leftChildIndex].total +
-        tree[rightChildIndex].total;
-    }
-  }
-
-  return;
-}
-
 bool NecessaryUpdate(int stIndex) {
   TreeNode & t = tree[stIndex];
   return t.total > (t.end - t.start + 1);
 }
 
-void update(int stIndex, int start, int end) {
+void UpdateNode(int stIndex) {
   TreeNode & t = tree[stIndex];
+  bool isLeaf = (t.start == t.end);
 
-  if (t.lazy) {
-    if (NecessaryUpdate(stIndex)) {
-      UpdateNode(stIndex, t, start, end, true);
+  if (NecessaryUpdate(stIndex)) {
+    if (isLeaf) {
+      tree[stIndex].total = floor(sqrt(tree[stIndex].total));
+    }
+    else {
+      int leftChildIndex = stIndex * 2,
+        rightChildIndex = leftChildIndex + 1;
+
+      UpdateNode(leftChildIndex);
+      UpdateNode(rightChildIndex);
+      tree[stIndex].total = tree[leftChildIndex].total +
+        tree[rightChildIndex].total;
     }
   }
+}
 
-  if (start > t.end || end < t.start || start > end) {
+void update(int stIndex, int start, int end) {
+
+  TreeNode & t = tree[stIndex];
+
+  if (start == t.start && end == t.end) {
+    UpdateNode(stIndex);
     return;
   }
 
   // node contain is contained in [start..end]
-  if (t.start >= start && t.end <= end) {
-    if (NecessaryUpdate(stIndex)) {
-      // cout << stIndex << ", <" << start << ", " << end << ">\n";
-      UpdateNode(stIndex, t, start, end, true);
-    }
-    return;
+  int leftChildIndex = stIndex * 2, rightChildIndex = leftChildIndex + 1,
+    mid = (t.start + t.end) / 2;
+
+  if (start > mid) {
+    update(rightChildIndex, start, end);
+  }
+  else if (end <= mid) {
+    update(leftChildIndex, start, end);
+  }
+  else {
+    update(leftChildIndex, start, mid);
+    update(rightChildIndex, mid + 1, end);
   }
 
-  int leftChildIndex = stIndex * 2, rightChildIndex = leftChildIndex + 1;
-
-  update(leftChildIndex, start, end);
-  update(rightChildIndex, start, end);
   t.total = tree[leftChildIndex].total + tree[rightChildIndex].total;
 
   return;
@@ -109,25 +100,24 @@ void update(int stIndex, int start, int end) {
 ll query(int stIndex, int start, int end) {
   TreeNode & t = tree[stIndex];
 
-  if (t.lazy) {
-    if (NecessaryUpdate(stIndex)) {
-      UpdateNode(stIndex, t, start, end, false);
-    }
-  }
-
-  if (start > t.end || end < t.start || start > end) {
-    return 0;
-  }
-
-  // node contain is contained in [start..end]
-  if (t.start >= start && t.end <= end) {
+  if (start == t.start && end == t.end) {
     return t.total;
   }
 
-  int leftChildIndex = stIndex * 2, rightChildIndex = leftChildIndex + 1;
+  // node contain is contained in [start..end]
+  int leftChildIndex = stIndex * 2, rightChildIndex = leftChildIndex + 1,
+    mid = (t.start + t.end) / 2;
 
-  return query(leftChildIndex, start, end) +
-    query(rightChildIndex, start, end);
+  if (start > mid) {
+    return query(rightChildIndex, start, end);
+  }
+  else if (end <= mid) {
+    return query(leftChildIndex, start, end);
+  }
+  else {
+    return query(leftChildIndex, start, mid) +
+      query(rightChildIndex, mid + 1, end);
+  }
 }
 
 int main(void) {
@@ -138,33 +128,32 @@ int main(void) {
   int N, M;
 
   int c = 1;
-  while (cin >> N) {
-    cout << "Case #" << c << ":" << endl;
+  while (~scanf("%d", &N)) {
+    printf("Case #%d:\n", c);
     ++c;
     for (int i = 0; i < N; ++i) {
-      cin >> a[i];
+      scanf("%lld", &a[i]);
     }
 
     build(1, 0, N - 1);
-    cin >> M;
+    scanf("%d", &M);
     for (int m = 1; m <= M; ++m) {
       int i, x, y;
-      cin >> i >> x >> y;
+      scanf("%d%d%d", &i, &x, &y);
+
+      if (x > y) {
+        swap(x, y);
+      }
+
       x--; y--;
       if (i) {
-        cout << query(1, x, y) << endl;
+        printf("%lld\n", query(1, x, y));
       }
       else {
         update(1, x, y);
       }
-
-      // print test
-      // for (int ii = 1; ii <= 9; ++ii) {
-      //   printNode(ii);
-      // }
-      // cout << "--------" << endl << endl;
     }
-    cout << endl;
+    printf("\n");
   }
   return 0;
 }
