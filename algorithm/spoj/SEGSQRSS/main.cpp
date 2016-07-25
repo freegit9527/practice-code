@@ -159,11 +159,6 @@ int main(void) {
 
       if (op == 2) {
         printf("%lld\n", query(1, st, nd).total);
-        // if (N == 4) {
-        //   for (int i = 1; i <= 7; ++i) {
-        //     printNode(i);
-        //   }
-        // }
       } else if (op == 1) {
         update(1, st, nd, x, 1);
       } else {
