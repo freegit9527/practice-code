@@ -6,6 +6,16 @@
 
 (symbol-function '+)
 
+(defun add (&rest lst)
+  (apply #'+ lst))
+
+(defun choose-which (a b c)
+  (let* ((input (read-line))
+         (func (cond ((equal input "add") 'add)
+                     ((equal input "sub") 'sub))))
+    (if (fboundp func)
+        (funcall func a b c))))
+
 (setf (symbol-function 'add2)
       #'(lambda (x)
 	  (+ x 2)))
