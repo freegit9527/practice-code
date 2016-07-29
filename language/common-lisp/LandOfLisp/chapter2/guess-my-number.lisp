@@ -1,4 +1,7 @@
-(defun guess-my-number ()
+;; my version guess-my-number
+;; 2016.07.29
+
+(defun liu/guess-my-number ()
   (let* ((low 1)
          (high 100)
          (guess-number
@@ -18,3 +21,24 @@
         (setf guess-number (floor (/ (+ high low)
                                      2)))
         (format t "~d~%" guess-number)))))
+
+;; guess-my-number on Land Of LISP
+(defparameter *small* 1)
+(defparameter *big* 100)
+(defun guess-my-number ()
+  (ash (+ *small* *big*)
+       -1))
+
+(defun smaller ()
+  (setf *small* (1+ (guess-my-number)))
+  (guess-my-number))
+
+;; on the book, this is inverse...
+
+(defun bigger ()
+  (setf *big* (1- (guess-my-number)))
+  (guess-my-number))
+
+(defun start-over ()
+  (defparameter *small* 1)
+  (defparameter *big* 100))
