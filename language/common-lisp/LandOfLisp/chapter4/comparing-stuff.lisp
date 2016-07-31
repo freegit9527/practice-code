@@ -1,3 +1,5 @@
+;; 2016.07.30 23:22:16 PM
+
 ;; 1. use EQ to compare symbols
 ;; 2. use EQUAL for everything else
 

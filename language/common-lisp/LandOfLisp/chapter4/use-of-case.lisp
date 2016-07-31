@@ -1,3 +1,5 @@
+;; 2016.07.30 21:22:04 PM
+
 (defvar *arch-enemy* nil)
 
 (defun pudding-eater (person)
