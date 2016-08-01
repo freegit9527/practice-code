@@ -1,3 +1,6 @@
+;; 2016/08/01 08:57:32 AM
+;; Xueyang Liu
+
 (load "text-adventure-game")
 
 (defun game-read ()
