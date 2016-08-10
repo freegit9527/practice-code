@@ -1,3 +1,5 @@
+// 2016/08/03
+
 "Hello World".postln;
 
 {SinOsc.ar}.play;
@@ -55,4 +57,28 @@ y;
 x;
 x + y;
 y - x;
+
+// 2016/08/04
+
+// modulate a sine frequency and a noise amplitude with another sine
+// whose frequency depends on the horizontal mouse pointer position
+(
+{
+        var x = SinOsc.ar(MouseX.kr(1, 100));
+        SinOsc.ar(300 * x + 800, 0, 0.1)
+        +
+        PinkNoise.ar(0.1 * x + 0.1)
+}.play;
+)
+
+// like the sound of the small river :-)
+(
+{
+({RHPF.ar(OnePole.ar(BrownNoise.ar, 0.99), LPF.ar(BrownNoise.ar, 14)
+		* 400 + 500, 0.03, 0.003)}!2)
+	+ ({RHPF.ar(OnePole.ar(BrownNoise.ar, 0.99), LPF.ar(BrownNoise.ar, 20)
+	* 800 + 1000, 0.03, 0.005)}!2)
+	* 4
+}.play
+)
 
