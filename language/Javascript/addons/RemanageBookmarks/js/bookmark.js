@@ -15,13 +15,13 @@ Then move bookmarks related into them.
 related into them.
  */
 
-
 if (localStorage.MESSID) {
     if (localStorage.secondRun) {
+        console.log("liu xue yang");
 //2.
-        moveAllBookmarks2MESS('1');
+        moveAllBookmarks2MESS('0');
 //3.
-        removeEmptyFoldersDuplicateURLs('1', {})
+        removeEmptyFoldersDuplicateURLs('0', {});
         localStorage.secondRun = true;
         console.log("second run.");
     }
@@ -68,8 +68,12 @@ function moveAllBookmarks2MESS(id) {
      its id is 1022
      */
 
+    console.log("id = " + id);
+
     chrome.bookmarks.getSubTree(id, function (bookmarkArray) {
         for (var i = 0; i < bookmarkArray.length; ++i) {
+            //console.log(bookmarkArray[i].id + " " + bookmarkArray[i].title);
+
             var children = bookmarkArray[i].children;
 
             if (children) {
