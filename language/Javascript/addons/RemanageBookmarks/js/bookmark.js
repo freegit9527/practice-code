@@ -13,18 +13,22 @@ its nest depth is 3, here, Bookmarks Bar is in depth 1.)
 Then move bookmarks related into them.
 5. create second class folders. Then move bookmarks
 related into them.
+
+However, it is just a script now. I have to modify some code before execute it.
+Don't know how to write Javascript. So sad. ;-(
  */
 
 if (localStorage.MESSID) {
-    if (localStorage.secondRun) {
-        console.log("liu xue yang");
+    //console.log("MESSID = " + localStorage.MESSID);
 //2.
-        moveAllBookmarks2MESS('0');
+//    moveAllBookmarks2MESS('0');
 //3.
-        removeEmptyFoldersDuplicateURLs('0', {});
-        localStorage.secondRun = true;
-        console.log("second run.");
-    }
+//    removeEmptyFoldersDuplicateURLs('0', {});
+    //if (localStorage.secondRun) {
+    //    console.log("liu xue yang");
+    //    localStorage.secondRun = true;
+    //    console.log("second run.");
+    //}
 }
 else {
 // if we didn't create before
@@ -33,11 +37,49 @@ else {
     setTimeout(getMESSFolderId, 1000);
 }
 
-//4.
-var numMoving = 1;
-var barrier = false;
+chrome.bookmarks.getSubTree(localStorage.MESSID, function (bookmarkArray) {
+    console.log("Size: " + bookmarkArray[0].children.length);
+});
 
-//create3rdClassFoldersAndMoveBookmarks2Them();
+//4.
+
+var folderList = [
+    //1. ////////////////////////
+    ['Blog' , ['blog','cnblogs','csdn', '博客园', '博客', 'wordpress', '关于我', 'About']],
+    ['BaiDu' , ['baidu', '百度']] ,
+
+    ['ZhiHu' , ['zhihu']] ,
+    ['Quora' , ['quora']] ,
+    ['SegmentFault' , ['SegmentFault']] ,
+    ['StackOverflow' , ['stackoverflow','stackexchange']] ,
+
+    ['Course' , ['coursera','Edx']],
+    ['V2EX' , ['V2EX']] ,
+    ['Jianshu' , ['jianshu']],
+    ['Github' , ['github']],
+
+    //2. ////////////////////////
+    ['Emacs' , ['emacs']] ,
+    ['Linux' , ['linux','opensuse','gentoo', 'LinuxTOY', 'archlinux', 'ubuntu', 'linuxfromscratch', 'raspberry']] ,
+    ['Vim' , ['vim']],
+    //3. ////////////////////////
+    ['Algorithm' , ['onlinejudge', 'topcoder', 'codeforces', 'spoj', 'acm', 'ICPC',
+        'timus', 'NOCOW', 'codechef', 'algorithm','线段树', '背包', 'geeksforgeeks', '算法']] ,
+    //4. ////////////////////////
+    ['Hack' , ['hack', 'kali', 'security', 'hacker', '安全']] ,
+    //5. ////////////////////////
+    ['Lisp' , ['lisp','scheme','sicp', 'cliki', 'lambda', 'gigamonkeys']] ,
+    ['Python' , ['python']] ,
+    ['Perl' , ['perl']] ,
+    ['Ruby' , ['ruby']] ,
+    ['LaTex' , ['latex']] ,
+    ['Shell' , ['shell','bash','zsh','fish']] ,
+    ['MarkDown' , ['markdown']] ,
+    ['Haskell' , ['haskell']]
+];
+
+
+create3rdClassFoldersAndMoveBookmarks2Them();
 //5.
 //create2ndClassFoldersAndMoveBookmarks2Them();
 
@@ -67,8 +109,6 @@ function moveAllBookmarks2MESS(id) {
      This functions move all functions to folder 'ALL'
      its id is 1022
      */
-
-    console.log("id = " + id);
 
     chrome.bookmarks.getSubTree(id, function (bookmarkArray) {
         for (var i = 0; i < bookmarkArray.length; ++i) {
@@ -110,7 +150,7 @@ function removeEmptyFoldersDuplicateURLs(id, dict) {
                 for (var j = 0; j < children.length; ++j) {
                     if (children[j].url) {
                         if (dict[children[j].url]) {
-                            console.log(children[j].url + " alread exists and it is removed");
+                            //console.log(children[j].url + " alread exists and it is removed");
                             chrome.bookmarks.remove(children[j].id, function(bookmark){ });
                         }
                         else {
@@ -120,8 +160,11 @@ function removeEmptyFoldersDuplicateURLs(id, dict) {
                     else {
                         // delete empty folders except MESS
 
-                        if (children[j].id != localStorage.MESSID && children[j].children.length == 0) {
-                            console.log("removing " + children[j].title);
+                        if (children[j].id != localStorage.MESSID &&
+                            children[j].children.length == 0 &&
+                            children[j].id != 0 &&
+                        children[j].id != 2) {
+                            //console.log("removing " + children[j].title + " id = " + children[j].id);
                             chrome.bookmarks.remove(children[j].id, function(bookmark){ });
                         }
                         else {
@@ -140,54 +183,37 @@ function create3rdClassFoldersAndMoveBookmarks2Them() {
      make folders under ID 1
      move bookmarks to those folders
      */
-    var nameList = [
-        ['Vim' , ['vim']] , ['Mac' , ['Mac']], ['Emacs' , ['emacs']] ,
-        ['Algorithm' , ['algorithm','线段树', '背包', 'geeksforgeeks']] ,
-        ['StackOverflow' , ['stackoverflow','stackexchange']] ,
-        ['Lisp' , ['lisp','scheme','sicp', 'cliki', 'lambda']] , ['Quora' , ['quora']] ,
-        ['SegmentFault' , ['SegmentFault']] , ['Python' , ['python']] , ['Perl' , ['perl']] ,
-        ['Linux' , ['linux','opensuse','gentoo','arch', 'LinuxTOY', 'archlinux']] ,
-        ['OnlineJudge' , ['onlinejudge', 'topcoder', 'codeforces', 'SPOJ', 'acm', 'ICPC', 'timus', 'NOCOW', 'codechef']] ,
-        ['Blog' , ['blog','cnblogs','csdn', '博客园', '博客', 'wordpress', '关于我', 'About']] ,
-        ['Ruby' , ['ruby']] , ['ZhiHu' , ['zhihu']] ,
-        ['V2EX' , ['V2EX']] , ['LaTex' , ['latex']] , ['Github' , ['github']] ,
-        ['Javascript' , ['javascript']] , ['BaiDu' , ['baidu', '百度']] ,
-        ['Shell' , ['shell','bash','zsh','fish']] , ['MarkDown' , ['markdown']] ,
-        ['Hack' , ['hack', 'kali']] , ['iOS' , ['iOS']] , ['Haskell' , ['haskell']] ,
-        ['HTML' , ['HTML']] , ['AWK' , ['awk']] , ['Sed' , ['sed']] ,
-        ['Course' , ['course','Edx']], ['Jianshu' , ['jianshu']], ['CSS' , ['CSS']],
-        ['C++' , ['c++', 'c', 'cplusplus']]
-    ];
 
-    var i = 0, len = nameList.length;
+    var nameList = folderList.slice(0, 1);
 
-    $('#create').on('click', function() {
-        console.log("i = " + i);
-        var e = nameList[i];
-        var fold = e[0];
-
-        console.log("i = " + i + " item = " + nameList[i]);
-
-        folderExistsOrCreate(fold);
-        numMoving = 1;
-
-        processArray(e[1], function (regStr) {
-            $('#move').on('click', function() {
-                moveBookmarks2Folder(fold, regStr);
-            });
-        });
-
-        i++;
-
-        if (i == len) {
-            console.log("End of list");
-        }
-    });
-
-    $('#again').on('click', function() {
-        i--;
-        console.log("minus i " + i);
-    });
+    //var i = 0, len = nameList.length;
+    //
+    //$('#create').on('click', function() {
+    //    console.log("i = " + i);
+    //    var e = nameList[i];
+    //    var fold = e[0];
+    //
+    //    console.log("i = " + i + " item = " + nameList[i]);
+    //
+    //    folderExistsOrCreate(fold);
+    //
+    //    processArray(e[1], function (regStr) {
+    //        $('#move').on('click', function() {
+    //            moveBookmarks2Folder(fold, regStr);
+    //        });
+    //    });
+    //
+    //    i++;
+    //
+    //    if (i == len) {
+    //        console.log("End of list");
+    //    }
+    //});
+    //
+    //$('#again').on('click', function() {
+    //    i--;
+    //    console.log("minus i " + i);
+    //});
 
 
     //setTimeout(processArray, 10000, nameList, function (e) {
@@ -198,13 +224,14 @@ function create3rdClassFoldersAndMoveBookmarks2Them() {
     //    });
     //});
 
-    //processArray(nameList, function (e) {
-    //    var fold = e[0];
-    //    folderExistsOrCreate(fold);
-    //    processArray(e[1], function (regStr) {
-    //        moveBookmarks2Folder(fold, regStr);
-    //    });
-    //});
+    processArray(nameList, function (e) {
+        var fold = e[0];
+        folderExistsOrCreate(fold);
+
+        processArray(e[1], function (regStr) {
+            moveBookmarks2Folder(fold, regStr);
+        });
+    });
 }
 
 // 5.
@@ -213,10 +240,9 @@ function create2ndClassFoldersAndMoveBookmarks2Them() {
     create folders under ID 1
      */
     var myTree = [
-        { "Language": ["Python", "Perl", "Lisp", "Shell",
-        "AWK", "Sed", "iOS", "Javascript", "CSS", "Haskell",
-        "Markdown", "Latex", "HTML", "Ruby"] },
-        { "Tool": [ "Emacs", "Vim", "Linux", "Mac"] },
+        { "Language": ["Python", "Perl", "Lisp", "Shell", "Haskell",
+        "Markdown", "Latex", "Ruby"] },
+        { "Tool": [ "Emacs", "Vim", "Linux"] },
         { "QA": [ "Quora", "StackOverflow", "ZhiHu", "SegmentFault" ] },
         { "Website": [ "BaiDu", "Github", "V2EX", "Jianshu" ]}
     ];
@@ -278,26 +304,19 @@ function moveBookmarks2Folder(folderName, regStr) {
             }
         }
 
-        while (barrier) {
-            sleep(5);
-        }
-
         chrome.bookmarks.search(regStr, function (bookmarkArray) {
-            barrier = true;
-
             for (var i = 0; i < bookmarkArray.length; ++i) {
-                if (bookmarkArray[i].url) {
+                if (bookmarkArray[i].url && bookmarkArray[i].parentId == localStorage.MESSID) {
+                    //console.log("parentId: " + bookmarkArray[i].parentId);
+
                     chrome.bookmarks.move(bookmarkArray[i].id, {
                         parentId: destId,
                         index: 0
                     }, function(bookmark) { });
 
-                    console.log(numMoving + " " + folderName + " folder moving " + bookmarkArray[i].url);
-                    numMoving++;
+                    console.log(folderName + " folder moving " + bookmarkArray[i].url);
                 }
             }
-
-            barrier = false;
         });
     });
 }
