@@ -79,7 +79,7 @@ var folderList = [
 ];
 
 
-create3rdClassFoldersAndMoveBookmarks2Them();
+//create3rdClassFoldersAndMoveBookmarks2Them();
 //5.
 //create2ndClassFoldersAndMoveBookmarks2Them();
 
