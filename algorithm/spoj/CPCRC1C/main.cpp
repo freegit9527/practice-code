@@ -3,11 +3,10 @@
  *
  *       Filename:  main.cpp
  *
- *    Description:  http://www.spoj.com/problems/ASSIGN/
- *    Time Limit Exceeded. :(
+ *    Description:  http://www.spoj.com/problems/CPCRC1C/
  *
  *        Version:  1.0
- *        Created:  2016年08月14日 11时19分34秒
+ *        Created:  08/14/2016 19:17:00
  *       Compiler:  g++
  *
  *         Author:  Sabastian (liuxueyang.github.io), read3valprintloop@gmail.com
@@ -30,36 +29,46 @@ typedef map<int,int> MI;
 typedef long long ll;
 typedef pair<int,int> PII;
 const ll MOD=1000000007;
-const ll N=1<<20;
-int b[25][N];
-ll a[25][N];
-int n;
-
-int cnt1(ll n){int cnt=0;while(n){if(n&1) ++cnt;n/=2;}return cnt;}
+int num_sum(int);
+// ll result;
+int num_len(int n) {
+  return floor(log10(n))+1;
+}
+ll solve(int n) {
+  if(n<=0)return 0;
+  if(num_len(n)==1)return (1+n)*n/2;
+  return solve(n-n%10-1)+num_sum(n/10)*(n%10+1)+solve(n%10);
+}
+int num_sum(int n) {
+  int re=0;while(n){re+=n%10;n/=10;}
+  return re;
+}
+ll bruteForce(int n) {
+  ll re=0;
+  rep(i,1,n+1)re+=num_sum(i);
+  return re;
+}
 
 int main ( void )
 {
 #ifndef  ONLINE_JUDGE
   freopen("input.txt", "r", stdin);
 #endif     /* -----  ONLINE_JUDGE  ----- */
+  int a,b;while(cin>>a>>b&&(a!=-1)){
+    // result=0;
+    // cout<<solve(a)<<","<<solve(b)<<endl;
+    cout<<solve(b)-solve(a-1)<<endl;
+    // cout<<"***"<<endl;
+    // cout<<bruteForce(a)<<","<<bruteForce(b)<<endl;
+    cout<<bruteForce(b)-bruteForce(a-1)<<endl;
+    // cout<<"========"<<endl;
+  }
+  // cout<<"---"<<endl;
+  // rep(i,1,301){
+  //   int i1=solve(i),i2=bruteForce(i);
+  //   if(i1!=i2)cout<<i<<" ("<<i1<<","<<i2<<") ";
+  // }
 
-    int T;cin>>T;while(T--) {
-        cin>>n; rep(i,1,n+1) rep(j,1,n+1) cin>>b[i][j];
-        memset(a,0,sizeof(a));
-        a[n+1][(1<<n)-1]=1;
-        per(i,1,n+1)
-        rep(j,1,n+1) {
-            if(b[i][j]) {
-                rep(mask,0,(1<<n)) if(cnt1(mask)==i-1) {
-                    if((mask&(1<<(j-1)))==0) {
-                        a[i][mask]+=a[i+1][mask|(1<<(j-1))];
-                    }
-                }
-            }
-        }
-
-        cout<<a[1][0]<<endl;
-    }
 
   return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */

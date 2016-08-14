@@ -1,13 +1,12 @@
 /*
  * =====================================================================================
  *
- *       Filename:  main.cpp
+ *       Filename:  main1.cpp
  *
- *    Description:  http://www.spoj.com/problems/ASSIGN/
- *    Time Limit Exceeded. :(
+ *    Description:  http://www.spoj.com/problems/CPCRC1C/
  *
  *        Version:  1.0
- *        Created:  2016年08月14日 11时19分34秒
+ *        Created:  08/14/2016 20:39:52
  *       Compiler:  g++
  *
  *         Author:  Sabastian (liuxueyang.github.io), read3valprintloop@gmail.com
@@ -30,36 +29,22 @@ typedef map<int,int> MI;
 typedef long long ll;
 typedef pair<int,int> PII;
 const ll MOD=1000000007;
-const ll N=1<<20;
-int b[25][N];
-ll a[25][N];
-int n;
 
-int cnt1(ll n){int cnt=0;while(n){if(n&1) ++cnt;n/=2;}return cnt;}
+int num_len(int n) {return floor(log10(n))+1;}
+ll solve(int n) {
+  if(n<=0)return 0;
+  int d=num_len(n);
+  if(d==1)return (1+n)*n/2;
+  int p=(int)pow(10,d-1),msd=n/p;
+  return solve(p-1)*msd+solve(msd-1)*p+(n%p+1)*msd+solve(n%p);
+}
 
 int main ( void )
 {
 #ifndef  ONLINE_JUDGE
   freopen("input.txt", "r", stdin);
 #endif     /* -----  ONLINE_JUDGE  ----- */
-
-    int T;cin>>T;while(T--) {
-        cin>>n; rep(i,1,n+1) rep(j,1,n+1) cin>>b[i][j];
-        memset(a,0,sizeof(a));
-        a[n+1][(1<<n)-1]=1;
-        per(i,1,n+1)
-        rep(j,1,n+1) {
-            if(b[i][j]) {
-                rep(mask,0,(1<<n)) if(cnt1(mask)==i-1) {
-                    if((mask&(1<<(j-1)))==0) {
-                        a[i][mask]+=a[i+1][mask|(1<<(j-1))];
-                    }
-                }
-            }
-        }
-
-        cout<<a[1][0]<<endl;
-    }
+  int a,b;while(cin>>a>>b&&(a!=-1))cout<<solve(b)-solve(a-1)<<endl;
 
   return EXIT_SUCCESS;
 }				/* ----------  end of function main  ---------- */
