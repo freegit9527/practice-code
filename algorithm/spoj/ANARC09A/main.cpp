@@ -37,18 +37,11 @@ int main ( void )
 #endif     /* -----  ONLINE_JUDGE  ----- */
   int T=1;
   string s;while(cin>>s){
-    if('-'==s[0])break;
+    if('-'==s[0])break; 
     int cnt=0,sum=0;
-    rep(i,0,(int)s.length()){
-      if('{'==s[i])sum-=1;
-      else{
-        if(sum<0)sum++;else cnt++;
-      }
-    }
-    cout<<T<<". ";sum=-sum;
-    if(sum&&cnt)cout<<cnt/2+(cnt&1)+sum/2+(sum&1);
-    else{if(sum)cout<<sum/2;else cout<<cnt/2;}
-    cout<<endl;++T;
+    rep(i,0,(int)s.length())'{'==s[i]?sum--:(sum<0?++sum:++cnt);
+    cout<<T<<". ";sum=-sum;++T;
+    cout<<(sum&&cnt?cnt/2+(cnt&1)+sum/2+(sum&1):(sum?sum/2:cnt/2))<<endl;
   }
 
   return EXIT_SUCCESS;
