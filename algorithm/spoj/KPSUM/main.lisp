@@ -1,3 +1,5 @@
+;; 2016/08/16 Tuesday
+
 (defun digit-sum (n)
   (do ((cur 1 (1+ cur))
        (arr (make-array 20))
