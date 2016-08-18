@@ -42,6 +42,9 @@ ll getSum2(ll n,int s){
   // return numbers in [1..n] whose digit-sum is s
   // (18+18*9)
   int a[20],b[20],j=0,len,presum=0;
+//  cout<<"n="<<n
+//    <<" s="<<s
+//    <<endl;
   ll ans=0,tn=n;
   while(tn){a[++j]=tn%10;tn/=10;}len=j;
   rep(i,1,j+1)b[j+1-i]=a[i];
@@ -57,23 +60,25 @@ ll getSum2(ll n,int s){
 ll getSum3(ll n,ll prefix,int sum){
   // 1~n number of numbers whose digit-sum is sum, num-prefix is prefix
   // O(18)
-  ll ans=0,tn=n,tprefix=prefix;
-  int a[20],b[20],c[20],len_p,len_n,d=0,presum=0;
-  bool mark=false;
+  if(prefix>n)return 0;
+  ll ans=0,tn=n,tprefix=prefix,postfix=0;
+  int a[20],b[20],c[20],len_p,len_n,d=0,presum=0,mark=0;
   while(tn){a[++d]=tn%10;tn/=10;}
   rep(i,1,d+1)b[d+1-i]=a[i];
   len_n=d;d=0;while(tprefix){a[++d]=tprefix%10;presum+=a[d];tprefix/=10;}
   len_p=d;rep(i,1,d+1)c[d+1-i]=a[i];
   rep(i,1,len_p+1){
-    if(c[i]>b[i]){mark=true;break;} //prefix > n_prefix
-    else if(c[i]<b[i]){break;}
+    if(c[i]>b[i]){mark=1;break;} //prefix > n_prefix
+    else if(c[i]<b[i]){mark=-1;break;}
   }
-  if(mark)rep(i,1,len_n-len_p)ans+=getSum1(i,sum-presum);
+  rep(i,len_p+1,len_n+1)postfix=postfix*10+b[i];
+  if(1==mark)rep(i,1,len_n-len_p)ans+=getSum1(i,sum-presum);
+  else if(0==mark)rep(i,1,len_n-len_p+1)ans+=getSum2(postfix,sum-presum);
   else rep(i,1,len_n-len_p+1)ans+=getSum1(i,sum-presum);
-  if(presum==sum)ans++;
+  if(presum==sum)ans++;                         /* prefix itself is counted!! */
   return ans;
 }
-ll getSum4(int sum,ll k,ll n){
+ll getSum4(ll n,ll k,int sum){
   // 1~n whose digit-sum is sum and lexgical<=k
   // O(18*9)
   ll ans=0,prefix=0,presum=0;
@@ -82,15 +87,15 @@ ll getSum4(int sum,ll k,ll n){
   rep(i,1,d+1)b[d+1-i]=a[i];
   rep(i,1,len_k+1){
     rep(j,0,b[i]){
-      ll t_prefix=prefix*10+j,t_presum=presum+j;
-      if(t_prefix)ans+=getSum3(n,t_prefix,sum-t_presum);
+      ll t_prefix=prefix*10+j;//t_presum=presum+j;
+      if(t_prefix)ans+=getSum3(n,t_prefix,sum);
     }
     prefix=prefix*10+b[i];presum+=b[i];
     if(presum==sum)ans++;
   }
   return ans;
 }
-ll getResult2(ll k,ll n){
+ll getResult2(ll n,ll k){
   // return number k position
   ll ans=0;
   int sum=0,tk=k;
@@ -98,10 +103,10 @@ ll getResult2(ll k,ll n){
   rep(i,1,sum){
     ans+=getSum2(n,i);
   }
-  cout<<"res1="<<ans
-    <<" res2="<<getSum4(sum,k,n)
-    <<endl;
-  ans=getSum4(sum,k,n);
+//  cout<<"res1="<<ans
+//    <<" res2="<<getSum4(n,k,sum)
+//    <<endl;
+  ans+=getSum4(n,k,sum);
   return ans;
 }
 ll getResult1(ll k,ll n){
@@ -125,25 +130,34 @@ ll getResult1(ll k,ll n){
 int main ( void )
 {
 #ifndef  ONLINE_JUDGE
-  freopen("input1.txt", "r", stdin);
+  freopen("input.txt", "r", stdin);
   freopen("output1.txt","w",stdout);
 #endif     /* -----  ONLINE_JUDGE  ----- */
   initDp();
   ll n,k;
-    for(int i=25;i<1000;++i){
-      for(int j=9;j<30;++j){
-        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
-        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)<<endl;
-      }
-    }
+//    for(int i=25;i<1000;++i){
+//      for(int j=9;j<30;++j){
+//        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
+//        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)
+//          <<" i="<<i
+//            <<" j="<<j
+//            <<" k="<<k
+//          <<endl;
+//      }
+//    }
+//  cout<<getSum3(296,29,18);
+//  cout<<getSum3(998,27,18);
   while(cin>>n>>k){
     if(!n)break;
 //    cout<<"n="<<n
 //      <<" k="<<k
 //      <<endl;
-//    cout<<getResult2(k,n)<<endl;
+    cout<<getResult2(n,k)<<
+        " n="<<n<<
+        " k="<<k
+      <<endl;
 //    cout<<getResult1(k,n)<<endl;
-//    cout<<getResult2(k,n)<<" "<<getResult1(k,n)<<endl;
+//    cout<<getResult2(n,k)<<" "<<getResult1(k,n)<<endl;
   }
 
   return EXIT_SUCCESS;

@@ -3,13 +3,9 @@
  *
  *       Filename:  main1.cpp
  *
- *    Description:  
+ *    Description:  source code from http://blog.csdn.net/morgan_xww/article/details/6787988
  *
- *        Version:  1.0
- *        Created:  08/18/2016 20:53:09
- *       Compiler:  g++
- *
- *         Author:  Sabastian (liuxueyang.github.io), read3valprintloop@gmail.com
+ *         Author:  http://blog.csdn.net/morgan_xww/article/details/6787988
  *
  * =====================================================================================
  */
@@ -21,6 +17,7 @@
     因为1~n不是按照题目规则有序的，所以不能二分。 
     纠结死我了。。。。。 
 **/  
+
 #include <iostream>  
 #include <cstdio>  
 #include <cstring>  
@@ -155,9 +152,9 @@ LL getSum5(LL n, LL k)
     LL  res = 0LL;  
     for (int i = 1; i < sum; i++) // 数字和小于sum的数的个数  
         res += getSum2(n, i);  
-    cout<<"res1="<<res
-      <<" res2="<<getSum4(n,k,sum)
-      <<endl;
+//    cout<<"res1="<<res
+//      <<" res2="<<getSum4(n,k,sum)
+//      <<endl;
     res += getSum4(n, k, sum);   // 数字和为sum且字典序小于k的数的个数  
     return res + 1;  
 }  
@@ -165,19 +162,27 @@ LL getSum5(LL n, LL k)
 int main()  
 {  
 #ifndef  ONLINE_JUDGE
-  freopen("input1.txt", "r", stdin);
+  freopen("input.txt", "r", stdin);
   freopen("output2.txt","w",stdout);
 #endif     /* -----  ONLINE_JUDGE  ----- */
     LL  n, k;  
   
-    for(int i=25;i<1000;++i){
-      for(int j=9;j<30;++j){
-        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
-        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)<<endl;
-      }
-    }
+//    for(int i=25;i<1000;++i){
+//      for(int j=9;j<30;++j){
+//        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
+//        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)
+//          <<" i="<<i
+//            <<" j="<<j
+//            <<" k="<<k
+//          <<endl;
+//      }
+//    }
     while ( cin >> n >> k && n )  
     {  
+      cout<<getum5(n,k)<<
+        " n="<<n<<
+        " k="<<k
+        <<endl;
 //        cout << getSum5(n, k) << " ";  
   
         int sum = 1, preSum;  
