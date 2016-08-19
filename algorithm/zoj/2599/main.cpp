@@ -3,7 +3,7 @@
  *
  *       Filename:  main.cpp
  *
- *    Description:  
+ *    Description:  数位DP论文里面的一道题目
  *
  *        Version:  1.0
  *        Created:  08/17/2016 11:31:03
@@ -30,85 +30,217 @@ typedef long long ll;
 typedef pair<int,int> PII;
 const ll MOD=1000000007;
 ll dp[30][300];
-void initDp(){
-  dp[0][0]=1;
-  rep(i,1,22)rep(j,0,190)
-    rep(k,0,min(9,j)+1) dp[i][j]+=dp[i-1][j-k];
-}
-// . return nubmer of those whoes number length is len,digit sum is sum
-// O(1)
-ll getSum1(int len,int sum){return dp[len][sum];}
-ll getSum2(ll n,int s){
-  // return numbers in [1..n] whose digit-sum is s
-  // (18+18*9)
-  int a[20],b[20],j=0,len,presum=0;
-//  cout<<"n="<<n
-//    <<" s="<<s
-//    <<endl;
-  ll ans=0,tn=n;
-  while(tn){a[++j]=tn%10;tn/=10;}len=j;
-  rep(i,1,j+1)b[j+1-i]=a[i];
-  rep(k,1,len){
-    rep(i,0,b[k]){
-      if(s>=(presum+i))ans+=getSum1(len-k,s-presum-i);
-    }
-    presum+=b[k];
+
+int integerToArray(ll n,int a[]) {
+  // 把一个整数放到数组里面，返回整数的长度
+  int i=0;
+
+  while(n){
+    a[++i]=n%10;
+    n/=10;
   }
-  rep(i,0,b[len]+1)if((presum+i)==s)++ans;
+
+  int len=i;
+  rep(i,1,len/2+1)
+    swap(a[i],a[len+1-i]);
+
+  return len;
+}
+
+int integerDigitSum(ll n){
+  // 计算一个整数的数位和
+  int sum=0;
+  while(n){
+    sum+=n%10;
+    n/=10;
+  }
+  return sum;
+}
+
+int integerLength(ll n){
+  // 整数的长度
+  int len=0;
+  while(n){
+    n/=10;
+    ++len;
+  }
+  return len;
+}
+
+void initDp(){
+  // O(19*172*9)
+  dp[0][0]=1;
+
+  rep(i,1,20)
+    rep(j,0,i*9+1)
+      rep(k,0,min(9,j)+1) 
+        dp[i][j]+=dp[i-1][j-k];
+}
+
+ll getSum1(int len,int sum){
+// 数字长度是len并且数位和是sum的数字的个数，数位长度包括前导零
+// O(1)
+  return dp[len][sum];}
+
+ll getSum2(ll n,int sum){
+  // 1~n里面数位和是sum的数字的个数
+  // (18*9+10)
+  int a[20],len=integerToArray(n,a),presum=0;
+  ll ans=0;
+
+  rep(k,1,len){
+    rep(i,0,a[k]){
+      if(sum>=(presum+i)){
+        ans+=getSum1(len-k,sum-presum-i);
+      }
+    }
+    presum+=a[k];
+  }
+
+  rep(i,0,a[len]+1)
+    if((presum+i)==sum)++ans;
   return ans;
 }
-ll getSum3(ll n,ll prefix,int sum){
-  // 1~n number of numbers whose digit-sum is sum, num-prefix is prefix
-  // O(18)
-  if(prefix>n)return 0;
-  ll ans=0,tn=n,tprefix=prefix,postfix=0;
-  int a[20],b[20],c[20],len_p,len_n,d=0,presum=0,mark=0;
-  while(tn){a[++d]=tn%10;tn/=10;}
-  rep(i,1,d+1)b[d+1-i]=a[i];
-  len_n=d;d=0;while(tprefix){a[++d]=tprefix%10;presum+=a[d];tprefix/=10;}
-  len_p=d;rep(i,1,d+1)c[d+1-i]=a[i];
+
+ll getSum3_1(ll n,ll prefix,int sum){
+  // 1~n里面数字前缀是prefix并且数位和是sum的数的个数
+  // O(19+18*9*18)
+  ll ans=0;
+  int b[20],c[20],len_p,len_n,presum=integerDigitSum(prefix),mark=0;
+
+  if(prefix>n||presum>sum) return 0;
+
+  len_n=integerToArray(n,b);
+  len_p=integerToArray(prefix,c);
+
+  if(len_n==len_p) return presum==sum?1:0;
+
   rep(i,1,len_p+1){
     if(c[i]>b[i]){mark=1;break;} //prefix > n_prefix
     else if(c[i]<b[i]){mark=-1;break;}
   }
-  rep(i,len_p+1,len_n+1)postfix=postfix*10+b[i];
-  if(1==mark)rep(i,1,len_n-len_p)ans+=getSum1(i,sum-presum);
-  else if(0==mark)rep(i,1,len_n-len_p+1)ans+=getSum2(postfix,sum-presum);
-  else rep(i,1,len_n-len_p+1)ans+=getSum1(i,sum-presum);
+  
   if(presum==sum)ans++;                         /* prefix itself is counted!! */
-  return ans;
-}
-ll getSum4(ll n,ll k,int sum){
-  // 1~n whose digit-sum is sum and lexgical<=k
-  // O(18*9)
-  ll ans=0,prefix=0,presum=0;
-  int a[20],b[20],len_k,d=0,tk=k;
-  while(tk){a[++d]=tk%10;tk/=10;}len_k=d;
-  rep(i,1,d+1)b[d+1-i]=a[i];
-  rep(i,1,len_k+1){
-    rep(j,0,b[i]){
-      ll t_prefix=prefix*10+j;//t_presum=presum+j;
-      if(t_prefix)ans+=getSum3(n,t_prefix,sum);
+
+  if(1==mark) {
+    // prefix > n_prefix
+    rep(i,1,len_n-len_p)
+      ans+=getSum1(i,sum-presum);
+  }
+  else if(0==mark) {
+    int dif_len=len_n-len_p;
+
+    rep(i,1,dif_len+1){
+      rep(l,1,dif_len-i+1){
+        ans+=getSum1(l,sum-presum);
+      }
+
+      int cur=b[i+len_p];
+
+      rep(j,0,cur){
+        if(sum>=presum+j){
+          rep(l,1,dif_len-i+1){
+            ans+=getSum1(l,sum-presum-j);
+          }
+        }
+      }
+
+      rep(l,1,dif_len-i){
+        if(sum>=presum+cur)
+          ans+=getSum1(l,sum-presum-cur);
+      }
+
+      if(i==dif_len){
+        rep(j,0,cur+1){
+          if(j+presum==sum)
+            ans++;
+        }
+      }
+
+      presum+=cur;
+      if(presum>sum)break;
     }
-    prefix=prefix*10+b[i];presum+=b[i];
-    if(presum==sum)ans++;
+  }
+  else {
+    rep(i,1,len_n-len_p+1)
+      ans+=getSum1(i,sum-presum);
   }
   return ans;
 }
-ll getResult2(ll n,ll k){
-  // return number k position
+
+ll getSum3(ll n,ll prefix,int sum){
+  // 1~n里面数字前缀是prefix并且数位和是sum的数的个数
   ll ans=0;
-  int sum=0,tk=k;
-  while(tk){sum+=tk%10;tk/=10;}
+  int b[20],c[20],len_p,len_n,presum=integerDigitSum(prefix),mark=0;
+
+  if(prefix>n||presum>sum) return 0;
+
+  len_n=integerToArray(n,b);
+  len_p=integerToArray(prefix,c);
+
+  if(len_n==len_p) return presum==sum?1:0;
+
+  rep(i,1,len_p+1){
+    if(c[i]>b[i]){mark=1;break;} //prefix > n_prefix
+    else if(c[i]<b[i]){mark=-1;break;}
+  }
+  
+  if(presum==sum)ans++;                         /* prefix itself is counted!! */
+
+  if(1==mark) {
+    // prefix > n_prefix
+    rep(i,1,len_n-len_p)
+      ans+=getSum1(i,sum-presum);
+  }
+  else if(0==mark) {
+    rep(i,0,10){
+      if(prefix*10+i<=n)
+        ans+=getSum3(n,prefix*10+i,sum);
+    }
+  }
+  else {
+    rep(i,1,len_n-len_p+1)
+      ans+=getSum1(i,sum-presum);
+  }
+  return ans;
+}
+
+ll getSum4(ll n,ll k,int sum){
+  // 1~n里面数位和是sum并且字典序小于k的字典序的数的个数
+  // O(18*9)
+  ll ans=0,prefix=0,presum=0;
+  int b[20],len_k;
+
+  len_k=integerToArray(k,b);
+
+  rep(i,1,len_k+1){
+    rep(j,0,b[i]){
+      ll t_prefix=prefix*10+j;
+      if(t_prefix)
+        ans+=getSum3(n,t_prefix,sum);
+    }
+    prefix=prefix*10+b[i];
+    presum+=b[i];
+
+    if(presum==sum&&prefix!=k)
+      ans++;                       /* digit-sum is the same exclude tailing 0 */
+  }
+  return ans;
+}
+
+ll getResult2(ll n,ll k){
+  // 1~n按照规则排序后，数字k的位置
+  ll ans=0;
+  int sum=integerDigitSum(k);
+
   rep(i,1,sum){
     ans+=getSum2(n,i);
   }
-//  cout<<"res1="<<ans
-//    <<" res2="<<getSum4(n,k,sum)
-//    <<endl;
   ans+=getSum4(n,k,sum);
-  return ans;
+
+  return ans+1;
 }
+
 ll getResult1(ll k,ll n){
   ll prefix=1,cnt;
   int sum,presum=1;
@@ -135,28 +267,15 @@ int main ( void )
 #endif     /* -----  ONLINE_JUDGE  ----- */
   initDp();
   ll n,k;
-//    for(int i=25;i<1000;++i){
-//      for(int j=9;j<30;++j){
-//        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
-//        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)
-//          <<" i="<<i
-//            <<" j="<<j
-//            <<" k="<<k
-//          <<endl;
-//      }
-//    }
-//  cout<<getSum3(296,29,18);
-//  cout<<getSum3(998,27,18);
+
+//  cout
+//    <<" "
+//    <<endl;
   while(cin>>n>>k){
     if(!n)break;
-//    cout<<"n="<<n
-//      <<" k="<<k
+//    cout
+//      <<getResult2(n,k)
 //      <<endl;
-    cout<<getResult2(n,k)<<
-        " n="<<n<<
-        " k="<<k
-      <<endl;
-//    cout<<getResult1(k,n)<<endl;
 //    cout<<getResult2(n,k)<<" "<<getResult1(k,n)<<endl;
   }
 

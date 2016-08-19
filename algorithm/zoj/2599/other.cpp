@@ -152,9 +152,6 @@ LL getSum5(LL n, LL k)
     LL  res = 0LL;  
     for (int i = 1; i < sum; i++) // 数字和小于sum的数的个数  
         res += getSum2(n, i);  
-//    cout<<"res1="<<res
-//      <<" res2="<<getSum4(n,k,sum)
-//      <<endl;
     res += getSum4(n, k, sum);   // 数字和为sum且字典序小于k的数的个数  
     return res + 1;  
 }  
@@ -166,22 +163,10 @@ int main()
   freopen("output2.txt","w",stdout);
 #endif     /* -----  ONLINE_JUDGE  ----- */
     LL  n, k;  
-  
-//    for(int i=25;i<1000;++i){
-//      for(int j=9;j<30;++j){
-//        int _i=j,_s=0,_t=0;while(_i){_s+=_i%10;_i/=10;_t++;}
-//        for(int k=_s;k<=_t*9;++k)cout<<getSum3(i,j,k)
-//          <<" i="<<i
-//            <<" j="<<j
-//            <<" k="<<k
-//          <<endl;
-//      }
-//    }
     while ( cin >> n >> k && n )  
     {  
-      cout<<getum5(n,k)<<
-        " n="<<n<<
-        " k="<<k
+      cout
+        <<getSum5(n,k)
         <<endl;
 //        cout << getSum5(n, k) << " ";  
   
