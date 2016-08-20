@@ -102,72 +102,6 @@ ll getSum2(ll n,int sum){
   return ans;
 }
 
-ll getSum3_1(ll n,ll prefix,int sum){
-  // 1~n里面数字前缀是prefix并且数位和是sum的数的个数
-  // O(19+18*9*18)
-  ll ans=0;
-  int b[20],c[20],len_p,len_n,presum=integerDigitSum(prefix),mark=0;
-
-  if(prefix>n||presum>sum) return 0;
-
-  len_n=integerToArray(n,b);
-  len_p=integerToArray(prefix,c);
-
-  if(len_n==len_p) return presum==sum?1:0;
-
-  rep(i,1,len_p+1){
-    if(c[i]>b[i]){mark=1;break;} //prefix > n_prefix
-    else if(c[i]<b[i]){mark=-1;break;}
-  }
-  
-  if(presum==sum)ans++;                         /* prefix itself is counted!! */
-
-  if(1==mark) {
-    // prefix > n_prefix
-    rep(i,1,len_n-len_p)
-      ans+=getSum1(i,sum-presum);
-  }
-  else if(0==mark) {
-    int dif_len=len_n-len_p;
-
-    rep(i,1,dif_len+1){
-      rep(l,1,dif_len-i+1){
-        ans+=getSum1(l,sum-presum);
-      }
-
-      int cur=b[i+len_p];
-
-      rep(j,0,cur){
-        if(sum>=presum+j){
-          rep(l,1,dif_len-i+1){
-            ans+=getSum1(l,sum-presum-j);
-          }
-        }
-      }
-
-      rep(l,1,dif_len-i){
-        if(sum>=presum+cur)
-          ans+=getSum1(l,sum-presum-cur);
-      }
-
-      if(i==dif_len){
-        rep(j,0,cur+1){
-          if(j+presum==sum)
-            ans++;
-        }
-      }
-
-      presum+=cur;
-      if(presum>sum)break;
-    }
-  }
-  else {
-    rep(i,1,len_n-len_p+1)
-      ans+=getSum1(i,sum-presum);
-  }
-  return ans;
-}
-
 ll getSum3(ll n,ll prefix,int sum){
   // 1~n里面数字前缀是prefix并且数位和是sum的数的个数
   ll ans=0;
@@ -241,21 +175,35 @@ ll getResult2(ll n,ll k){
   return ans+1;
 }
 
-ll getResult1(ll k,ll n){
+ll getResult1(ll n,ll k){
+  // 1~n按照规则排序后，第k个位置的数字
   ll prefix=1,cnt;
-  int sum,presum=1;
-  rep(i,1,190){
-    if((cnt=getSum2(n,i))>=k){sum=i;break;}
+  int sum=0,presum=1;
+
+  rep(i,1,18*9+1) {
+    if((cnt=getSum2(n,i))>=k) {
+      sum=i;
+      break;
+    }
     k-=cnt;
   }
+
   while(true){
-    while((cnt=getSum3(n,prefix,sum))<k){
-      k-=cnt;presum++;prefix++;
-    }
     if(presum==sum)break;
-    prefix*=10;
+    cnt=getSum3(n,prefix,sum);
+
+    if(cnt<k){
+      k-=cnt;
+      prefix++;
+      presum++;
+    }
+    else{
+      prefix*=10;
+    }
   }
+
   while(--k)prefix*=10;
+
   return prefix;
 }
 
@@ -268,15 +216,9 @@ int main ( void )
   initDp();
   ll n,k;
 
-//  cout
-//    <<" "
-//    <<endl;
   while(cin>>n>>k){
     if(!n)break;
-//    cout
-//      <<getResult2(n,k)
-//      <<endl;
-//    cout<<getResult2(n,k)<<" "<<getResult1(k,n)<<endl;
+    cout<<getResult2(n,k)<<" "<<getResult1(n,k)<<endl;
   }
 
   return EXIT_SUCCESS;

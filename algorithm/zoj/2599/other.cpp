@@ -165,10 +165,10 @@ int main()
     LL  n, k;  
     while ( cin >> n >> k && n )  
     {  
-      cout
-        <<getSum5(n,k)
-        <<endl;
-//        cout << getSum5(n, k) << " ";  
+//      cout
+//        <<getSum5(n,k)
+//        <<endl;
+        cout << getSum5(n, k) << " ";  
   
         int sum = 1, preSum;  
         LL  t, pre;  
@@ -192,7 +192,7 @@ int main()
             else pre *= 10;  
         }  
         while ( --k ) pre *= 10;  
-//        cout << pre << endl;  
+        cout << pre << endl;  
     }  
     return 0;  
 }  
