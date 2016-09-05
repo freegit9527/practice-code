@@ -3,7 +3,8 @@
  *
  *       Filename:  main.cpp
  *
- *    Description:  [>0;95;0c]
+ *    Description:  把变量初始化为无穷大的时候要注意，不能随意在
+ *    无穷大上面加数字，因为会溢出。
  *
  *        Version:  1.0
  *        Created:  2016/08/29 21时08分22秒
@@ -64,50 +65,29 @@ int main ( void )
     rep(i,2,n+1){
       rep(b,1,K+1){
         if(co[i]){
-          if(!co[i-1]){
-            rep(k,1,M+1){
-              if(k==co[i])
-                a[i][b][co[i]]=min(a[i][b][k],a[i-1][b][k]);
-              else
-                a[i][b][co[i]]=min(a[i][b][co[i]],a[i-1][b-1][k]);
-            }
-          }
-          else{
-            if(co[i]==co[i-1]){
-              a[i][b][co[i]]=min(a[i][b][co[i]],a[i-1][b][co[i-1]]);
-            }
-            else{
-              a[i][b][co[i]]=min(a[i][b][co[i]],a[i-1][b-1][co[i-1]]);
+          if(LLONG_MAX!=a[i-1][b][co[i]])
+            a[i][b][co[i]]=min(a[i][b][co[i]],
+                a[i-1][b][co[i]]); 
+          rep(k,1,M+1){                         /* pos i-1 */
+            if(k!=co[i]){
+              if(LLONG_MAX!=a[i-1][b-1][k]){
+                a[i][b][co[i]]=min(a[i][b][co[i]],
+                    a[i-1][b-1][k]);
+              }
             }
           }
         }
-        else{
-          if(!co[i-1]){
-            rep(k1,1,M+1)//i-1
+        else{                                   /* co[i]==0 */
+          rep(k,1,M+1)                          /* pos i */
+          {
+            /* same color */
+            if(LLONG_MAX!=a[i-1][b][k])
+              a[i][b][k]=min(a[i][b][k],a[i-1][b][k]+p[i][k]); 
+            rep(k1,1,M+1)                       /* pos i-1 */
             {
-              rep(k2,1,M+1)//i
-              {
-                if(k1==k2){
-                  if(LLONG_MAX==a[i-1][b][k1])continue; /* 不然会溢出 */
-                  a[i][b][k2]=min(a[i][b][k2],a[i-1][b][k1]+p[i][k2]);
-                }
-                else{
-                  if(LLONG_MAX==a[i-1][b-1][k1])continue;
-                  a[i][b][k2]=min(a[i][b][k2],a[i-1][b-1][k1]+p[i][k2]);
-                }
-              }
-            }
-          }
-          else{
-            rep(k,1,M+1)//i
-            {
-              if(k==co[i-1]){
-                if(LLONG_MAX==a[i-1][b][k])continue;
-                a[i][b][k]=min(a[i][b][k],a[i-1][b][k]+p[i][k]);
-              }
-              else{
-                if(LLONG_MAX==a[i-1][b-1][co[i-1]])continue;
-                a[i][b][k]=min(a[i][b][k],a[i-1][b-1][co[i-1]]+p[i][k]);
+              if(k!=k1){
+                if(LLONG_MAX!=a[i-1][b-1][k1])
+                  a[i][b][k]=min(a[i][b][k],a[i-1][b-1][k1]+p[i][k]);
               }
             }
           }

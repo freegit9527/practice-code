@@ -28,6 +28,9 @@ const ll INF = ll(1e18);
 ll dp[N][N][N];
 int c[N];
 ll cost[N][N];
+ll idx[N][N];
+ll m1[N][N];
+ll m2[N][N];
 
 int main()
 {
@@ -41,6 +44,7 @@ int main()
 	{
 		for(int j = 0; j <= k; j++)
 		{
+			m1[i][j] = INF; m2[i][j] = INF; idx[i][j] = -1;
 			for(int a = 0; a <= m; a++)
 			{
 				dp[i][j][a] = INF;
@@ -59,11 +63,29 @@ int main()
 		for(int i = 1; i <= m; i++)
 		{
 			dp[1][1][i] = cost[1][i];
+			if(dp[1][1][i] <= m1[1][1])
+			{
+				if(dp[1][1][i] == m1[1][1])
+				{
+					idx[1][1] = -2;
+				}
+				else
+				{
+					idx[1][1] = i;
+				}
+				m2[1][1] = m1[1][1];
+				m1[1][1] = dp[1][1][i];
+			}
+			else if(dp[1][1][i] <= m2[1][1])
+			{
+				m2[1][1] = dp[1][1][i];
+			}
 		}
 	}
 	else
 	{
 		dp[1][1][c[1]] = 0;
+		m1[1][1] = 0; idx[1][1] = c[1];
 	}
 	for(int i = 2; i <= n; i++)
 	{
@@ -71,13 +93,19 @@ int main()
 		{
 			if(c[i] == 0)
 			{
-				for(int a = 1; a <= m; a++)             /* pos i */
+				for(int a = 1; a <= m; a++)
 				{
 					dp[i][j][a] = min(dp[i][j][a], dp[i-1][j][a] + cost[i][a]);
-					for(int b = 1; b <= m; b++)           /* pos i-1 */
+					ll tmp = INF;
+					if(a == idx[i-1][j-1])
 					{
-						if(b != a) dp[i][j][a] = min(dp[i][j][a], dp[i-1][j-1][b] + cost[i][a]);
+						tmp = m2[i-1][j-1];
 					}
+					else
+					{
+						tmp = m1[i-1][j-1];
+					}
+				    dp[i][j][a] = min(dp[i][j][a], tmp + cost[i][a]);
 				}
 			}
 			else
@@ -86,6 +114,27 @@ int main()
 				for(int b = 1; b <= m; b++)
 				{
 					if(b != c[i]) dp[i][j][c[i]] = min(dp[i][j][c[i]], dp[i-1][j-1][b]);
+				}
+				//cout << i << ' ' << j << ' ' << c[i] << ' ' << dp[i][j][c[i]] << '\n';
+			}
+			for(int a = 1; a <= m; a++)
+			{
+				if(dp[i][j][a] <= m1[i][j])
+				{
+					if(dp[i][j][a] == m1[i][j])
+					{
+						idx[i][j] = -2;
+					}
+					else
+					{
+						idx[i][j] = a;
+					}
+					m2[i][j] = m1[i][j];
+					m1[i][j] = dp[i][j][a];
+				}
+				else if(dp[i][j][a] <= m2[i][j])
+				{
+					m2[i][j] = dp[i][j][a];
 				}
 			}
 		}
