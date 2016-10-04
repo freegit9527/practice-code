@@ -33,19 +33,31 @@ void update(int pos, int n, int l, int r) {
     return;
   }
   int m = (l + r) / 2;
+
   if (pos <= m) {
     update(pos, n * 2, l, m);
   }
   else {
     update(pos, n * 2 + 1, m + 1, r);
   }
+  
   if (b[n*2].right && b[n*2+1].left) {
     b[n].value = b[n*2].value + b[n*2+1].value;
-  }else {
-    b[n].value = max(b[n * 2].value, b[n * 2 + 1].value);
+    b[n].left = b[n*2].left;
+    b[n].right = b[n*2+1].right;
   }
-  b[n].left = b[n*2].left;
-  b[n].right = b[n*2+1].right;
+  else {
+    if (b[n*2].value > b[n*2+1].value) {
+      b[n].value = b[n*2].value;
+      b[n].left = b[n*2].left;
+      b[n].right = false;
+    }
+    else {
+      b[n].value = b[n*2+1].value;
+      b[n].left = false;
+      b[n].right = b[n*2+1].right;
+    }
+  }
 }
 
 int main(void) {
@@ -54,6 +66,7 @@ int main(void) {
   #endif
   int n;
   while (cin >> n) {
+    cout << "---\n";
     for (int i = 1; i <= n; ++i) {
       cin >> a[i];
     }
