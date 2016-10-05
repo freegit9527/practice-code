@@ -1,3 +1,5 @@
+// http://codeforces.com/contest/723
+
 #include <iostream>
 #include <cstdlib>
 #include <cstdio>
@@ -9,7 +11,7 @@ using namespace std;
 int main()
 {
   #ifndef ONLINE_JUDGE
-  freopen("in3.xtx", "r", stdin);
+  freopen("b_in.txt", "r", stdin);
   #endif
   char a[300];
   int nn;
