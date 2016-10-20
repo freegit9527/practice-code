@@ -45,55 +45,109 @@
 
 // Code:
 
-
 #include <bits/stdc++.h>
 using namespace std;
-using ll=long long;
-#define _ ios_base::sync_with_stdio(0);cin.tie(0);
-const ll MOD=1000000007;
+using ll = long long;
+#define _                                                                      \
+  ios_base::sync_with_stdio(0);                                                \
+  cin.tie(0);
+const ll MOD = 1000000007;
 
-const int N=2000;
-int a[N],n,S,d_max[N],vis[N];
+const int N = 2000;
+int a[N], n, S, d_max[N], vis[N], min_d[N], max_d[N], min_path[N], max_path[N];
 
-int dp_max(int s){
-  int & ans=d_max[s];
-  if(vis[s])return ans;
-  vis[s]=1;
-  //if(-1!=ans)return ans;
-  ans=INT_MIN;
-  cout << "s=" << s << ", ans=" << ans  << "\n";
-  for (auto i = 1; i < n+1; ++i) {
-    if(s>=a[i]){
-      ans=max(ans,dp_max(s-a[i])+1);
+// 方法一
+int dp_max(int s) {
+  int &ans = d_max[s];
+  if (vis[s])
+    return ans;
+  vis[s] = 1;
+  // if(-1!=ans)return ans;
+  ans = INT_MIN;
+  for (auto i = 1; i < n + 1; ++i) {
+    if (s >= a[i]) {
+      ans = max(ans, dp_max(s - a[i]) + 1);
     }
   }
 
   return ans;
 }
 
-int main ( void )
-{
-  _
-#ifndef  ONLINE_JUDGE
-    freopen("coins.txt", "r", stdin);
-#endif     /* -----  ONLINE_JUDGE  ----- */
-
-  while (cin>>n>>S) {
-    for (auto i = 1; i < n+1; ++i) {
-      cin>>a[i];
+void print_ans(int *d, int s) {
+  for (auto i = 1; i < n + 1; ++i) {
+    if (d[s] == d[s - a[i]] + 1) {
+      cout << i << " ";
+      print_ans(d, s - a[i]);
+      break;
     }
-    memset(d_max,-1,sizeof(d_max));
-    memset(vis,0,sizeof(vis));
-    vis[0]=1;// 如果要使用标记数组的话，一定要注意这个。
-    d_max[0]=0; // 注意边界条件。
+  }
+}
+
+void print_path(int *path, int s) {
+  while (s) {
+    cout << path[s] << " ";
+    s = s - a[path[s]];
+  }
+  cout << "\n";
+}
+
+int main(void) {
+  _
+#ifndef ONLINE_JUDGE
+      freopen("coins.txt", "r", stdin);
+#endif /* -----  ONLINE_JUDGE  ----- */
+
+  while (cin >> n >> S) {
+    for (auto i = 1; i < n + 1; ++i) {
+      cin >> a[i];
+    }
+    memset(d_max, -1, sizeof(d_max));
+    memset(vis, 0, sizeof(vis));
+    vis[0] = 1; // 如果要使用标记数组的话，一定要注意这个。
+    d_max[0] = 0; // 注意边界条件。
     dp_max(S);
     cout << d_max[S] << "\n";
-    for_each(d_max,d_max+S+1,[](int x){cout << x<<" ";});
+    // for_each(d_max,d_max+S+1,[](int x){cout << x<<" ";});
+    // cout << "\n";
+
+    // 方法二
+    memset(max_d, -1, sizeof(max_d));
+    for (auto i = 1; i < S + 1; ++i) {
+      min_d[i] = INT_MAX;
+    }
+
+    min_d[0] = max_d[0] = 0;
+    for (auto i = 1; i < S + 1; ++i) {
+      for (auto j = 1; j < n + 1; ++j) {
+        if (i >= a[j]) {
+          if (max_d[i - a[j]] + 1 > max_d[i]) {
+            max_d[i] = max_d[i - a[j]] + 1;
+            max_path[i] = j;
+          }
+          max_d[i] = max(max_d[i], max_d[i - a[j]] + 1);
+          // 注意保证不会出现INT_MAX+1的情况。
+          if (min_d[i - a[j]] != INT_MAX && min_d[i - a[j]] + 1 < min_d[i]) {
+            min_d[i] = min_d[i - a[j]] + 1;
+            min_path[i] = j;
+          }
+        }
+      }
+    }
+    cout << "min and max is:"
+         << "\n";
+    cout << min_d[S] << " " << max_d[S] << "\n";
+    // 输出字典序最小的解：
+    print_ans(min_d, S);
     cout << "\n";
+    print_ans(max_d, S);
+    cout << "\nAnother way to print path"
+         << "\n";
+    print_path(min_path, S);
+    print_path(max_path, S);
   }
 
   return EXIT_SUCCESS;
-}				/* ----------  end of function main  ---------- */
+} /* ----------  end of function main  ---------- */
 
 //
 // coins.cpp ends here
